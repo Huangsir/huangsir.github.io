@@ -8,4 +8,5 @@ exclude: [README.md, LICENSE, Makefile]
 gereksiz:
    author: "Huangsir"
    email: "rj.huangsir@gmail.com"
+   companyName: "Youmi"
    company: "http://www.youmi.net"
