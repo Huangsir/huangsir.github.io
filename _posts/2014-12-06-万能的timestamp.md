@@ -33,6 +33,7 @@ Twitter也用时间搓呀，果然时间戳才是解决问题的王道哇~
 [http://www.slideshare.net/davegardnerisme/unique-id-generation-in-distributed-systems](http://www.slideshare.net/davegardnerisme/unique-id-generation-in-distributed-systems)
 
 ```php
+<?php
 $current_sequence = 4095;
 $machine = 1023;
 $current_timestamp = intval(microtime(true)*1000);  // 1417848461815
