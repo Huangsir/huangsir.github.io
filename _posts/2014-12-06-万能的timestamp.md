@@ -32,7 +32,7 @@ tags: []
 Twitter也用时间搓呀，果然时间戳才是解决问题的王道哇~  
 [http://www.slideshare.net/davegardnerisme/unique-id-generation-in-distributed-systems](http://www.slideshare.net/davegardnerisme/unique-id-generation-in-distributed-systems)
 
-```python
+```php
 $current_sequence = 4095;
 $machine = 1023;
 $current_timestamp = intval(microtime(true)*1000);  // 1417848461815
@@ -40,19 +40,25 @@ $epoch = strtotime("2014-12-05")*1000;  // 1417737600000
 
 $current_timestamp -= $epoch;  // 110861815
 
-// echo decbin($current_timestamp)          // 110100110111001110111110111
+echo decbin($current_timestamp);
+// 110100110111001110111110111
 
 $current_timestamp <<= 22;
 $machine <<= 12;
 
-// echo decbin($current_timestamp)          // 1101001101110011101111101110000000000000000000000
-// echo decbin($machine)                    // 0000000000000000000000000001111111111000000000000
-// echo decbin($current_sequence)           // 0000000000000000000000000000000000000111111111111
-// echo decbin($current_timestamp|$machine) // 1101001101110011101111101111111111111000000000000
+echo decbin($current_timestamp);
+echo decbin($machine);
+echo decbin($current_sequence);
+echo decbin($current_timestamp|$machine);
+// 1101001101110011101111101110000000000000000000000
+// 0000000000000000000000000001111111111000000000000
+// 0000000000000000000000000000000000000111111111111
+// 1101001101110011101111101111111111111000000000000
 
 $id = $current_timestamp|$machine|$current_sequence;
 
-// echo decbin($id)                         // 1101001101110011101111101111111111111111111111111
+echo decbin($id);
+// 1101001101110011101111101111111111111111111111111
 
 echo $id;  // 464988158296063
 
