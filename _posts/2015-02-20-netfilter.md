@@ -41,7 +41,9 @@ net.netfilter.nf_conntrack_tcp_timeout_established = 86400
 `net.netfilter.nf_conntrack_tcp_timeout_established`表示已建立的tcp连接的超时时间。这个值过大将导致一些可能已经不用的连接常驻于内存中，占用大量链接资源，从而可能导致NAT
 ip_conntrack: table full的问题。
 
-修改了几个参数之后重新跑了一下`sysctl -p /etc/sysctl.conf`，之后死人杨先生又调整了dns等等其他参数，问题基本解决ಥ_ಥ
+修改了几个参数之后重新跑了一下`sysctl -p /etc/sysctl.conf`，之后死人杨先生又调整了dns等等其他参数，问题基本解决。
+
+这个故事告诉我们，假前不要随便上线奇怪的东西，任何不畏惧墨菲定律的行为都将会得到报应ಥ_ಥ
 
 **参考：**  
 [http://my.oschina.net/hongsheng/blog/151136](http://my.oschina.net/hongsheng/blog/151136)  
