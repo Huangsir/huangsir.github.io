@@ -30,7 +30,7 @@ tags: []
 
 rotate和maxage都是控制日志保留的，不过前者是以个数为单位，后者以天数为单位。
 
-具体logrotated会在什么时候运行，这个需要看cron.daily会在什么时候运行。在/etc/crontab文件里可以看到运行时间。
+具体logrotated会在什么时候运行，这个需要看cron.daily会在什么时候运行，在`/etc/crontab`里可以看到运行时间。
 
 一般自己写的程序，我习惯使用两种logrotated的方式。
 
@@ -39,7 +39,7 @@ rotate和maxage都是控制日志保留的，不过前者是以个数为单位�
 ```
 weekly
 missingok
-rotate 0
+rotate 0    #完全不需要保存数据，直接删掉
 su root audio
 ```
 
@@ -54,15 +54,15 @@ su root audio
 ```
 
 是否需要compress要看log文件的大小和具体的业务，保存几天也视情况而定。
-不过一般情况下我会选择保存2周时间。
+不过一般情况下我会选择压缩+保存2周时间。
 
 su root audio这个命令是用于解决权限问题的，一般不会加，
-但是如果你发现你的log文件logrotated因为权限问题无法正确的归档，
-就可以增加该命令。
+但是如果你发现你的log文件因为权限问题无法正确的归档时，
+可以增加该命令。
 [[参考]](https://linuxslut.net/logrotate-parent-directory-has-insecure-permissions/)
 
 编辑好你的rotate脚本后，保存到/etc/logrotate.d下，最好对于每一个日志，
-都编辑一个与之对应的logrotated脚本。当然也可以把多个脚本放在一个文件下。
+都编辑一个与之对应的logrotated脚本。当然也可以把多个脚本放在一个文件里。
 
 保存好之后不需要重启什么服务，下次日志归档时就会自动生效了。
 
@@ -80,7 +80,7 @@ sudo logrotate -vf <你的logrotated脚本路径>
 在归档后，文件名变成了celery.log.1.gz。  
 这时程序理应生成一个新的celery.log并往里面写数据，
 但是却不见celery.log出现。  
-这是因为程序一直持有老的celery.log的fd，在老的celery.log变成celery.log.1.gz后，并没有释放fd，所以就不会生成新的celery.log。
+这是因为程序一直持有老的celery.log的fd，在老的celery.log变成celery.log.1.gz后，程序并没有释放fd，所以就不会生成新的celery.log。
 
 解决这个问题的方法要看具体案例，比如说php5-fpm就使用上文的postrotate语法段来解决。  
 如果是我们自己写的python程序，使用logging的FileHandler时也会出现这个问题，可以改用WatchedFileHandler解决问题。  
