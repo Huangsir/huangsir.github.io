@@ -25,10 +25,14 @@ jobs:
       - run: npm install acyort -g
       - run: git config --global user.email "rj.huangsir@gmail.com"
       - run: git config --global user.name "Huangsir"
-      - run: git clone git@github.com:Huangsir/huangsir.github.io.git public
+      - run: git checkout master
+      - run: git reset --hard origin/master
+      - run: git checkout develop
       - run: git clone https://github.com/acyortjs/theme-donob.git themes/donob
       - run: acyort build
-      - run: cd public
+      - run: git checkout master
+      - run: cp -R public/* .
+      - run: rm -R public
       - run: ls -alh
       - run: git status
       - run: git add .
