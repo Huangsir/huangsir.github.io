@@ -33,4 +33,4 @@ jobs:
       - run: git config --global user.email "rj.huangsir@gmail.com"
       - run: git config --global user.name "Huangsir"
       - run: git commit -am "build by circleci"
-      - run: git push origin master
+      - run: git push origin master --force
