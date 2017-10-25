@@ -46,7 +46,7 @@ repository: huangsir.github.io
 
 # html output directory or child directory e.g. 'child'
 # default "/"
-public_dir:
+public_dir: public
 
 # blog post authors
 # github username
