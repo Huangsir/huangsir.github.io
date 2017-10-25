@@ -26,6 +26,7 @@ jobs:
       - run: git clone https://github.com/acyortjs/theme-donob.git themes/donob
       - run: acyort build
       - run: git checkout master
+      - run: git pull
       - run: ls -alh
       - run: git status
       - run: cp -R public/* ./
