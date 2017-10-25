@@ -25,14 +25,11 @@ jobs:
       - run: npm install acyort -g
       - run: git config --global user.email "rj.huangsir@gmail.com"
       - run: git config --global user.name "Huangsir"
+      - run: git clone git@github.com:Huangsir/huangsir.github.io.git public
       - run: git clone https://github.com/acyortjs/theme-donob.git themes/donob
       - run: acyort build
-      - run: git checkout master
-      - run: git pull
+      - run: cd public
       - run: ls -alh
-      - run: git status
-      - run: cp -R public/* ./
-      - run: rm -R public
       - run: git status
       - run: git add .
       - run: git commit -am "build by circleci"
