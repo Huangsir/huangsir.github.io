@@ -36,5 +36,5 @@ jobs:
       - run: ls -alh
       - run: git status
       - run: git add .
-      - run: git commit -am "build by circleci"
+      - run: git commit -am "build by circleci - `date`"
       - run: git push origin master --force
