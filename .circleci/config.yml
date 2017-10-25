@@ -1,0 +1,33 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: node:latest
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+    
+    branches:
+      only:
+        - master
+
+    steps:
+      - checkout
+      - run: npm install acyort -g
+      - run: git clone https://github.com/acyortjs/theme-donob.git themes/donob
+      - run: acyort build
+      - run: ls -alh
+      - run: git add .
+      - run: git config --global user.email "rj.huangsir@gmail.com"
+      - run: git config --global user.name "Huangsir"
+      - run: git commit -am "build by circleci"
+      - run: git push origin master
