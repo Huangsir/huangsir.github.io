@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="keywords" content="" />
+<link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+Lock your procedure - huangsir
+</title>
+</head>
+
+<body>
+
+<div class="main">
+<div class="inner">
+  
+<div class="header">
+    <a class="logo" href="/">huangsir</a><!--
+
+ --><div class="menu">
+        <a href="/archives">archives</a><a href="/category">category</a><a href="/tag">tag</a>
+    </div>
+
+    <div class="social">
+        <a target="_blank" href="https://github.com/Huangsir/huangsir.github.io/issues"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"></path>
+</svg></a><!--
+    --><a target="_blank" href="/rss.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z"></path>
+</svg></a>
+    </div>
+</div>
+
+
+
+
+<div id="post" class="center">
+
+    <p class="time">October 26, 2017</p>
+
+    <h1 class="title">Lock your procedure</h1>
+
+    <div class="content"><hr>
+<p>datetime: 2015-02-18 20:33:12</p>
+<hr>
+<p>在MySQL里，我们使用存储过程，以保证在执行出错的时候，数据可以即时的回滚到上一个状态。</p>
+<p>存储过程并不是线程安全的。假如存储过程调用频率比较频繁时，如果同一个存储过程在同一刻被意外的打码多次，就有可能出现问题。</p>
+<p>比如说下面的过程</p>
+
+    <div class="hljs sql">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-keyword">declare</span> va <span class="hljs-built_in">int</span>;
+<span class="hljs-keyword">select</span> v1 <span class="hljs-keyword">into</span> va <span class="hljs-keyword">from</span> table1;
+<span class="hljs-keyword">update</span> table2 <span class="hljs-keyword">set</span> v2 = v2 + va;</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>如果同时执行两次，则可能出现第一个过程在select后，update之前，第二个过程也select完成了。这时再update就会出现数据异常。</p>
+<p>解决这个问题，可以在过程中使用具有幂等性的方法。如依赖MySQL的UniqueKey，或者在存储过程中使用<code>update table2 set v2 = value2</code>这样的句式。</p>
+<p>但是这样的过程比不是在任何一个环境下都能写出来的。所以，在无法实现具有幂等性的句式下，需要保证存储过程同一时间只能运行一次。这是我们需要对存储过程加锁。</p>
+<p>加锁的方法：</p>
+
+    <div class="hljs sql">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-function"><span class="hljs-title">GET_LOCK</span><span class="hljs-params">(<span class="hljs-string">"&lt;lock_name&gt;"</span>, <span class="hljs-string">"&lt;expire_seconds&gt;"</span>)</span></span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>如<code>GET_LOCK(&#39;a_lock_name&#39;, 60)</code>表示以<code>a_lock_name</code>这个名字做锁，期限是60秒。超过60秒锁自动释放。成果获得锁返回true，否则返回false。</p>
+<p>解锁的方法：</p>
+
+    <div class="hljs sql">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-function"><span class="hljs-title">RELEASE_LOCK</span><span class="hljs-params">(<span class="hljs-string">"&lt;lock_name&gt;"</span>)</span></span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>如<code>DO RELEASE_LOCK(&quot;a_lock_name&quot;)</code>表示显示的释放名字为<code>a_lock_name</code>的锁。</p>
+<p>例：</p>
+
+    <div class="hljs sql">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> <span class="hljs-string">`procedure_name`</span> ()
+top:<span class="hljs-keyword">BEGIN</span>
+<span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> (<span class="hljs-keyword">GET_LOCK</span>(<span class="hljs-string">`lock_name`</span>, <span class="hljs-number">60</span>)) <span class="hljs-keyword">then</span>
+    leave top;
+<span class="hljs-keyword">end</span> <span class="hljs-keyword">if</span>;
+
+body:<span class="hljs-keyword">BEGIN</span>
+
+<span class="hljs-comment">-- Your SQL here</span>
+
+<span class="hljs-keyword">COMMIT</span>;
+<span class="hljs-keyword">end</span> <span class="hljs-keyword">body</span>;
+
+<span class="hljs-keyword">DO</span> <span class="hljs-keyword">RELEASE_LOCK</span>(<span class="hljs-string">`lock_name`</span>);
+<span class="hljs-keyword">end</span> top;</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+<div class="footer">
+    <div class="center">huangsir / Powered by <a target="_blank" href="https://github.com/acyortjs/acyort">AcyOrt</a> & <a target="_blank" href="https://github.com">GitHub</a></div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>

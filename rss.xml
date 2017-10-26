@@ -1,4 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 15:39:35 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 15:39:34 GMT</pubDate><item><title><![CDATA[清除命令行或文本里的着色代码]]></title><description><![CDATA[<hr>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 15:40:30 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 15:40:29 GMT</pubDate><item><title><![CDATA[Lock your procedure]]></title><description><![CDATA[<hr>
+<p>datetime: 2015-02-18 20:33:12</p>
+<hr>
+<p>在MySQL里，我们使用存储过程，以保证在执行出错的时候，数据可以即时的回滚到上一个状态。</p>
+<p>存储过程并不是线程安全的。假如存储过程调用频率比较频繁时，如果同一个存储过程在同一刻被意外的打码多次，就有可能出现问题。</p>
+<p>比如说下面的过程</p>
+<pre><code>declare va int;
+select v1 into va from table1;
+update table2 set v2 &#x3D; v2 + va;</code></pre><p>如果同时执行两次，则可能出现第一个过程在select后，update之前，第二个过程也select完成了。这时再update就会出现数据异常。</p>
+<p>解决这个问题，可以在过程中使用具有幂等性的方法。如依赖MySQL的UniqueKey，或者在存储过程中使用<code>update table2 set v2 = value2</code>这样的句式。</p>
+<p>但是这样的过程比不是在任何一个环境下都能写出来的。所以，在无法实现具有幂等性的句式下，需要保证存储过程同一时间只能运行一次。这是我们需要对存储过程加锁。</p>
+<p>加锁的方法：</p>
+<pre><code>GET_LOCK(&quot;&lt;lock_name&gt;&quot;, &quot;&lt;expire_seconds&gt;&quot;)</code></pre><p>如<code>GET_LOCK(&#39;a_lock_name&#39;, 60)</code>表示以<code>a_lock_name</code>这个名字做锁，期限是60秒。超过60秒锁自动释放。成果获得锁返回true，否则返回false。</p>
+<p>解锁的方法：</p>
+<pre><code>RELEASE_LOCK(&quot;&lt;lock_name&gt;&quot;)</code></pre><p>如<code>DO RELEASE_LOCK(&quot;a_lock_name&quot;)</code>表示显示的释放名字为<code>a_lock_name</code>的锁。</p>
+<p>例：</p>
+<pre><code>create procedure &#x60;procedure_name&#x60; ()
+top:BEGIN
+if not (GET_LOCK(&#x60;lock_name&#x60;, 60)) then
+    leave top;
+end if;
+
+body:BEGIN
+
+-- Your SQL here
+
+COMMIT;
+end body;
+
+DO RELEASE_LOCK(&#x60;lock_name&#x60;);
+end top;</code></pre>]]></description><link>http:/ruibo.me/posts/268810987.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268810987.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 15:40:13 GMT</pubDate></item><item><title><![CDATA[清除命令行或文本里的着色代码]]></title><description><![CDATA[<hr>
 <p>datetime: 2015-12-07 23:33:15</p>
 <hr>
 <p>有的logging模块，比如说Celery的，或者Golang的seelog，在输出日志的时候会带有高亮的着色代码。我们在cut日志或做其他操作的时候就会变得十分蛋疼。  </p>
