@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="keywords" content="" />
+<link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+万能的timestamp - huangsir
+</title>
+</head>
+
+<body>
+
+<div class="main">
+<div class="inner">
+  
+<div class="header">
+    <a class="logo" href="/">huangsir</a><!--
+
+ --><div class="menu">
+        <a href="/archives">archives</a><a href="/category">category</a><a href="/tag">tag</a>
+    </div>
+
+    <div class="social">
+        <a target="_blank" href="https://github.com/Huangsir/huangsir.github.io/issues"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"></path>
+</svg></a><!--
+    --><a target="_blank" href="/rss.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z"></path>
+</svg></a>
+    </div>
+</div>
+
+
+
+
+<div id="post" class="center">
+
+    <p class="time">October 26, 2017</p>
+
+    <h1 class="title">万能的timestamp</h1>
+
+    <div class="content"><hr>
+<p>datetime: 2014-12-06 11:10:03</p>
+<hr>
+<p>日常工作中经常需要做一些counter的工作，但是老老实实的用户点一下赞就加一个赞，或用户下载一个App就给这个App的下载数+1这种做法实在是太不符合老！板！的！风！格！了！  </p>
+<p>假如，你的老板有这种需求，怎么办呢？这时时间戳出现了。</p>
+<p>稳定，自增，全局，幂等，还有比这个更完美的解决方案么？</p>
+<p>假如我是豌豆夹的码农(我不是豌豆夹的码农，我也不知道豌豆夹有没有这样搞，我就是举个栗子)，刚刚起步时，我们从GP上抓了100w的App下来。<br>这时我们的产品就可以放出去了！吗？不行啊，下载数都是0啊，连qq都是0啊，这样拿出去怎么见人？不行哇！  </p>
+<p>怎么办？要不直接上时间戳吧！下载数是时间戳，你这不是要火么？<br>没关系哇，时间戳调慢一点，截取一段用来做前缀，中间一点稳定的hash值，后面再加一点随机数，最后再给他来个自增。回头一看，完美-，-#</p>
+<p>服务器要部署在全球多个IDC节点上哇，MySQL要做Master-Master哇，不做也没关系哇，总之Id不能冲突哇。<br>怎么办？UUID吧，到你公司倒闭100次人家照样好用哇。<br>不行哇，我要自增啊。
+自增你妹啊自增～～
+不行哇，一定要自增哇，Dump数据，增量查询都方便哇。</p>
+<p>自增就自增，来个<code>MongoId</code>吧，Timestamp+MachineId+ProcessId+SequenceId，做成16进制，大把够你用哇。<a href="http://docs.mongodb.org/manual/reference/object-id">http://docs.mongodb.org/manual/reference/object-id</a></p>
+<p>什么？要数字？数你妹啊数字～～<br>不行哇，强类型哇，臣妾做不到哇，你看看Twitter，Facebook都是数字呀~~<br>哎哟我擦，还真是-，-#<br>Twitter也用时间搓呀，果然时间戳才是解决问题的王道哇~<br><a href="http://www.slideshare.net/davegardnerisme/unique-id-generation-in-distributed-systems">http://www.slideshare.net/davegardnerisme/unique-id-generation-in-distributed-systems</a></p>
+
+    <div class="hljs php">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+<span>21</span>
+<span>22</span>
+<span>23</span>
+<span>24</span>
+<span>25</span>
+<span>26</span>
+<span>27</span>
+<span>28</span>
+<span>29</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="php"><span class="hljs-meta">&lt;?php</span>
+$current_sequence = <span class="hljs-number">4095</span>;
+$machine = <span class="hljs-number">1023</span>;
+$current_timestamp = intval(microtime(<span class="hljs-keyword">true</span>)*<span class="hljs-number">1000</span>);  <span class="hljs-comment">// 1417848461815</span>
+$epoch = strtotime(<span class="hljs-string">"2014-12-05"</span>)*<span class="hljs-number">1000</span>;  <span class="hljs-comment">// 1417737600000</span>
+
+$current_timestamp -= $epoch;  <span class="hljs-comment">// 110861815</span>
+
+<span class="hljs-keyword">echo</span> decbin($current_timestamp);
+<span class="hljs-comment">// 110100110111001110111110111</span>
+
+$current_timestamp &lt;&lt;= <span class="hljs-number">22</span>;
+$machine &lt;&lt;= <span class="hljs-number">12</span>;
+
+<span class="hljs-keyword">echo</span> decbin($current_timestamp);
+<span class="hljs-keyword">echo</span> decbin($machine);
+<span class="hljs-keyword">echo</span> decbin($current_sequence);
+<span class="hljs-keyword">echo</span> decbin($current_timestamp|$machine);
+<span class="hljs-comment">// 1101001101110011101111101110000000000000000000000</span>
+<span class="hljs-comment">// 0000000000000000000000000001111111111000000000000</span>
+<span class="hljs-comment">// 0000000000000000000000000000000000000111111111111</span>
+<span class="hljs-comment">// 1101001101110011101111101111111111111000000000000</span>
+
+$id = $current_timestamp|$machine|$current_sequence;
+
+<span class="hljs-keyword">echo</span> decbin($id);
+<span class="hljs-comment">// 1101001101110011101111101111111111111111111111111</span>
+
+<span class="hljs-keyword">echo</span> $id;  <span class="hljs-comment">// 464988158296063</span></span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+<div class="footer">
+    <div class="center">huangsir / Powered by <a target="_blank" href="https://github.com/acyortjs/acyort">AcyOrt</a> & <a target="_blank" href="https://github.com">GitHub</a></div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>

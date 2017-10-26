@@ -1,4 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 14:36:43 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 14:36:41 GMT</pubDate><item><title><![CDATA[如何优雅的解析Binlog]]></title><description><![CDATA[<hr>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 15:38:47 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 15:38:45 GMT</pubDate><item><title><![CDATA[万能的timestamp]]></title><description><![CDATA[<hr>
+<p>datetime: 2014-12-06 11:10:03</p>
+<hr>
+<p>日常工作中经常需要做一些counter的工作，但是老老实实的用户点一下赞就加一个赞，或用户下载一个App就给这个App的下载数+1这种做法实在是太不符合老！板！的！风！格！了！  </p>
+<p>假如，你的老板有这种需求，怎么办呢？这时时间戳出现了。</p>
+<p>稳定，自增，全局，幂等，还有比这个更完美的解决方案么？</p>
+<p>假如我是豌豆夹的码农(我不是豌豆夹的码农，我也不知道豌豆夹有没有这样搞，我就是举个栗子)，刚刚起步时，我们从GP上抓了100w的App下来。<br>这时我们的产品就可以放出去了！吗？不行啊，下载数都是0啊，连qq都是0啊，这样拿出去怎么见人？不行哇！  </p>
+<p>怎么办？要不直接上时间戳吧！下载数是时间戳，你这不是要火么？<br>没关系哇，时间戳调慢一点，截取一段用来做前缀，中间一点稳定的hash值，后面再加一点随机数，最后再给他来个自增。回头一看，完美-，-#</p>
+<p>服务器要部署在全球多个IDC节点上哇，MySQL要做Master-Master哇，不做也没关系哇，总之Id不能冲突哇。<br>怎么办？UUID吧，到你公司倒闭100次人家照样好用哇。<br>不行哇，我要自增啊。
+自增你妹啊自增～～
+不行哇，一定要自增哇，Dump数据，增量查询都方便哇。</p>
+<p>自增就自增，来个<code>MongoId</code>吧，Timestamp+MachineId+ProcessId+SequenceId，做成16进制，大把够你用哇。<a href="http://docs.mongodb.org/manual/reference/object-id">http://docs.mongodb.org/manual/reference/object-id</a></p>
+<p>什么？要数字？数你妹啊数字～～<br>不行哇，强类型哇，臣妾做不到哇，你看看Twitter，Facebook都是数字呀~~<br>哎哟我擦，还真是-，-#<br>Twitter也用时间搓呀，果然时间戳才是解决问题的王道哇~<br><a href="http://www.slideshare.net/davegardnerisme/unique-id-generation-in-distributed-systems">http://www.slideshare.net/davegardnerisme/unique-id-generation-in-distributed-systems</a></p>
+<pre><code>&lt;?php
+$current_sequence &#x3D; 4095;
+$machine &#x3D; 1023;
+$current_timestamp &#x3D; intval(microtime(true)*1000);  &#x2F;&#x2F; 1417848461815
+$epoch &#x3D; strtotime(&quot;2014-12-05&quot;)*1000;  &#x2F;&#x2F; 1417737600000
+
+$current_timestamp -&#x3D; $epoch;  &#x2F;&#x2F; 110861815
+
+echo decbin($current_timestamp);
+&#x2F;&#x2F; 110100110111001110111110111
+
+$current_timestamp &lt;&lt;&#x3D; 22;
+$machine &lt;&lt;&#x3D; 12;
+
+echo decbin($current_timestamp);
+echo decbin($machine);
+echo decbin($current_sequence);
+echo decbin($current_timestamp|$machine);
+&#x2F;&#x2F; 1101001101110011101111101110000000000000000000000
+&#x2F;&#x2F; 0000000000000000000000000001111111111000000000000
+&#x2F;&#x2F; 0000000000000000000000000000000000000111111111111
+&#x2F;&#x2F; 1101001101110011101111101111111111111000000000000
+
+$id &#x3D; $current_timestamp|$machine|$current_sequence;
+
+echo decbin($id);
+&#x2F;&#x2F; 1101001101110011101111101111111111111111111111111
+
+echo $id;  &#x2F;&#x2F; 464988158296063</code></pre>]]></description><link>http:/ruibo.me/posts/268810327.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268810327.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 15:38:29 GMT</pubDate></item><item><title><![CDATA[如何优雅的解析Binlog]]></title><description><![CDATA[<hr>
 <p>datetime: 2014-10-27 22:11:23</p>
 <hr>
 <p>知乎中毒患者会说：&quot;先上结论&quot; ...<br>结论就是，用现成的工具吧~~</p>
