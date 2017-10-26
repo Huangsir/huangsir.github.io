@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 14:33:53 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 14:33:52 GMT</pubDate><item><title><![CDATA[Celery]]></title><description><![CDATA[<hr>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 14:36:43 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 14:36:41 GMT</pubDate><item><title><![CDATA[如何优雅的解析Binlog]]></title><description><![CDATA[<hr>
+<p>datetime: 2014-10-27 22:11:23</p>
+<hr>
+<p>知乎中毒患者会说：&quot;先上结论&quot; ...<br>结论就是，用现成的工具吧~~</p>
+<p>不，结论我要放后面，不过还没内容哟。。。<br>TODO ...</p>
+<p>可以使用MySQL自带的<code>mysqlbinlog</code>，或者直接在MySQL里<code>SHOW BINLOG EVENTS</code>等，或者如果要实时获取Binlog的event，用这个<br><a href="https://github.com/noplay/python-mysql-replication">https://github.com/noplay/python-mysql-replication</a> python的<br>或者这个<br><a href="https://github.com/BullSoft/php-binlog">https://github.com/BullSoft/php-binlog</a> php的<br>什么？看不起脚本语言？要用C写？要用Golang写？我会告诉你php是世界上<del>最好</del>的编程语言么？</p>
+]]></description><link>http:/ruibo.me/posts/268786151.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268786151.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 14:36:17 GMT</pubDate></item><item><title><![CDATA[Celery]]></title><description><![CDATA[<hr>
 <p>datetime: 2014-09-12 11:34:12</p>
 <hr>
 <p><img src="https://user-images.githubusercontent.com/3870517/32059034-851cc114-ba30-11e7-81ca-658f58638ec0.jpg" alt="benefits-of-celery"></p>
