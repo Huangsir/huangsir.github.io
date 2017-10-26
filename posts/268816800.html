@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="keywords" content="" />
+<link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+用户数统计运算 - huangsir
+</title>
+</head>
+
+<body>
+
+<div class="main">
+<div class="inner">
+  
+<div class="header">
+    <a class="logo" href="/">huangsir</a><!--
+
+ --><div class="menu">
+        <a href="/archives">archives</a><a href="/category">category</a><a href="/tag">tag</a>
+    </div>
+
+    <div class="social">
+        <a target="_blank" href="https://github.com/Huangsir/huangsir.github.io/issues"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"></path>
+</svg></a><!--
+    --><a target="_blank" href="/rss.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z"></path>
+</svg></a>
+    </div>
+</div>
+
+
+
+
+<div id="post" class="center">
+
+    <p class="time">October 26, 2017</p>
+
+    <h1 class="title">用户数统计运算</h1>
+
+    <div class="content"><hr>
+<h2 id="datetime20151211221134">datetime: 2015-12-11 22:11:34</h2><p>用户数统计基本上有三种做法。</p>
+<ol>
+<li>使用一个Set来直接记录用户数</li><li>自己实现类似BloomFilter的方法</li><li>HyperLogLog</li></ol>
+<h4 id="hyperloglog">HyperLogLog</h4><p>HyperLogLog(HLL)作为比较新的一种方案，比起BloomFilter，错误可以比较稳定的维持在一个较低的水平。绝大多数情况下误差不回超过5%，平均错误在1%以内，对于超大量的用户量级维护十分友好。</p>
+<p>Redis里原生提供对HyperLogLog的支持，官方说明12K的key可以存放2^64的uniqueid</p>
+<p>当然，如果要保证毫无错误的话，还是直接使用Set来保存是最好。</p>
+<p>关于HyperLogLog的文章可以参考 <a href="http://blog.codinglabs.org/articles/algorithms-for-cardinality-estimation-part-iv.html">http://blog.codinglabs.org/articles/algorithms-for-cardinality-estimation-part-iv.html</a> 或者自行Google</p>
+<h4 id="容斥原理">容斥原理</h4><p>我们会遇到这样一种情况——我们有许多的用户数据，包用户的使用的手机品牌型号，地理位置，运营商等信息。</p>
+<p>这时我们想要计算每一天，我们在各个省市有多少用户、各个品牌上有多少用户、联通有多少用户，移动有多少用户、有多少用户使用WIFI接入我们的产品，有多少用户使用3G接入我们的产品。</p>
+<p>甚至，我们还想知道，广州小米有多少用户？，浙江三星有多少用户？；又或者在深圳使用小米的联通用户有多少？北京使用iPhone6s的移动用户里4G的用户有多少？</p>
+<p>看到这么多的排列组合，即使手头握着HyperLogLog这样的神器，也开始不淡定了呢。</p>
+<p>于是我们想到，能不能记录下每天广州的用户数HLL以及使用iPhone的用户数的HLL，然后将两个HLL做一个Intersection，就可以近似的算出每天广州的iPhone用户有多少？</p>
+<p>想法是挺好的，但是HyperLogLog并不能支持简单的Intersection。单纯的使用异或运算运算是无法得出正确结果的。</p>
+<p>幸运的是，HyperLogLog作为一种数据集合，是可以直接使用集合公式进行运算的。</p>
+<p>以下使用Redis自带的HyperLogLog为基础进行计算，Redis中PFCOUNT可以合并计算多个HLL的结果，结果相当于计算多个HLL集合的并集。</p>
+<p>即：<code>PFCOUNT k1 k2 k3 == k1 ∪ k2 ∪ k3</code></p>
+<p>根据集合运算中的容斥原理（请参见高中课本或<a href="https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle），集合A跟B的交集等于A跟B的和减去A跟B的交集。">https://en.wikipedia.org/wiki/Inclusion%E2%80%93exclusion_principle），集合A跟B的交集等于A跟B的和减去A跟B的交集。</a></p>
+<p>即：<code>|A∪B|=|A|+|B|-|A∩B|</code>，所以可得：<code>|A∩B|=|A|+|B|-|A∪B|</code>。</p>
+<p>即假设，集合A有10个元素，集合B有6个元素，A与B的并集有12个元素，那么可以算得A与B的交集必然有10+6-12=4个元素。</p>
+<p>回到Redis，根据上面所列公式，计算<code>k1∩k2</code>的方法为：<code>PFCOUNT k1 + PFCOUNT k2 - PFCOUNT k1 k2</code></p>
+<p>3个元素的情况下，<code>|A∪B∪C|=|A|+|B|+|C|-|A∩B|-|A∩C|-|B∩C|+|A∩B∩C|</code></p>
+<p>所以计算<code>k1∩k2∩k3</code>的方法也可以递归得出，同理更高维的情况。</p>
+<p>n个维度：</p>
+<p><img src="../assets/aklshdfqewjfhqef.png" alt=""></p>
+<p>习题 _(•̀ω•́ 」∠)_：</p>
+
+    <div class="hljs">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+</pre>
+            </td>
+            <td class="code"><pre>求a,b,c,d,e,f六个字母的全排列中不允许出现ace和df图象的排列数。</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <h4 id="minhash">MinHash</h4><p>上面的习题做不出来的话，请看这里∠( ᐛ 」∠)＿</p>
+<p>MinHash原本是搜索引擎用来快速估算两个网页的相似度而研究出来的一种算法，她可以用来快速计算两个集合的相似程度。</p>
+<p>介绍见此 <a href="https://en.wikipedia.org/wiki/MinHash">https://en.wikipedia.org/wiki/MinHash</a></p>
+<p>MinHash会对数据进行Hash并得到一个较为简短的摘要，对内存开销十分友好，这点与HLL类似。</p>
+<p>MinHash度量结果叫做Jaccard similarity，记做<code>J</code>，其中有公式：</p>
+<p><img src="../assets/23wieyroiwr.png" alt=""></p>
+<p>多维的情况下，可以表示为：</p>
+<p><img src="../assets/akdgfjkaehe.png" alt=""></p>
+<p>由上面两个公式可以看到，求交集的方法已经呼之欲出。</p>
+<h4 id="最后">最后</h4><p>值得注意的是，因为HyperLogLog本身并不是100%无差统计，每个HLL的数据集里都可能会多多少少有一些误差，在做容斥运算的时候会导致这些误差增大。最坏的情况下，误差可能会达到30%多，且在做减法运算时，可能会出现负数的情况。</p>
+<h4 id="参考">参考：</h4><p><a href="http://tech.adroll.com/blog/data/2013/07/10/hll-minhash.html">http://tech.adroll.com/blog/data/2013/07/10/hll-minhash.html</a></p>
+<p><a href="http://research.neustar.biz/2012/12/17/hll-intersections-2/">http://research.neustar.biz/2012/12/17/hll-intersections-2/</a></p>
+</div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+<div class="footer">
+    <div class="center">huangsir / Powered by <a target="_blank" href="https://github.com/acyortjs/acyort">AcyOrt</a> & <a target="_blank" href="https://github.com">GitHub</a></div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>
