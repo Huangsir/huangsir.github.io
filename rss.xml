@@ -1,4 +1,332 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 15:56:12 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 15:56:10 GMT</pubDate><item><title><![CDATA[用户数统计运算]]></title><description><![CDATA[<hr>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 16:00:43 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 16:00:41 GMT</pubDate><item><title><![CDATA[iphone用ikev2搭梯子]]></title><description><![CDATA[<hr>
+<h2>datetime: 2015-10-24 21:38:19</h2><p>一种个人感觉比较小众的科学Shangwang的方式</p>
+<p>&lt;!-- more --&gt;
+</p>
+<hr>
+<p>layout: post
+title: &quot;iphone用ikev2翻墙&quot;
+description: &quot;&quot;
+category: </p>
+<h2>tags: []</h2><p>想到要为我的iphone翻墙原因有两个。一是前几天出门旅游，在玩instagram；二是我一直在玩ingress，但是手头iphone翻墙实在不方便，虽然在家大部分时间还是用Android机开画图工具-，-#</p>
+<p>不过始终，觉得为自己的iphone弄个翻墙还是很有必要的。</p>
+<p>为此我尝试了使用openvpn。但发现openvpn在如果是连接国内ip的server是十分稳定的，但是如果连接国外的openvpn服务，就会经常被block掉连接。</p>
+<p>这样我很不爽，出门打架，或者面基的时候被block了，还要花半天时间来连接服务器，这尼玛不得坑死我。</p>
+<p>于是我就发现了ikev2这套协议。</p>
+<p>选用的方法是在在vps上部署<code>strongswan</code>，部署的方法可以见<a href="https://gist.github.com/losisli/11081793">这篇文章</a></p>
+<p>然而相比于大部分blog里直接wget下来安装的做法，本人喜欢使用apt-get来安装。</p>
+<hr>
+<p><strong>安装strongswan</strong></p>
+<pre><code>apt-get install build-essential     #编译环境
+aptitude install libgmp10 libgmp3-dev libssl-dev pkg-config libpcsclite-dev libpam0g-dev     #编译所需要的软件
+apt-get install strongswan</code></pre><hr>
+<p><strong>生成证书</strong></p>
+<p>生成根证书</p>
+<pre><code>ipsec pki --gen --outform pem &gt; caKey.pem
+ipsec pki --self --in caKey.pem --dn &quot;C&#x3D;CN, O&#x3D;myNetwork, CN&#x3D;myCA&quot; --ca --outform pem &gt; caCert.pem</code></pre><p>生成服务器证书</p>
+<pre><code>ipsec pki --gen --outform pem &gt; serverKey.pem
+ipsec pki --pub --in serverKey.pem | ipsec pki --issue --cacert caCert.pem --cakey caKey.pem --dn &quot;C&#x3D;CN, O&#x3D;myNetwork, CN&#x3D;&lt;这里要填写服务器的ip或者域名&gt;&quot; --san&#x3D;&quot;&lt;这里要填写服务器的ip或者域名&gt;&quot; --flag serverAuth --flag ikeIntermediate --outform pem &gt; serverCert.pem</code></pre><p>生成客户端证书</p>
+<pre><code>ipsec pki --gen --outform pem &gt; clientKey.pem
+ipsec pki --pub --in clientKey.pem | ipsec pki --issue --cacert caCert.pem --cakey caKey.pem --dn &quot;C&#x3D;CN, O&#x3D;strongSwan, CN&#x3D;iphoneClient&quot; --outform pem &gt; clientCert.pem</code></pre><p>很多博客里会说让生成p12证书，然而在iOS8以上好像并不需要这个东西。</p>
+<p>将证书Copy到对应的目录下，使用apt-get来安装strongswan的话，证书需要copy到/etc目录下</p>
+<pre><code>sudo mv caCert.pem &#x2F;etc&#x2F;ipsec.d&#x2F;cacerts&#x2F;
+sudo mv serverCert.pem &#x2F;etc&#x2F;ipsec.d&#x2F;certs&#x2F;
+sudo mv caKey.pem &#x2F;etc&#x2F;ipsec.d&#x2F;private&#x2F;
+sudo mv serverKey.pem &#x2F;etc&#x2F;ipsec.d&#x2F;private&#x2F;
+sudo mv clientKey.pem &#x2F;etc&#x2F;ipsec.d&#x2F;private&#x2F;</code></pre><hr>
+<p><strong>配置strongswan</strong></p>
+<p>因为我只需要让我的iphone能够翻墙，所以我这里只有iphone的配置。</p>
+<p>编辑<code>/etc/ipsec.conf</code></p>
+<pre><code># ipsec.conf - strongSwan IPsec configuration file
+
+# basic configuration
+
+config setup
+    # strictcrlpolicy&#x3D;yes
+    uniqueids &#x3D; never
+
+# Add connections here.
+conn %default
+    left&#x3D;%defaultroute
+    ikelifetime&#x3D;60m
+    keylife&#x3D;20m
+    rekeymargin&#x3D;3m
+    keyingtries&#x3D;1
+    keyexchange&#x3D;ikev2  # 协议是ikev2
+    authby&#x3D;secret  # 验证方式是密码，也可以用证书，证书配置起来比较麻烦，需要选用iphone支持的签名方法(懒得下证书了-，-#)
+
+conn iOS_psk
+    leftsubnet&#x3D;0.0.0.0&#x2F;0
+    leftfirewall&#x3D;yes
+    right&#x3D;%any
+    rightsourceip&#x3D;10.63.41.0&#x2F;24  # 分配的内网ip
+    auto&#x3D;add</code></pre><p>编辑<code>/etc/ipsec.secrets</code></p>
+<pre><code># This file holds shared secrets or RSA private keys for authentication.
+
+# RSA private key for this host, authenticating it to any other host
+# which knows the public part.  Suitable public keys, for ipsec.conf, DNS,
+# or configuration of other implementations, can be extracted conveniently
+# with &quot;ipsec showhostkey&quot;.
+
+: PSK &quot;&lt;你的密码，尽量不要使用太奇怪的字符&gt;&quot;</code></pre><p>编辑<code>/etc/strongswan.conf</code>，其他参数没有测试过，但是dns是一定需要的，不然的话上不了网，不知其他网友有没有这种情况。</p>
+<pre><code># strongswan.conf - strongSwan configuration file
+#
+# Refer to the strongswan.conf(5) manpage for details
+#
+# Configuration changes should be made in the included files
+
+charon {
+    load_modular &#x3D; yes
+        duplicheck.enable &#x3D; no
+        compress &#x3D; yes
+        dns1 &#x3D; 8.8.8.8
+        dns2 &#x3D; 8.8.4.4
+    plugins {
+        include strongswan.d&#x2F;charon&#x2F;*.conf
+    }
+}
+
+include strongswan.d&#x2F;*.conf</code></pre><hr>
+<p><strong>打开ip转发</strong></p>
+<pre><code>sudo sed -s &#39;s&#x2F;^#net.ipv4.ip_forward&#x3D;1&#x2F;net.ipv4.ip_forward&#x3D;1&#x2F;g&#39; &#x2F;etc&#x2F;sysctl.conf -i
+sudo sysctl -p</code></pre><hr>
+<p><strong>配置iptable</strong></p>
+<p>注意里面配置的ip，和上面ipsec.conf配置的ip一致，这个就不用多解释了。</p>
+<p>这里我为了解决iptable重启之后会失效的问题，用了iptables-save这个工具，找不到这个工具的也可以找其他工具帮忙。</p>
+<pre><code>#!&#x2F;bin&#x2F;bash
+iptables -A INPUT -p udp --dport 500 -j ACCEPT
+iptables -A INPUT -p udp --dport 4500 -j ACCEPT
+iptables -t nat -A POSTROUTING -s 10.63.41.0&#x2F;24 -o eth0 -j MASQUERADE
+iptables -A FORWARD -s 10.63.41.0&#x2F;24 -j ACCEPT
+
+# 保存iptables配置
+iptables-save &gt; &#x2F;etc&#x2F;iptables&#x2F;rules.v4</code></pre><hr>
+<p>自此，服务器端的配置都已经完成，启动strongswan我们就可以使用iphone翻墙了</p>
+<pre><code># 普通启动
+ipsec start
+
+# 输出日志的启动
+ipsec start --nofork</code></pre><hr>
+<p><strong>iPhone配置</strong></p>
+<p>&lt;img width=&quot;402&quot; alt=&quot;4e11705d-1eec-4edc-929e-66861f25b70f&quot; src=&quot;https://user-images.githubusercontent.com/3870517/32063455-d1b00fb6-ba3c-11e7-92ec-8bf7d6340a4b.png&quot;&gt;</p>
+<p>描述可以随便写，服务器和远程ID都填服务器的ip地址，或者域名。</p>
+<p>密码就是上文所配置的那个密码。</p>
+<p>然后点击完成，vpn的配置就完成了。</p>
+<p><strong>配置文件</strong></p>
+<p>但是直接配置账号密码，并不能让iphone在切换网络之后自动连接。要自动连接的话，需要使用配置文件。</p>
+<p>配置文件的样例如下：</p>
+<pre><code>&lt;!DOCTYPE plist PUBLIC &quot;-&#x2F;&#x2F;Apple&#x2F;&#x2F;DTD PLIST 1.0&#x2F;&#x2F;EN&quot; &quot;http:&#x2F;&#x2F;www.apple.com&#x2F;DTDs&#x2F;PropertyList-1.0.dtd&quot;&gt;
+&lt;!-- Read more: https:&#x2F;&#x2F;wiki.strongswan.org&#x2F;projects&#x2F;strongswan&#x2F;wiki&#x2F;AppleIKEv2Profile --&gt;
+&lt;plist version&#x3D;&quot;1.0&quot;&gt;
+    &lt;dict&gt;
+        &lt;!-- Set the name to whatever you like, it is used in the profile list on the device --&gt;
+        &lt;key&gt;PayloadDisplayName&lt;&#x2F;key&gt;
+        &lt;string&gt;${PROFILE_NAME}&lt;&#x2F;string&gt;
+        &lt;!-- This is a reverse-DNS style unique identifier used to detect duplicate profiles --&gt;
+        &lt;key&gt;PayloadIdentifier&lt;&#x2F;key&gt;
+        &lt;string&gt;${PROFILE_IDENTIFIER}&lt;&#x2F;string&gt;
+        &lt;!-- A globally unique identifier, use uuidgen on Linux&#x2F;Mac OS X to generate it --&gt;
+        &lt;key&gt;PayloadUUID&lt;&#x2F;key&gt;
+        &lt;string&gt;${PROFILE_UUID}&lt;&#x2F;string&gt;
+        &lt;key&gt;PayloadType&lt;&#x2F;key&gt;
+        &lt;string&gt;Configuration&lt;&#x2F;string&gt;
+        &lt;key&gt;PayloadVersion&lt;&#x2F;key&gt;
+        &lt;integer&gt;1&lt;&#x2F;integer&gt;
+        &lt;key&gt;PayloadContent&lt;&#x2F;key&gt;
+        &lt;array&gt;
+            &lt;!-- It is possible to add multiple VPN payloads with different identifiers&#x2F;UUIDs and names --&gt;
+            &lt;dict&gt;
+                &lt;!-- This is an extension of the identifier given above --&gt;
+                &lt;key&gt;PayloadIdentifier&lt;&#x2F;key&gt;
+                &lt;string&gt;${CONN_IDENTIFIER}&lt;&#x2F;string&gt;
+                &lt;!-- A globally unique identifier for this payload --&gt;
+                &lt;key&gt;PayloadUUID&lt;&#x2F;key&gt;
+                &lt;string&gt;${CONN_UUID}&lt;&#x2F;string&gt;
+                &lt;key&gt;PayloadType&lt;&#x2F;key&gt;
+                &lt;string&gt;com.apple.vpn.managed&lt;&#x2F;string&gt;
+                &lt;key&gt;PayloadVersion&lt;&#x2F;key&gt;
+                &lt;integer&gt;1&lt;&#x2F;integer&gt;
+                &lt;!-- This is the name of the VPN connection as seen in the VPN application later --&gt;
+                &lt;key&gt;UserDefinedName&lt;&#x2F;key&gt;
+                &lt;string&gt;${CONN_NAME}&lt;&#x2F;string&gt;
+                &lt;key&gt;VPNType&lt;&#x2F;key&gt;
+                &lt;string&gt;IKEv2&lt;&#x2F;string&gt;
+                &lt;key&gt;IKEv2&lt;&#x2F;key&gt;
+                &lt;dict&gt;
+                    &lt;!-- Hostname or IP address of the VPN server --&gt;
+                    &lt;key&gt;RemoteAddress&lt;&#x2F;key&gt;
+                    &lt;string&gt;${CONN_HOST}&lt;&#x2F;string&gt;
+                    &lt;!-- Remote identity, can be a FQDN, a userFQDN, an IP or (theoretically) a certificate&#39;s subject DN. Can&#39;t be empty.
+                     IMPORTANT: DNs are currently not handled correctly, they are always sent as identities of type FQDN --&gt;
+                    &lt;key&gt;RemoteIdentifier&lt;&#x2F;key&gt;
+                    &lt;string&gt;${CONN_REMOTE_IDENTIFIER}&lt;&#x2F;string&gt;
+                    &lt;!-- Local IKE identity, same restrictions as above. If it is empty the client&#39;s IP address will be used --&gt;
+                    &lt;key&gt;LocalIdentifier&lt;&#x2F;key&gt;
+                    &lt;string&gt;&lt;&#x2F;string&gt;
+                    &lt;!--
+                    OnDemand references:
+                    https:&#x2F;&#x2F;developer.apple.com&#x2F;library&#x2F;mac&#x2F;featuredarticles&#x2F;iPhoneConfigurationProfileRef&#x2F;Introduction&#x2F;Introduction.html
+                    --&gt;
+                    &lt;key&gt;OnDemandEnabled&lt;&#x2F;key&gt;
+                    &lt;integer&gt;1&lt;&#x2F;integer&gt;
+                    &lt;key&gt;OnDemandRules&lt;&#x2F;key&gt;
+                    &lt;array&gt;
+                        &lt;dict&gt;
+                            &lt;key&gt;Action&lt;&#x2F;key&gt;
+                            &lt;string&gt;Connect&lt;&#x2F;string&gt;
+                        &lt;&#x2F;dict&gt;
+                    &lt;&#x2F;array&gt;
+                    &lt;!-- The server is authenticated using a certificate --&gt;
+                    &lt;key&gt;AuthenticationMethod&lt;&#x2F;key&gt;
+                    &lt;string&gt;SharedSecret&lt;&#x2F;string&gt;
+                    &lt;key&gt;SharedSecret&lt;&#x2F;key&gt;
+                    &lt;string&gt;${CONN_SHARED_SECRET}&lt;&#x2F;string&gt;
+                    &lt;!-- The client uses EAP to authenticate --&gt;
+                    &lt;key&gt;ExtendedAuthEnabled&lt;&#x2F;key&gt;
+                    &lt;integer&gt;0&lt;&#x2F;integer&gt;
+                &lt;&#x2F;dict&gt;
+            &lt;&#x2F;dict&gt;
+        &lt;&#x2F;array&gt;
+    &lt;&#x2F;dict&gt;
+&lt;&#x2F;plist&gt;</code></pre><p> 里面有不少东西需要自己替换成自己的配置。所以最后我干脆写了一个脚本，用来配置这个东西。</p>
+<p>配置一共有3个文件</p>
+<pre><code>config.sh  # 用于配置环境，并生成iphone使用的.mobileconfig文件
+generate-mobileconfig.sh  # iphone使用的.mobileconfig文件的模板，config.sh会调用这个脚本
+iptables.sh  # 配置iptables的脚本</code></pre><p><em>config.sh</em></p>
+<pre><code>#!&#x2F;bin&#x2F;bash
+
+HOST&#x3D;&quot;&lt;这里写服务器的ip，或者域名&gt;&quot;
+export HOST&#x3D;$HOST
+
+ipsec pki --gen --outform pem &gt; caKey.pem
+ipsec pki --self --in caKey.pem --dn &quot;C&#x3D;CN, O&#x3D;myNetwork, CN&#x3D;myCA&quot; --ca --outform pem &gt; caCert.pem
+
+ipsec pki --gen --outform pem &gt; serverKey.pem
+ipsec pki --pub --in serverKey.pem | ipsec pki --issue --cacert caCert.pem --cakey caKey.pem --dn &quot;C&#x3D;CN, O&#x3D;myNetwork, CN&#x3D;$host&quot; --san&#x3D;&quot;$host&quot; --flag serverAuth --flag ikeIntermediate --outform pem &gt; serverCert.pem
+
+ipsec pki --gen --outform pem &gt; clientKey.pem
+ipsec pki --pub --in clientKey.pem | ipsec pki --issue --cacert caCert.pem --cakey caKey.pem --dn &quot;C&#x3D;CN, O&#x3D;strongSwan, CN&#x3D;iphoneClient&quot; --outform pem &gt; clientCert.pem
+
+openssl pkcs12 -export -inkey clientKey.pem -in clientCert.pem -name &quot;iphoneClient&quot; -certfile caCert.pem -caname &quot;myCA&quot; -out clientCert.p12
+
+sudo mv caCert.pem &#x2F;etc&#x2F;ipsec.d&#x2F;cacerts&#x2F;
+sudo mv serverCert.pem &#x2F;etc&#x2F;ipsec.d&#x2F;certs&#x2F;
+sudo mv caKey.pem &#x2F;etc&#x2F;ipsec.d&#x2F;private&#x2F;
+sudo mv serverKey.pem &#x2F;etc&#x2F;ipsec.d&#x2F;private&#x2F;
+sudo mv clientKey.pem &#x2F;etc&#x2F;ipsec.d&#x2F;private&#x2F;
+
+sudo cp ipsec.conf &#x2F;etc&#x2F;
+sudo cp ipsec.secrets &#x2F;etc&#x2F;
+sudo cp strongswan.conf &#x2F;etc&#x2F;
+
+sudo sed -s &#39;s&#x2F;^#net.ipv4.ip_forward&#x3D;1&#x2F;net.ipv4.ip_forward&#x3D;1&#x2F;g&#39; &#x2F;etc&#x2F;sysctl.conf -i
+sudo sysctl -p
+
+.&#x2F;generate-mobileconfig.sh &gt; $HOST.mobileconfig</code></pre><p><em>iptables.sh</em></p>
+<pre><code>#!&#x2F;bin&#x2F;bash
+iptables -A INPUT -p udp --dport 500 -j ACCEPT
+iptables -A INPUT -p udp --dport 4500 -j ACCEPT
+iptables -t nat -A POSTROUTING -s 10.63.41.0&#x2F;24 -o eth0 -j MASQUERADE
+iptables -A FORWARD -s 10.63.41.0&#x2F;24 -j ACCEPT
+iptables-save &gt; &#x2F;etc&#x2F;iptables&#x2F;rules.v4</code></pre><p><em>generate-mobileconfig.sh</em></p>
+<pre><code>#!&#x2F;bin&#x2F;bash
+
+# TODO: add regenerate shared secret option
+
+# In normal cases, you will only need to pass the HOST of your server.
+#[ &quot;no${HOST}&quot; &#x3D; &quot;no&quot; ] &amp;&amp; echo &quot;\$HOST environment variable required.&quot; &amp;&amp; exit 1
+: ${PROFILE_NAME&#x3D;&quot;${HOST} Profile&quot;}
+: ${PROFILE_IDENTIFIER&#x3D;$(echo -n &quot;${HOST}.&quot; | tac -s. | sed &#39;s&#x2F;\.$&#x2F;&#x2F;g&#39;)}
+: ${PROFILE_UUID&#x3D;$(hostname)}
+# These variable, especially CONN_UUID, are bind to per username,
+# which currently, all users share the same secrets and configurations.
+: ${CONN_NAME&#x3D;&quot;${HOST}&quot;}
+: ${CONN_IDENTIFIER&#x3D;&quot;${PROFILE_IDENTIFIER}.shared-configuration&quot;}
+: ${CONN_UUID&#x3D;$(uuidgen)}
+: ${CONN_HOST&#x3D;${HOST}}
+: ${CONN_REMOTE_IDENTIFIER&#x3D;${HOST}}
+CONN_SHARED_SECRET&#x3D;$(grep &quot;PSK&quot; &#x2F;etc&#x2F;ipsec.secrets | sed &#39;s&#x2F;.*&quot;\(.*\)&quot;&#x2F;\1&#x2F;g&#39;)
+
+cat &lt;&lt;EOF
+&lt;!DOCTYPE plist PUBLIC &quot;-&#x2F;&#x2F;Apple&#x2F;&#x2F;DTD PLIST 1.0&#x2F;&#x2F;EN&quot; &quot;http:&#x2F;&#x2F;www.apple.com&#x2F;DTDs&#x2F;PropertyList-1.0.dtd&quot;&gt;
+&lt;!-- Read more: https:&#x2F;&#x2F;wiki.strongswan.org&#x2F;projects&#x2F;strongswan&#x2F;wiki&#x2F;AppleIKEv2Profile --&gt;
+&lt;plist version&#x3D;&quot;1.0&quot;&gt;
+    &lt;dict&gt;
+        &lt;!-- Set the name to whatever you like, it is used in the profile list on the device --&gt;
+        &lt;key&gt;PayloadDisplayName&lt;&#x2F;key&gt;
+        &lt;string&gt;${PROFILE_NAME}&lt;&#x2F;string&gt;
+        &lt;!-- This is a reverse-DNS style unique identifier used to detect duplicate profiles --&gt;
+        &lt;key&gt;PayloadIdentifier&lt;&#x2F;key&gt;
+        &lt;string&gt;${PROFILE_IDENTIFIER}&lt;&#x2F;string&gt;
+        &lt;!-- A globally unique identifier, use uuidgen on Linux&#x2F;Mac OS X to generate it --&gt;
+        &lt;key&gt;PayloadUUID&lt;&#x2F;key&gt;
+        &lt;string&gt;${PROFILE_UUID}&lt;&#x2F;string&gt;
+        &lt;key&gt;PayloadType&lt;&#x2F;key&gt;
+        &lt;string&gt;Configuration&lt;&#x2F;string&gt;
+        &lt;key&gt;PayloadVersion&lt;&#x2F;key&gt;
+        &lt;integer&gt;1&lt;&#x2F;integer&gt;
+        &lt;key&gt;PayloadContent&lt;&#x2F;key&gt;
+        &lt;array&gt;
+            &lt;!-- It is possible to add multiple VPN payloads with different identifiers&#x2F;UUIDs and names --&gt;
+            &lt;dict&gt;
+                &lt;!-- This is an extension of the identifier given above --&gt;
+                &lt;key&gt;PayloadIdentifier&lt;&#x2F;key&gt;
+                &lt;string&gt;${CONN_IDENTIFIER}&lt;&#x2F;string&gt;
+                &lt;!-- A globally unique identifier for this payload --&gt;
+                &lt;key&gt;PayloadUUID&lt;&#x2F;key&gt;
+                &lt;string&gt;${CONN_UUID}&lt;&#x2F;string&gt;
+                &lt;key&gt;PayloadType&lt;&#x2F;key&gt;
+                &lt;string&gt;com.apple.vpn.managed&lt;&#x2F;string&gt;
+                &lt;key&gt;PayloadVersion&lt;&#x2F;key&gt;
+                &lt;integer&gt;1&lt;&#x2F;integer&gt;
+                &lt;!-- This is the name of the VPN connection as seen in the VPN application later --&gt;
+                &lt;key&gt;UserDefinedName&lt;&#x2F;key&gt;
+                &lt;string&gt;${CONN_NAME}&lt;&#x2F;string&gt;
+                &lt;key&gt;VPNType&lt;&#x2F;key&gt;
+                &lt;string&gt;IKEv2&lt;&#x2F;string&gt;
+                &lt;key&gt;IKEv2&lt;&#x2F;key&gt;
+                &lt;dict&gt;
+                    &lt;!-- Hostname or IP address of the VPN server --&gt;
+                    &lt;key&gt;RemoteAddress&lt;&#x2F;key&gt;
+                    &lt;string&gt;${CONN_HOST}&lt;&#x2F;string&gt;
+                    &lt;!-- Remote identity, can be a FQDN, a userFQDN, an IP or (theoretically) a certificate&#39;s subject DN. Can&#39;t be empty.
+                     IMPORTANT: DNs are currently not handled correctly, they are always sent as identities of type FQDN --&gt;
+                    &lt;key&gt;RemoteIdentifier&lt;&#x2F;key&gt;
+                    &lt;string&gt;${CONN_REMOTE_IDENTIFIER}&lt;&#x2F;string&gt;
+                    &lt;!-- Local IKE identity, same restrictions as above. If it is empty the client&#39;s IP address will be used --&gt;
+                    &lt;key&gt;LocalIdentifier&lt;&#x2F;key&gt;
+                    &lt;string&gt;&lt;&#x2F;string&gt;
+                    &lt;!--
+                    OnDemand references:
+                    https:&#x2F;&#x2F;developer.apple.com&#x2F;library&#x2F;mac&#x2F;featuredarticles&#x2F;iPhoneConfigurationProfileRef&#x2F;Introduction&#x2F;Introduction.html
+                    --&gt;
+                    &lt;key&gt;OnDemandEnabled&lt;&#x2F;key&gt;
+                    &lt;integer&gt;1&lt;&#x2F;integer&gt;
+                    &lt;key&gt;OnDemandRules&lt;&#x2F;key&gt;
+                    &lt;array&gt;
+                        &lt;dict&gt;
+                            &lt;key&gt;Action&lt;&#x2F;key&gt;
+                            &lt;string&gt;Connect&lt;&#x2F;string&gt;
+                        &lt;&#x2F;dict&gt;
+                    &lt;&#x2F;array&gt;
+                    &lt;!-- The server is authenticated using a certificate --&gt;
+                    &lt;key&gt;AuthenticationMethod&lt;&#x2F;key&gt;
+                    &lt;string&gt;SharedSecret&lt;&#x2F;string&gt;
+                    &lt;key&gt;SharedSecret&lt;&#x2F;key&gt;
+                    &lt;string&gt;${CONN_SHARED_SECRET}&lt;&#x2F;string&gt;
+                    &lt;!-- The client uses EAP to authenticate --&gt;
+                    &lt;key&gt;ExtendedAuthEnabled&lt;&#x2F;key&gt;
+                    &lt;integer&gt;0&lt;&#x2F;integer&gt;
+                &lt;&#x2F;dict&gt;
+            &lt;&#x2F;dict&gt;
+        &lt;&#x2F;array&gt;
+    &lt;&#x2F;dict&gt;
+&lt;&#x2F;plist&gt;
+EOF</code></pre><p>最后整个配置也只有我自己试用过是可以的。如果发现用不了，请自己上网找怎么解决。</p>
+<p>生成了<code>.mobileconfig</code>文件后，使用<code>python -m SimpleHTTPServer</code>命令运行一个web服务，然后在iphone上用Safari打开这个文件，安装配置。然后你就有了一个可以自动连接的ikev2配置。</p>
+<hr>
+<p>后记：iphone上我只使用过openvpn和ikev2个人感觉ikev2十分稳定，到目前为止没有出现过被block的情况。出门打po面基都十分方便，用instagram装逼也是妥妥的。</p>
+<p>PS：我是蓝...</p>
+]]></description><link>http:/ruibo.me/posts/268818423.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268818423.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 16:00:16 GMT</pubDate></item><item><title><![CDATA[用户数统计运算]]></title><description><![CDATA[<hr>
 <h2>datetime: 2015-12-11 22:11:34</h2><p>用户数统计基本上有三种做法。</p>
 <ol>
 <li>使用一个Set来直接记录用户数</li>

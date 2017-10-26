@@ -1,0 +1,889 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="keywords" content="" />
+<link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+iphone用ikev2搭梯子 - huangsir
+</title>
+</head>
+
+<body>
+
+<div class="main">
+<div class="inner">
+  
+<div class="header">
+    <a class="logo" href="/">huangsir</a><!--
+
+ --><div class="menu">
+        <a href="/archives">archives</a><a href="/category">category</a><a href="/tag">tag</a>
+    </div>
+
+    <div class="social">
+        <a target="_blank" href="https://github.com/Huangsir/huangsir.github.io/issues"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"></path>
+</svg></a><!--
+    --><a target="_blank" href="/rss.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z"></path>
+</svg></a>
+    </div>
+</div>
+
+
+
+
+<div id="post" class="center">
+
+    <p class="time">October 26, 2017</p>
+
+    <h1 class="title">iphone用ikev2搭梯子</h1>
+
+    <div class="content"><hr>
+<h2 id="datetime20151024213819">datetime: 2015-10-24 21:38:19</h2><p>一种个人感觉比较小众的科学Shangwang的方式</p>
+<hr>
+<p>layout: post
+title: &quot;iphone用ikev2翻墙&quot;
+description: &quot;&quot;
+category: </p>
+<h2 id="tags">tags: []</h2><p>想到要为我的iphone翻墙原因有两个。一是前几天出门旅游，在玩instagram；二是我一直在玩ingress，但是手头iphone翻墙实在不方便，虽然在家大部分时间还是用Android机开画图工具-，-#</p>
+<p>不过始终，觉得为自己的iphone弄个翻墙还是很有必要的。</p>
+<p>为此我尝试了使用openvpn。但发现openvpn在如果是连接国内ip的server是十分稳定的，但是如果连接国外的openvpn服务，就会经常被block掉连接。</p>
+<p>这样我很不爽，出门打架，或者面基的时候被block了，还要花半天时间来连接服务器，这尼玛不得坑死我。</p>
+<p>于是我就发现了ikev2这套协议。</p>
+<p>选用的方法是在在vps上部署<code>strongswan</code>，部署的方法可以见<a href="https://gist.github.com/losisli/11081793">这篇文章</a></p>
+<p>然而相比于大部分blog里直接wget下来安装的做法，本人喜欢使用apt-get来安装。</p>
+<hr>
+<p><strong>安装strongswan</strong></p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+</pre>
+            </td>
+            <td class="code"><pre>apt-get <span class="hljs-keyword">install </span><span class="hljs-keyword">build-essential </span>    <span class="hljs-comment">#编译环境</span>
+aptitude <span class="hljs-keyword">install </span>libgmp10 libgmp3-dev libssl-dev pkg-<span class="hljs-built_in">config</span> libpcsclite-dev libpam0g-dev     <span class="hljs-comment">#编译所需要的软件</span>
+apt-get <span class="hljs-keyword">install </span>strongswan</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <hr>
+<p><strong>生成证书</strong></p>
+<p>生成根证书</p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+</pre>
+            </td>
+            <td class="code"><pre>ipsec pki --gen --outform pem &gt; caKey.pem<span class="hljs-built_in">
+ipsec </span>pki --self --in caKey.pem --dn <span class="hljs-string">"C=CN, O=myNetwork, CN=myCA"</span> --ca --outform pem &gt; caCert.pem</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>生成服务器证书</p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+</pre>
+            </td>
+            <td class="code"><pre>ipsec pki --gen --outform pem &gt; serverKey.pem<span class="hljs-built_in">
+ipsec </span>pki --pub --in serverKey.pem |<span class="hljs-built_in"> ipsec </span>pki --issue --cacert caCert.pem --cakey caKey.pem --dn <span class="hljs-string">"C=CN, O=myNetwork, CN=&lt;这里要填写服务器的ip或者域名&gt;"</span> <span class="hljs-attribute">--san</span>=<span class="hljs-string">"&lt;这里要填写服务器的ip或者域名&gt;"</span> --flag serverAuth --flag ikeIntermediate --outform pem &gt; serverCert.pem</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>生成客户端证书</p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+</pre>
+            </td>
+            <td class="code"><pre>ipsec pki --gen --outform pem &gt; clientKey.pem<span class="hljs-built_in">
+ipsec </span>pki --pub --in clientKey.pem |<span class="hljs-built_in"> ipsec </span>pki --issue --cacert caCert.pem --cakey caKey.pem --dn <span class="hljs-string">"C=CN, O=strongSwan, CN=iphoneClient"</span> --outform pem &gt; clientCert.pem</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>很多博客里会说让生成p12证书，然而在iOS8以上好像并不需要这个东西。</p>
+<p>将证书Copy到对应的目录下，使用apt-get来安装strongswan的话，证书需要copy到/etc目录下</p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+</pre>
+            </td>
+            <td class="code"><pre>sudo mv caCert.pem <span class="hljs-regexp">/etc/i</span>psec.d<span class="hljs-regexp">/cacerts/</span>
+sudo mv serverCert.pem <span class="hljs-regexp">/etc/i</span>psec.d<span class="hljs-regexp">/certs/</span>
+sudo mv caKey.pem <span class="hljs-regexp">/etc/i</span>psec.d<span class="hljs-regexp">/private/</span>
+sudo mv serverKey.pem <span class="hljs-regexp">/etc/i</span>psec.d<span class="hljs-regexp">/private/</span>
+sudo mv clientKey.pem <span class="hljs-regexp">/etc/i</span>psec.d<span class="hljs-regexp">/private/</span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <hr>
+<p><strong>配置strongswan</strong></p>
+<p>因为我只需要让我的iphone能够翻墙，所以我这里只有iphone的配置。</p>
+<p>编辑<code>/etc/ipsec.conf</code></p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+<span>21</span>
+<span>22</span>
+<span>23</span>
+<span>24</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-comment"># ipsec.conf - strongSwan IPsec configuration file</span>
+
+<span class="hljs-comment"># basic configuration</span>
+<span class="hljs-built_in">
+config </span>setup
+    # <span class="hljs-attribute">strictcrlpolicy</span>=<span class="hljs-literal">yes</span>
+    uniqueids = never
+
+<span class="hljs-comment"># Add connections here.</span>
+conn %default
+    <span class="hljs-attribute">left</span>=%defaultroute
+    <span class="hljs-attribute">ikelifetime</span>=60m
+    <span class="hljs-attribute">keylife</span>=20m
+    <span class="hljs-attribute">rekeymargin</span>=3m
+    <span class="hljs-attribute">keyingtries</span>=1
+    <span class="hljs-attribute">keyexchange</span>=ikev2  # 协议是ikev2
+    <span class="hljs-attribute">authby</span>=secret  # 验证方式是密码，也可以用证书，证书配置起来比较麻烦，需要选用iphone支持的签名方法(懒得下证书了-，-#)
+
+conn iOS_psk
+    <span class="hljs-attribute">leftsubnet</span>=0.0.0.0/0
+    <span class="hljs-attribute">leftfirewall</span>=<span class="hljs-literal">yes</span>
+    <span class="hljs-attribute">right</span>=%any
+    <span class="hljs-attribute">rightsourceip</span>=10.63.41.0/24  # 分配的内网ip
+    <span class="hljs-attribute">auto</span>=add</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>编辑<code>/etc/ipsec.secrets</code></p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-meta">#</span><span class="bash"> This file holds shared secrets or RSA private keys <span class="hljs-keyword">for</span> authentication.</span>
+<span class="hljs-meta">
+#</span><span class="bash"> RSA private key <span class="hljs-keyword">for</span> this host, authenticating it to any other host</span>
+<span class="hljs-meta">#</span><span class="bash"> <span class="hljs-built_in">which</span> knows the public part.  Suitable public keys, <span class="hljs-keyword">for</span> ipsec.conf, DNS,</span>
+<span class="hljs-meta">#</span><span class="bash"> or configuration of other implementations, can be extracted conveniently</span>
+<span class="hljs-meta">#</span><span class="bash"> with <span class="hljs-string">"ipsec showhostkey"</span>.</span>
+
+: PSK "&lt;你的密码，尽量不要使用太奇怪的字符&gt;"</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>编辑<code>/etc/strongswan.conf</code>，其他参数没有测试过，但是dns是一定需要的，不然的话上不了网，不知其他网友有没有这种情况。</p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-comment"># strongswan.conf - strongSwan configuration file</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># Refer to the strongswan.conf(5) manpage for details</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># Configuration changes should be made in the included files</span>
+
+<span class="hljs-section">charon</span> {
+    <span class="hljs-attribute">load_modular</span> = <span class="hljs-literal">yes</span>
+        duplicheck.enable = <span class="hljs-literal">no</span>
+        compress = <span class="hljs-literal">yes</span>
+        dns1 = <span class="hljs-number">8.8.8.8</span>
+        dns2 = <span class="hljs-number">8.8.4.4</span>
+    plugins {
+        <span class="hljs-attribute">include</span> strongswan.d/charon/<span class="hljs-regexp">*.conf</span>
+    }
+}
+
+include strongswan.d/<span class="hljs-regexp">*.conf</span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <hr>
+<p><strong>打开ip转发</strong></p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+</pre>
+            </td>
+            <td class="code"><pre>sudo sed -s <span class="hljs-string">'s/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g'</span> /etc/sysctl<span class="hljs-selector-class">.conf</span> -<span class="hljs-selector-tag">i</span>
+sudo sysctl -p</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <hr>
+<p><strong>配置iptable</strong></p>
+<p>注意里面配置的ip，和上面ipsec.conf配置的ip一致，这个就不用多解释了。</p>
+<p>这里我为了解决iptable重启之后会失效的问题，用了iptables-save这个工具，找不到这个工具的也可以找其他工具帮忙。</p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-comment">#!/bin/bash</span>
+iptables -A INPUT -p udp --dport 500 -j ACCEPT
+iptables -A INPUT -p udp --dport 4500 -j ACCEPT
+iptables -t<span class="hljs-built_in"> nat </span>-A POSTROUTING -s 10.63.41.0/24 -o eth0 -j MASQUERADE
+iptables -A FORWARD -s 10.63.41.0/24 -j ACCEPT
+
+<span class="hljs-comment"># 保存iptables配置</span>
+iptables-save &gt; /etc/iptables/rules.v4</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <hr>
+<p>自此，服务器端的配置都已经完成，启动strongswan我们就可以使用iphone翻墙了</p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-comment"># 普通启动</span><span class="hljs-built_in">
+ipsec </span>start
+
+<span class="hljs-comment"># 输出日志的启动</span><span class="hljs-built_in">
+ipsec </span>start --nofork</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <hr>
+<p><strong>iPhone配置</strong></p>
+<p>&lt;img width=&quot;402&quot; alt=&quot;4e11705d-1eec-4edc-929e-66861f25b70f&quot; src=&quot;https://user-images.githubusercontent.com/3870517/32063455-d1b00fb6-ba3c-11e7-92ec-8bf7d6340a4b.png&quot;&gt;</p>
+<p>描述可以随便写，服务器和远程ID都填服务器的ip地址，或者域名。</p>
+<p>密码就是上文所配置的那个密码。</p>
+<p>然后点击完成，vpn的配置就完成了。</p>
+<p><strong>配置文件</strong></p>
+<p>但是直接配置账号密码，并不能让iphone在切换网络之后自动连接。要自动连接的话，需要使用配置文件。</p>
+<p>配置文件的样例如下：</p>
+
+    <div class="hljs xml">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+<span>21</span>
+<span>22</span>
+<span>23</span>
+<span>24</span>
+<span>25</span>
+<span>26</span>
+<span>27</span>
+<span>28</span>
+<span>29</span>
+<span>30</span>
+<span>31</span>
+<span>32</span>
+<span>33</span>
+<span>34</span>
+<span>35</span>
+<span>36</span>
+<span>37</span>
+<span>38</span>
+<span>39</span>
+<span>40</span>
+<span>41</span>
+<span>42</span>
+<span>43</span>
+<span>44</span>
+<span>45</span>
+<span>46</span>
+<span>47</span>
+<span>48</span>
+<span>49</span>
+<span>50</span>
+<span>51</span>
+<span>52</span>
+<span>53</span>
+<span>54</span>
+<span>55</span>
+<span>56</span>
+<span>57</span>
+<span>58</span>
+<span>59</span>
+<span>60</span>
+<span>61</span>
+<span>62</span>
+<span>63</span>
+<span>64</span>
+<span>65</span>
+<span>66</span>
+<span>67</span>
+<span>68</span>
+<span>69</span>
+<span>70</span>
+<span>71</span>
+<span>72</span>
+<span>73</span>
+<span>74</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="xml"><span class="hljs-meta">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="hljs-comment">&lt;!-- Read more: https://wiki.strongswan.org/projects/strongswan/wiki/AppleIKEv2Profile --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">plist</span> <span class="hljs-attr">version</span>=<span class="hljs-string">"1.0"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- Set the name to whatever you like, it is used in the profile list on the device --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadDisplayName<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{PROFILE_NAME}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- This is a reverse-DNS style unique identifier used to detect duplicate profiles --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadIdentifier<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{PROFILE_IDENTIFIER}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- A globally unique identifier, use uuidgen on Linux/Mac OS X to generate it --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadUUID<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{PROFILE_UUID}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadType<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>Configuration<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadVersion<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">integer</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">integer</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadContent<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">array</span>&gt;</span>
+            <span class="hljs-comment">&lt;!-- It is possible to add multiple VPN payloads with different identifiers/UUIDs and names --&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+                <span class="hljs-comment">&lt;!-- This is an extension of the identifier given above --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadIdentifier<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_IDENTIFIER}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-comment">&lt;!-- A globally unique identifier for this payload --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadUUID<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_UUID}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadType<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>com.apple.vpn.managed<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadVersion<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">integer</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">integer</span>&gt;</span>
+                <span class="hljs-comment">&lt;!-- This is the name of the VPN connection as seen in the VPN application later --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>UserDefinedName<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_NAME}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>VPNType<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>IKEv2<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>IKEv2<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- Hostname or IP address of the VPN server --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>RemoteAddress<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_HOST}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- Remote identity, can be a FQDN, a userFQDN, an IP or (theoretically) a certificate's subject DN. Can't be empty.
+                     IMPORTANT: DNs are currently not handled correctly, they are always sent as identities of type FQDN --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>RemoteIdentifier<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_REMOTE_IDENTIFIER}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- Local IKE identity, same restrictions as above. If it is empty the client's IP address will be used --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>LocalIdentifier<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!--
+                    OnDemand references:
+                    https://developer.apple.com/library/mac/featuredarticles/iPhoneConfigurationProfileRef/Introduction/Introduction.html
+                    --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>OnDemandEnabled<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">integer</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">integer</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>OnDemandRules<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">array</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+                            <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>Action<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                            <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>Connect<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                        <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">array</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- The server is authenticated using a certificate --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>AuthenticationMethod<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>SharedSecret<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>SharedSecret<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_SHARED_SECRET}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- The client uses EAP to authenticate --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>ExtendedAuthEnabled<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">integer</span>&gt;</span>0<span class="hljs-tag">&lt;/<span class="hljs-name">integer</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">array</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">plist</span>&gt;</span></span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p> 里面有不少东西需要自己替换成自己的配置。所以最后我干脆写了一个脚本，用来配置这个东西。</p>
+<p>配置一共有3个文件</p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-built_in">config</span>.<span class="hljs-keyword">sh </span> <span class="hljs-comment"># 用于配置环境，并生成iphone使用的.mobileconfig文件</span>
+generate-mobileconfig.<span class="hljs-keyword">sh </span> <span class="hljs-comment"># iphone使用的.mobileconfig文件的模板，config.sh会调用这个脚本</span>
+iptables.<span class="hljs-keyword">sh </span> <span class="hljs-comment"># 配置iptables的脚本</span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p><em>config.sh</em></p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+<span>21</span>
+<span>22</span>
+<span>23</span>
+<span>24</span>
+<span>25</span>
+<span>26</span>
+<span>27</span>
+<span>28</span>
+<span>29</span>
+<span>30</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-comment">#!/bin/bash</span>
+
+HOST=<span class="hljs-string">"&lt;这里写服务器的ip，或者域名&gt;"</span>
+export HOST=$HOST
+
+ipsec pki <span class="hljs-params">--gen</span> <span class="hljs-params">--outform</span> pem &gt; caKey.pem
+ipsec pki <span class="hljs-params">--self</span> <span class="hljs-params">--in</span> caKey.pem <span class="hljs-params">--dn</span> <span class="hljs-string">"C=CN, O=myNetwork, CN=myCA"</span> <span class="hljs-params">--ca</span> <span class="hljs-params">--outform</span> pem &gt; caCert.pem
+
+ipsec pki <span class="hljs-params">--gen</span> <span class="hljs-params">--outform</span> pem &gt; serverKey.pem
+ipsec pki <span class="hljs-params">--pub</span> <span class="hljs-params">--in</span> serverKey.pem | ipsec pki <span class="hljs-params">--issue</span> <span class="hljs-params">--cacert</span> caCert.pem <span class="hljs-params">--cakey</span> caKey.pem <span class="hljs-params">--dn</span> <span class="hljs-string">"C=CN, O=myNetwork, CN=$host"</span> <span class="hljs-params">--san=</span><span class="hljs-string">"$host"</span> <span class="hljs-params">--flag</span> serverAuth <span class="hljs-params">--flag</span> ikeIntermediate <span class="hljs-params">--outform</span> pem &gt; serverCert.pem
+
+ipsec pki <span class="hljs-params">--gen</span> <span class="hljs-params">--outform</span> pem &gt; clientKey.pem
+ipsec pki <span class="hljs-params">--pub</span> <span class="hljs-params">--in</span> clientKey.pem | ipsec pki <span class="hljs-params">--issue</span> <span class="hljs-params">--cacert</span> caCert.pem <span class="hljs-params">--cakey</span> caKey.pem <span class="hljs-params">--dn</span> <span class="hljs-string">"C=CN, O=strongSwan, CN=iphoneClient"</span> <span class="hljs-params">--outform</span> pem &gt; clientCert.pem
+
+openssl pkcs12 -export -inkey clientKey.pem -in clientCert.pem -name <span class="hljs-string">"iphoneClient"</span> -certfile caCert.pem -caname <span class="hljs-string">"myCA"</span> -out clientCert.p12
+
+sudo mv caCert.pem <span class="hljs-string">/etc/ipsec.d/cacerts/</span>
+sudo mv serverCert.pem <span class="hljs-string">/etc/ipsec.d/certs/</span>
+sudo mv caKey.pem <span class="hljs-string">/etc/ipsec.d/private/</span>
+sudo mv serverKey.pem <span class="hljs-string">/etc/ipsec.d/private/</span>
+sudo mv clientKey.pem <span class="hljs-string">/etc/ipsec.d/private/</span>
+
+sudo cp ipsec.conf <span class="hljs-string">/etc/</span>
+sudo cp ipsec.secrets <span class="hljs-string">/etc/</span>
+sudo cp strongswan.conf <span class="hljs-string">/etc/</span>
+
+sudo sed -s 's/^<span class="hljs-comment">#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf -i</span>
+sudo sysctl -p
+
+<span class="hljs-string">./generate-mobileconfig.sh</span> &gt; $HOST.mobileconfig</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p><em>iptables.sh</em></p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-comment">#!/bin/bash</span>
+iptables -A INPUT -p udp --dport 500 -j ACCEPT
+iptables -A INPUT -p udp --dport 4500 -j ACCEPT
+iptables -t<span class="hljs-built_in"> nat </span>-A POSTROUTING -s 10.63.41.0/24 -o eth0 -j MASQUERADE
+iptables -A FORWARD -s 10.63.41.0/24 -j ACCEPT
+iptables-save &gt; /etc/iptables/rules.v4</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p><em>generate-mobileconfig.sh</em></p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+<span>21</span>
+<span>22</span>
+<span>23</span>
+<span>24</span>
+<span>25</span>
+<span>26</span>
+<span>27</span>
+<span>28</span>
+<span>29</span>
+<span>30</span>
+<span>31</span>
+<span>32</span>
+<span>33</span>
+<span>34</span>
+<span>35</span>
+<span>36</span>
+<span>37</span>
+<span>38</span>
+<span>39</span>
+<span>40</span>
+<span>41</span>
+<span>42</span>
+<span>43</span>
+<span>44</span>
+<span>45</span>
+<span>46</span>
+<span>47</span>
+<span>48</span>
+<span>49</span>
+<span>50</span>
+<span>51</span>
+<span>52</span>
+<span>53</span>
+<span>54</span>
+<span>55</span>
+<span>56</span>
+<span>57</span>
+<span>58</span>
+<span>59</span>
+<span>60</span>
+<span>61</span>
+<span>62</span>
+<span>63</span>
+<span>64</span>
+<span>65</span>
+<span>66</span>
+<span>67</span>
+<span>68</span>
+<span>69</span>
+<span>70</span>
+<span>71</span>
+<span>72</span>
+<span>73</span>
+<span>74</span>
+<span>75</span>
+<span>76</span>
+<span>77</span>
+<span>78</span>
+<span>79</span>
+<span>80</span>
+<span>81</span>
+<span>82</span>
+<span>83</span>
+<span>84</span>
+<span>85</span>
+<span>86</span>
+<span>87</span>
+<span>88</span>
+<span>89</span>
+<span>90</span>
+<span>91</span>
+<span>92</span>
+<span>93</span>
+<span>94</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="xml">#!/bin/bash
+
+# TODO: add regenerate shared secret option
+
+# In normal cases, you will only need to pass the HOST of your server.
+#[ "no$</span><span class="hljs-template-variable">{HOST}</span><span class="xml">" = "no" ] &amp;&amp; echo "\$HOST environment variable required." &amp;&amp; exit 1
+: $</span><span class="hljs-template-variable">{PROFILE_NAME="${HOST}</span><span class="xml"> Profile"}
+: $</span><span class="hljs-template-variable">{PROFILE_IDENTIFIER=$(echo -n "${HOST}</span><span class="xml">." | tac -s. | sed 's/\.$//g')}
+: $</span><span class="hljs-template-variable">{PROFILE_UUID=$(hostname)}</span><span class="xml">
+# These variable, especially CONN_UUID, are bind to per username,
+# which currently, all users share the same secrets and configurations.
+: $</span><span class="hljs-template-variable">{CONN_NAME="${HOST}</span><span class="xml">"}
+: $</span><span class="hljs-template-variable">{CONN_IDENTIFIER="${PROFILE_IDENTIFIER}</span><span class="xml">.shared-configuration"}
+: $</span><span class="hljs-template-variable">{CONN_UUID=$(uuidgen)}</span><span class="xml">
+: $</span><span class="hljs-template-variable">{CONN_HOST=${HOST}</span><span class="xml">}
+: $</span><span class="hljs-template-variable">{CONN_REMOTE_IDENTIFIER=${HOST}</span><span class="xml">}
+CONN_SHARED_SECRET=$(grep "PSK" /etc/ipsec.secrets | sed 's/.*"\(.*\)"/\1/g')
+
+cat <span class="hljs-tag">&lt;&lt;<span class="hljs-attr">EOF</span>
+&lt;!<span class="hljs-attr">DOCTYPE</span> <span class="hljs-attr">plist</span> <span class="hljs-attr">PUBLIC</span> "<span class="hljs-attr">-</span>//<span class="hljs-attr">Apple</span>//<span class="hljs-attr">DTD</span> <span class="hljs-attr">PLIST</span> <span class="hljs-attr">1.0</span>//<span class="hljs-attr">EN</span>" "<span class="hljs-attr">http:</span>//<span class="hljs-attr">www.apple.com</span>/<span class="hljs-attr">DTDs</span>/<span class="hljs-attr">PropertyList-1.0.dtd</span>"&gt;</span>
+<span class="hljs-comment">&lt;!-- Read more: https://wiki.strongswan.org/projects/strongswan/wiki/AppleIKEv2Profile --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">plist</span> <span class="hljs-attr">version</span>=<span class="hljs-string">"1.0"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- Set the name to whatever you like, it is used in the profile list on the device --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadDisplayName<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{PROFILE_NAME}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- This is a reverse-DNS style unique identifier used to detect duplicate profiles --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadIdentifier<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{PROFILE_IDENTIFIER}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- A globally unique identifier, use uuidgen on Linux/Mac OS X to generate it --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadUUID<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{PROFILE_UUID}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadType<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>Configuration<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadVersion<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">integer</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">integer</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadContent<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">array</span>&gt;</span>
+            <span class="hljs-comment">&lt;!-- It is possible to add multiple VPN payloads with different identifiers/UUIDs and names --&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+                <span class="hljs-comment">&lt;!-- This is an extension of the identifier given above --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadIdentifier<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_IDENTIFIER}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-comment">&lt;!-- A globally unique identifier for this payload --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadUUID<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_UUID}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadType<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>com.apple.vpn.managed<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>PayloadVersion<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">integer</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">integer</span>&gt;</span>
+                <span class="hljs-comment">&lt;!-- This is the name of the VPN connection as seen in the VPN application later --&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>UserDefinedName<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_NAME}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>VPNType<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>IKEv2<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>IKEv2<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- Hostname or IP address of the VPN server --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>RemoteAddress<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_HOST}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- Remote identity, can be a FQDN, a userFQDN, an IP or (theoretically) a certificate's subject DN. Can't be empty.
+                     IMPORTANT: DNs are currently not handled correctly, they are always sent as identities of type FQDN --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>RemoteIdentifier<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_REMOTE_IDENTIFIER}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- Local IKE identity, same restrictions as above. If it is empty the client's IP address will be used --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>LocalIdentifier<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!--
+                    OnDemand references:
+                    https://developer.apple.com/library/mac/featuredarticles/iPhoneConfigurationProfileRef/Introduction/Introduction.html
+                    --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>OnDemandEnabled<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">integer</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">integer</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>OnDemandRules<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">array</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+                            <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>Action<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                            <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>Connect<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                        <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">array</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- The server is authenticated using a certificate --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>AuthenticationMethod<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>SharedSecret<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>SharedSecret<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>$</span><span class="hljs-template-variable">{CONN_SHARED_SECRET}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+                    <span class="hljs-comment">&lt;!-- The client uses EAP to authenticate --&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>ExtendedAuthEnabled<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-name">integer</span>&gt;</span>0<span class="hljs-tag">&lt;/<span class="hljs-name">integer</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">array</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">plist</span>&gt;</span>
+EOF</span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>最后整个配置也只有我自己试用过是可以的。如果发现用不了，请自己上网找怎么解决。</p>
+<p>生成了<code>.mobileconfig</code>文件后，使用<code>python -m SimpleHTTPServer</code>命令运行一个web服务，然后在iphone上用Safari打开这个文件，安装配置。然后你就有了一个可以自动连接的ikev2配置。</p>
+<hr>
+<p>后记：iphone上我只使用过openvpn和ikev2个人感觉ikev2十分稳定，到目前为止没有出现过被block的情况。出门打po面基都十分方便，用instagram装逼也是妥妥的。</p>
+<p>PS：我是蓝...</p>
+</div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+<div class="footer">
+    <div class="center">huangsir / Powered by <a target="_blank" href="https://github.com/acyortjs/acyort">AcyOrt</a> & <a target="_blank" href="https://github.com">GitHub</a></div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>
