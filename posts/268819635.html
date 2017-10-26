@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="keywords" content="" />
+<link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+git flow release finish的时候自动生成Changelog - huangsir
+</title>
+</head>
+
+<body>
+
+<div class="main">
+<div class="inner">
+  
+<div class="header">
+    <a class="logo" href="/">huangsir</a><!--
+
+ --><div class="menu">
+        <a href="/archives">archives</a><a href="/category">category</a><a href="/tag">tag</a>
+    </div>
+
+    <div class="social">
+        <a target="_blank" href="https://github.com/Huangsir/huangsir.github.io/issues"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"></path>
+</svg></a><!--
+    --><a target="_blank" href="/rss.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z"></path>
+</svg></a>
+    </div>
+</div>
+
+
+
+
+<div id="post" class="center">
+
+    <p class="time">October 26, 2017</p>
+
+    <h1 class="title">git flow release finish的时候自动生成Changelog</h1>
+
+    <div class="content"><hr>
+<h2 id="datetime20160223192219">datetime: 2016-02-23 19:22:19</h2><p>大部分人应该都没有写Changelog的习惯吧？我也没有...</p>
+<p>git有提供hook的方法，可以实现帮助我们实现许多自定义的功能。在git flow大热之后，许多的企业项目，都采用git flow的流程来作为项目开发的标准流程。</p>
+<p>有一天老夫在网上逛荡的时候，注意到一些服务每次在发布版本的时候，都有提供详细的Changelog，然而老夫自己的项目里基本上是不会有这种东西的，而且我感觉也没有人有兴趣每天在上面更新项目的Changelog。作为一个极（ma）客（nong），我们应该是用技术的手法来减少工作。</p>
+<p>于是乎，我就想到了在git flow发布release的时候，自动生成一份Changelog。</p>
+<p>在网上翻了翻，其实有不少网友已经有提供了现成的脚本，老夫随意拿了一份来，改了改~~</p>
+<p>git flow在安装的时候，本身已经对git的hook进行了一定的扩展，feature，release，hotfix都有start和finish的hook。我就选择使用release的finish的hook来实现自动生成Changelog的功能。</p>
+<p>我希望能够达到的效果是：当我发布一个版本时（git flow release finish），程序能够自动将上一个版本，到这一次发版之间，所有的commit，全部输出到Changelog.md这个文件上，然后将这个文件的修改commit到版本库里。</p>
+<p>我们新建一个项目，就叫做test_hook好了，然后在项目里使用git init初始化git目录，然后使用git flow init初始化git flow配置。</p>
+<p>这时进入项目里.git/hooks，可以看到里面有一些hook的sample，如果没有找到这个目录，可以自己make一个。</p>
+<p>然后我们在hooks目录下添加一个文件名为pre-flow-release-finish的文件。</p>
+<p>文件脚本如下：</p>
+
+    <div class="hljs">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+<span>21</span>
+<span>22</span>
+<span>23</span>
+<span>24</span>
+<span>25</span>
+<span>26</span>
+<span>27</span>
+<span>28</span>
+<span>29</span>
+<span>30</span>
+<span>31</span>
+<span>32</span>
+<span>33</span>
+<span>34</span>
+<span>35</span>
+<span>36</span>
+<span>37</span>
+<span>38</span>
+<span>39</span>
+<span>40</span>
+<span>41</span>
+<span>42</span>
+<span>43</span>
+<span>44</span>
+<span>45</span>
+<span>46</span>
+<span>47</span>
+<span>48</span>
+<span>49</span>
+<span>50</span>
+<span>51</span>
+<span>52</span>
+<span>53</span>
+<span>54</span>
+<span>55</span>
+<span>56</span>
+<span>57</span>
+<span>58</span>
+<span>59</span>
+<span>60</span>
+<span>61</span>
+<span>62</span>
+<span>63</span>
+</pre>
+            </td>
+            <td class="code"><pre>#!&#x2F;bin&#x2F;bash
+#
+# Runs before git flow release finish
+#
+# Positional arguments:
+# $1    The version (including the version prefix)
+# $2    The origin remote
+# $3    The full branch name (including the release prefix)
+#
+# The following variables are available as they are exported by git-flow:
+#
+# MASTER_BRANCH - The branch defined as Master
+# DEVELOP_BRANCH - The branch defined as Develop
+#
+VERSION&#x3D;$1
+ORIGIN&#x3D;$2
+BRANCH&#x3D;$3
+
+if [ &#x60;echo &quot;$VERSION&quot; | grep -P &quot;v\d+.+&quot;&#x60; !&#x3D; $VERSION ]; then
+    exit 0
+fi
+
+REPOADDR&#x3D;&#x60;git config --get remote.origin.url | sed -s &#39;s&#x2F;.git$&#x2F;&#x2F;g&#39;&#x60;
+if [ ${REPOADDR:0:3} &#x3D;&#x3D; &quot;git&quot; ]; then
+    REPOADDR&#x3D;&#x60;echo $REPOADDR | sed -s &#39;s&#x2F;:&#x2F;\&#x2F;&#x2F;g;s&#x2F;git\@&#x2F;https:\&#x2F;\&#x2F;&#x2F;g&#39;&#x60;
+fi
+LINKADDR&#x3D;$REPOADDR&#x2F;commit&#x2F;
+
+rm Changelog.md 2&gt;&#x2F;dev&#x2F;null
+while read TAG; do
+    if [ ! $CURRENT ]; then
+        REV&#x3D;&quot;--all&quot;
+        CURRENT&#x3D;1
+        echo &quot;     &quot; &gt;&gt; Changelog.md
+        echo &quot;*$VERSION (CURRENT)*&quot; &gt;&gt; Changelog.md
+        echo &quot;---&quot; &gt;&gt; Changelog.md
+    else
+        REV&#x3D;$TAG
+        echo &quot;     &quot; &gt;&gt; Changelog.md
+        echo *$NEXT* &gt;&gt; Changelog.md
+        echo &quot;---&quot; &gt;&gt; Changelog.md
+    fi
+
+    echo &quot;     &quot; &gt;&gt; Changelog.md
+    git log --no-merges --date&#x3D;short  --pretty&#x3D;format:&quot;- %ad (%an) %s -&gt; [view commit](${LINKADDR}%h)&quot; $TAG..$NEXT | grep -v &quot;Edit Changelog.md&quot; &gt;&gt; Changelog.md
+    echo &quot;     &quot; &gt;&gt; Changelog.md
+
+    NEXT&#x3D;$TAG
+done &lt; &lt;(git for-each-ref --sort&#x3D;&#39;*authordate&#39; --format&#x3D;&#39;%(tag)&#39; refs&#x2F;tags | grep &#39;v\d+.+&#39; -P | tac)
+
+COMMITID&#x3D;&#x60;git rev-list $NEXT | head -n 1&#x60;
+LINKADDR&#x3D;$REPOADDR&#x2F;commit&#x2F;$COMMITID
+echo &quot;     &quot; &gt;&gt; Changelog.md
+echo *$NEXT* &gt;&gt; Changelog.md
+echo &quot;---&quot; &gt;&gt; Changelog.md
+echo &quot;     &quot; &gt;&gt; Changelog.md
+git log --no-merges --date&#x3D;short  --pretty&#x3D;format:&quot;- %ad (%an) %s -&gt; [view commit](${LINKADDR}%h)&quot; $NEXT &gt;&gt; Changelog.md
+echo &quot;     &quot; &gt;&gt; Changelog.md
+
+git add Changelog.md
+git commit -am &quot;Edit Changelog.md&quot;
+
+exit 0</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>上面的逻辑表示他会读取这次release的tag，如果tag匹配v\d+.+，如v1.1这样的格式，那么就可以继续进项后续的流程。也就是说，我们release的tag，必须是满足类似v1.1或v2.12.4这样的格式，才能够正确被脚本读取，其余格式的tag都会被直接忽略，当做一个普通的commit来处理。</p>
+<p>因为我们的Changelog里，每个commit id要能够对应到具体的页面上。而.git/config有可能记录的是以git为scheme的URI，所以这里需要一个简陋的转换，把git://的地址转为使用<a href="https://的地址。">https://的地址。</a></p>
+<p>然后就是把旧的Changelog.md删掉，同时生成新的Changelog.md。</p>
+<p>最后就是把这个新的Changelog.md的修改commit上去，之后git flow release finish的流程就完成了。这时的版本库里就携带有最新的Changelog信息。</p>
+<p>更多对git hook的了解可以参阅<a href="https://git-scm.com/book/zh/v1/%E8%87%AA%E5%AE%9A%E4%B9%89-Git-Git%E6%8C%82%E9%92%A9">官方文档</a></p>
+</div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+<div class="footer">
+    <div class="center">huangsir / Powered by <a target="_blank" href="https://github.com/acyortjs/acyort">AcyOrt</a> & <a target="_blank" href="https://github.com">GitHub</a></div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>
