@@ -1,4 +1,197 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 15:41:40 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 15:41:39 GMT</pubDate><item><title><![CDATA[netfilter参数]]></title><description><![CDATA[<hr>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 15:44:15 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 15:44:13 GMT</pubDate><item><title><![CDATA[ubuntu上安装和配置graphite+statsd]]></title><description><![CDATA[<p>在Ubuntu上配置Graphite加Statsd来采集程序运行状态。
+&lt;!-- more --&gt;</p>
+<hr>
+<p>datetime: 2015-02-21 22:09:11</p>
+<hr>
+<p>常见的开源监控工具有nagios, ganglia, graphite等等，各有各的特点。
+第一次听说graphite是在nsq的文档上，他声称官方支持使用graphite+statsd来统计metric。
+于是乎便捣鼓了一下。</p>
+<p>ubuntu12.04和ubuntu14.04上的安装方法略有不同，总体来说我更喜欢ubuntu14.04的使用方法。</p>
+<hr>
+<p><strong>ubuntu12.04</strong></p>
+<p>首先，安装各种依赖。graphite会安装到/opt/graphite，不伦有没有使用virtualenv，不过我们依然建议使用virtualenv。
+graphite-web的各种依赖可以看<a href="https://github.com/graphite-project/graphite-web/blob/master/requirements.txt">这里</a>。  </p>
+<p>这里我没有贴出所需要得依赖，因为我自己也忘记了。不想看依赖的可以像我一样，装到哪里发现不行的时候再去补充依赖。</p>
+<p>需要注意的是django和django-tagging两个依赖，django版本不兼容也已经不是新鲜事了，如果发现django报错，可能是你的版本使用的不对。<br>我这里使用的是</p>
+<pre><code>Django (1.6.1)
+django-tagging (0.3.1)</code></pre><p>系统库也需要补充一些<code>sudo apt-get install libcairo2-dev</code>  </p>
+<pre><code>pip install whisper
+pip install carbon
+pip install graphite-web</code></pre><p>这里介绍一下，whisper是一个文件数据库，用来存储采集到的metrics。你采集到的metrics会扔到carbon里，然后carbon会存储到whisper上。
+graphite-web从whisper中拿出各种metrics来画图，画图用的库我们刚刚用apt-get安装了。<br>metrics是什么？比如说<code>stats.cpu.host-01.cpu-00</code>就是一个metrics，也是一个key，他的value是50，就表示host-01这台机器的cpu-00现在是50%的状态。<br>使用点号分割。但是我们不需要在意这些细节。</p>
+<p>安装完后，你会发现/opt/graphite下多了很多东西，把/opt/graphite/conf下面的*.example的.example去掉cp到对应的目录即可。默认graphite会使用2003，2004端口。</p>
+<p>启动carbon</p>
+<pre><code>&#x2F;opt&#x2F;graphite&#x2F;bin&#x2F;carbon-cache.py start</code></pre><p>制造一些metrics发送</p>
+<pre><code>vim &#x2F;etc&#x2F;hosts
+127.0.0.1   graphite
+python &#x2F;opt&#x2F;graphite&#x2F;examples&#x2F;example-client.py</code></pre><p>数据会存放在</p>
+<pre><code>&#x2F;opt&#x2F;graphite&#x2F;storage&#x2F;whisper</code></pre><p>现在去看看，是不是有一些东西了。</p>
+<p>同步数据库</p>
+<pre><code>python &#x2F;opt&#x2F;graphite&#x2F;webapp&#x2F;graphite&#x2F;manage.py syncdb</code></pre><p>启动graphite-web</p>
+<pre><code>python &#x2F;opt&#x2F;graphite&#x2F;webapp&#x2F;graphite&#x2F;manage.py runserver 0.0.0.0:12222</code></pre><p>打开浏览器 <a href="http://127.0.0.1:12222，看看是不是有了一些东西。">http://127.0.0.1:12222，看看是不是有了一些东西。</a></p>
+<hr>
+<p><strong>ubuntu14.04</strong></p>
+<p>14.04的官方库里就有了graphite，可以直接安装。老夫装完后升级到14.04又重新用新的方法装一次-，-#</p>
+<pre><code>sudo apt-get install graphite-web graphite-carbon</code></pre><p>apt-get安装后，配置文件在/etc/graphite/, /etc/carbon/下。<br>数据库放在/var/lib/graphite/下。<br>graphite的uwsgi文件在/usr/share/graphite-web下。<br>graphite的py文件在/usr/lib/python2.7/dist-packages/graphite<br>graphite的可执行文件为graphite-manage，可以直接运行<br>配置的example在/usr/share/doc下  </p>
+<hr>
+<p><strong>配置Graphite</strong></p>
+<p>14.04的配置在/etc/graphite/local_settings.py里，ubuntu12.04在/opt里有对应的配置文件。<strong>往后的配置如无特别说明都以ubuntu14.04为主，因为我已经没有12.04的环境，找不回配置文件所在了。</strong></p>
+<pre><code>SECRET_KEY &#x3D; &#39;yw7HIHFkW459HuswEUAZOn12NgQGx+z6\n&#39;</code></pre><p>可以使用python来生成</p>
+<pre><code>import os
+os.urandom(24).encode(&#39;base64&#39;)</code></pre><pre><code>#修改时区
+TIME_ZONE &#x3D; &#39;Asia&#x2F;Shanghai&#39;
+#打开RemoteUser身份认证（不知道干嘛用的）
+USE_REMOTE_USER_AUTHENTICATION &#x3D; True</code></pre><p>配置好后同步数据库:</p>
+<pre><code>#ubuntu14.04
+sudo graphite-manage syncdb
+
+#ubuntu12.04
+python &#x2F;opt&#x2F;graphite&#x2F;webapp&#x2F;graphite&#x2F;manage.py syncdb</code></pre><p><strong>配置Carbon</strong></p>
+<p>配置carbon开机启动（这项配置ubuntu12.04里没有）</p>
+<pre><code>sudo vim &#x2F;etc&#x2F;default&#x2F;graphite-carbon
+
+CARBON_CACHE_ENABLED&#x3D;true</code></pre><p>开启carbon的log rotation</p>
+<pre><code>sudo vim &#x2F;etc&#x2F;carbon&#x2F;carbon.conf
+
+ENABLE_LOGROTATION&#x3D;true</code></pre><p>配置storage schemas，在最上面添加一个新的schema</p>
+<pre><code>sudo vim &#x2F;etc&#x2F;carbon&#x2F;storage-schemas.conf
+
+[statsd]
+pattern &#x3D; ^stats\.
+retentions &#x3D; 15s:1d,1m:7d,15m:5y</code></pre><p>上面这段statsd的意思是：</p>
+<ul>
+<li>匹配以<code>stats.</code>为开头的所有metrics</li>
+<li>每隔15s创建一个数据点，保存1d，请求最近1d的数据时使用这套数据</li>
+<li>每隔1m创建一个数据点，保存7d，请求7d内得数据时使用这套数据</li>
+<li>每隔15m创建一个数据点，保存5y，请求5y内得数据时使用这套数据</li>
+</ul>
+<p>修改数据聚合的方法aggregation method</p>
+<pre><code>sudo vim &#x2F;etc&#x2F;carbon&#x2F;storage-aggregation.conf
+
+#可以改为以下(网上抄的)
+[min]
+pattern &#x3D; \.min$
+xFilesFactor &#x3D; 0.1
+aggregationMethod &#x3D; min
+
+[max]
+pattern &#x3D; \.max$
+xFilesFactor &#x3D; 0.1
+aggregationMethod &#x3D; max
+
+[count]
+pattern &#x3D; \.count$
+xFilesFactor &#x3D; 0
+aggregationMethod &#x3D; sum
+
+[lower]
+pattern &#x3D; \.lower(_\d+)?$
+xFilesFactor &#x3D; 0.1
+aggregationMethod &#x3D; min
+
+[upper]
+pattern &#x3D; \.upper(_\d+)?$
+xFilesFactor &#x3D; 0.1
+aggregationMethod &#x3D; max
+
+[sum]
+pattern &#x3D; \.sum$
+xFilesFactor &#x3D; 0
+aggregationMethod &#x3D; sum
+
+[gauges]
+pattern &#x3D; ^.*\.gauges\..*
+xFilesFactor &#x3D; 0
+aggregationMethod &#x3D; last
+
+[default_average]
+pattern &#x3D; .*
+xFilesFactor &#x3D; 0.5
+aggregationMethod &#x3D; average</code></pre><p>其中的xFileFactor的值代表carbon做聚合的最小百分比值，根据你的具体情况修改。</p>
+<p>启动carbon-cache</p>
+<pre><code>sudo service carbon-cache start</code></pre><p><strong>Nginx配置</strong></p>
+<pre><code>sudo vim &#x2F;etc&#x2F;nginx&#x2F;site-enabled&#x2F;graphite
+
+upstream graphite {
+    server unix:&#x2F;&#x2F;&#x2F;run&#x2F;uwsgi&#x2F;app&#x2F;graphite&#x2F;socket;
+    keepalive 600;
+}
+server {
+    listen 80;
+    server_name XXXX;
+
+    access_log off;
+    error_log off;
+
+    location &#x2F; {
+        uwsgi_pass graphite;
+        include uwsgi_params;
+    }
+}</code></pre><p><strong>Uwsgi配置</strong></p>
+<pre><code>sudo vim &#x2F;etc&#x2F;uwsgi&#x2F;apps-available&#x2F;graphite.ini
+
+[uwsgi]
+processes &#x3D; 8
+uid &#x3D; _graphite
+gid &#x3D; _graphite
+master &#x3D; True
+chdir &#x3D; &#x2F;usr&#x2F;share&#x2F;graphite-web
+wsgi-file &#x3D; graphite.wsgi
+chmod-socket &#x3D; 666
+enable-threads &#x3D; true</code></pre><p>启动服务</p>
+<pre><code>sudo service carbon-cache restart
+sudo service nginx restart
+sudo service uwsgi restart</code></pre><p>打开浏览器 <a href="http://XXXX:80">http://XXXX:80</a></p>
+<p><strong>安装statsd</strong></p>
+<p>一般使用statsd来收集各种metrics。然后传给carbon，carbon再保存到whisper里。</p>
+<p>安装所需要的依赖</p>
+<pre><code>sudo apt-get install git nodejs devscripts debhelper</code></pre><p>下载并编译statsd</p>
+<pre><code>mkdir statsd_build
+cd statsd_build
+git clone https:&#x2F;&#x2F;github.com&#x2F;etsy&#x2F;statsd.git
+cd statsd
+dpkg-buildpackage
+cd ..
+sudo dpkg -i *.deb</code></pre><p>关闭statsd的legacy namespacing</p>
+<pre><code>sudo vim &#x2F;etc&#x2F;statsd&#x2F;localConfig.js
+
+{
+  graphitePort: 2003
+, graphiteHost: &quot;localhost&quot;
+, port: 8125
+, graphite: {
+    legacyNamespace: false
+  }
+}</code></pre><p>上文所配置的carbon配置，已经是按照statsd的格式来配置了，所以这里不再重复。</p>
+<p>重启服务</p>
+<pre><code>sudo service carbon-cache restart
+sudo service statsd start</code></pre><p>访问graphite，可以看到statsd自身的一些记录。statsd有许多的client，大家可以自己上github上搜索自己语言使用的client。</p>
+<p>需要删掉数据的时候，可以直接到whisper下删除对应的文件，当然要先停止掉carbon和statsd的服务。</p>
+<p>到这里已经可以正常的看到图像了，如果不行，可以自己再去google。</p>
+<p><strong>配置Dashboard</strong></p>
+<p>Graphite的原装web实在是看不下去，当然人家主打的也不是这个界面，所以有许多扩展界面出现。可以参考<a href="http://dashboarddude.com/blog/2013/01/23/dashboards-for-graphite/">这里</a></p>
+<p>豆瓣也出了一个<a href="https://github.com/douban/graph-index">graphite-index</a>，主要是配置方便。</p>
+<p>用过kibana3的同学可以考虑使用<a href="https://github.com/torkelo/grafana">grafana</a>，该项目是一个基于kibana3的改版而来的Dashboard，配置方法和kibana3很相似。</p>
+<p>这里我选择的是golang版的grafana <a href="https://github.com/jwilder/gofana">gofana</a>，为什么要使用这个呢，因为他配置起来很方便，可以直接使用docker来安装。而且使用起来也和kibana类似。</p>
+<p>安装得方法在github上写得十分详细，我这里就不再重复。</p>
+<p>这里要注意几点，kibana系列的Dashboard是自己用js绘图的，对于数据量很大的图表，绘制起来会很慢，原装的就不会有这个问题。我现在平均1s有1k+的metrics采集，查看7d的数据已经卡成狗，是有必要修改一下storage_schema的。</p>
+<p>如果使用的是grafana，使用起来会有跨域问题（kibana是由js直接发起请求的）。解决这个问题的方法我查了很多，比如在nginx的返回值里手动添加CORS等。<br>我这里选择了另外一种方式，直接修改graphite-web的配置，增加CORS。</p>
+<p>安装django-cors-headers</p>
+<pre><code>pip install django-cors-headers</code></pre><p>修改graphite-web的app_settings.py</p>
+<pre><code>sudo vim &#x2F;usr&#x2F;lib&#x2F;python2.7&#x2F;dist-packages&#x2F;graphite&#x2F;app_settings.py
+
+MIDDLEWARE_CLASSES &#x3D; (
+  &#39;corsheaders.middleware.CorsMiddleware&#39;,  # 添加这一行
+  &#39;...&#39;,
+)</code></pre><p>编辑/etc/graphite/local_settings.py</p>
+<pre><code>sudo vim &#x2F;etc&#x2F;graphite&#x2F;local_settings.py
+
+#添加一行
+CORS_ORIGIN_ALLOW_ALL &#x3D; True</code></pre><p><strong>参考+推荐</strong></p>
+<p><a href="http://note.axiaoxin.com/contents/install-and-use-graphite-on-ubuntu14.04.html">http://note.axiaoxin.com/contents/install-and-use-graphite-on-ubuntu14.04.html</a>
+<a href="http://segmentfault.com/blog/duoduo3_69/1190000000744706">http://segmentfault.com/blog/duoduo3_69/1190000000744706</a>
+<a href="https://kevinmccarthy.org/blog/2013/07/18/10-things-i-learned-deploying-graphite/">https://kevinmccarthy.org/blog/2013/07/18/10-things-i-learned-deploying-graphite/</a></p>
+]]></description><link>http:/ruibo.me/posts/268812421.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268812421.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 15:43:45 GMT</pubDate></item><item><title><![CDATA[netfilter参数]]></title><description><![CDATA[<hr>
 <p>datetime: 2015-02-20 22:01:33</p>
 <hr>
 <p>死人杨先生在春节放假前几天，跑去机房升级了两台服务器的内存，<strong>顺便</strong>把这两台服务器从ubuntu12.04升级到14.04。<br>这两台服务器负责的一个重要的业务，是使用rest对外发送各种消息或postback数据。<br>升级之后，当天晚上发现大量rest请求出现<code>tcp i/o timeout</code>这样的错误，死人杨先生重启服务后继续再跑。</p>
