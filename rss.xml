@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 16:01:07 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 16:01:05 GMT</pubDate><item><title><![CDATA[iphone用ikev2搭梯子]]></title><description><![CDATA[<hr>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 16:02:26 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 16:02:24 GMT</pubDate><item><title><![CDATA[基于issue的Github Page工具]]></title><description><![CDATA[<hr>
+<h2>datetime: 2016-02-18 22:09:12</h2><p>换了这个用commit issue的方法来发blog的工具，感觉还是挺不错的。把之前的page全部都迁移过来了，虽然时间有点对不上，不过这点小事也不用太care。</p>
+<p>&lt;!-- more --&gt;
+</p>
+<p>基于Issue的blog有两种，一种是在前端页面直接调用github api加载数据然后现场渲染页面的。另一种是线下build完之后在用git push上传的。</p>
+<p>原本第一种挺好的，但是他的核心劣势在于没有seo，没办法，只能在自己的小服务器上部署一个github hook来定期build了-，-#</p>
+]]></description><link>http:/ruibo.me/posts/268819030.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268819030.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 16:02:04 GMT</pubDate></item><item><title><![CDATA[iphone用ikev2搭梯子]]></title><description><![CDATA[<hr>
 <h2>datetime: 2015-10-24 21:38:19</h2><p>一种个人感觉比较小众的科学Shangwang的方式</p>
 <p>&lt;!-- more --&gt;
 </p>
