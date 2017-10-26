@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="keywords" content="" />
+<link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+netfilter参数 - huangsir
+</title>
+</head>
+
+<body>
+
+<div class="main">
+<div class="inner">
+  
+<div class="header">
+    <a class="logo" href="/">huangsir</a><!--
+
+ --><div class="menu">
+        <a href="/archives">archives</a><a href="/category">category</a><a href="/tag">tag</a>
+    </div>
+
+    <div class="social">
+        <a target="_blank" href="https://github.com/Huangsir/huangsir.github.io/issues"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"></path>
+</svg></a><!--
+    --><a target="_blank" href="/rss.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z"></path>
+</svg></a>
+    </div>
+</div>
+
+
+
+
+<div id="post" class="center">
+
+    <p class="time">October 26, 2017</p>
+
+    <h1 class="title">netfilter参数</h1>
+
+    <div class="content"><hr>
+<p>datetime: 2015-02-20 22:01:33</p>
+<hr>
+<p>死人杨先生在春节放假前几天，跑去机房升级了两台服务器的内存，<strong>顺便</strong>把这两台服务器从ubuntu12.04升级到14.04。<br>这两台服务器负责的一个重要的业务，是使用rest对外发送各种消息或postback数据。<br>升级之后，当天晚上发现大量rest请求出现<code>tcp i/o timeout</code>这样的错误，死人杨先生重启服务后继续再跑。</p>
+<p>第二天又发生了许多的<code>tcp i/o
+timeout</code>，因为死人杨先生又去了机房，只能老夫来抢救服务。检查了cpu和内存，都没有发现异常，load也很低，网卡中断也正常，syslog和dmesg没有错误信息。事情紧急，不能挂tcpdump这种耗时的工作(大多数发生问题的时候都已经不容许挂tcpdump或者strace这种高耗时的工作了)。细细思考了一下，插内存对于机器的影响是很小的，相比于插内存，更有可能出现问题的是升级系统。</p>
+<p>细细思考了一下后，打电话问杨先生升级系统之后，sysctl有没有重新设置，杨先生的回复是没！有！-，-#（当时心中一千万只草泥马奔腾而过）</p>
+<p>重新跑了sysctl后问题依然没有解决，发现有几个设置在14.04后已经没有了。  </p>
+<p>改好后的参数几个参数  </p>
+
+    <div class="hljs c">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-comment">//net.core.somaxconn = 300000</span>
+net<span class="hljs-selector-class">.core</span><span class="hljs-selector-class">.somaxconn</span> = <span class="hljs-number">65535</span>
+<span class="hljs-comment">//net.ipv4.netfilter.ip_conntrack_max = 655350</span>
+net<span class="hljs-selector-class">.netfilter</span><span class="hljs-selector-class">.nf_conntrack_max</span> = <span class="hljs-number">655350</span>
+<span class="hljs-comment">//net.ipv4.netfilter.ip_conntrack_tcp_timeout_established = 86400</span>
+net<span class="hljs-selector-class">.netfilter</span><span class="hljs-selector-class">.nf_conntrack_tcp_timeout_established</span> = <span class="hljs-number">86400</span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p><strong>net.core.somaxconn</strong>  </p>
+<p><code>net.core.somaxconn</code>定义了系统中每一个端口最大的监听队列的长度，这是个全局的参数。在突发的高并发请求时，可能会导致连接超时。在ubuntu14.04，这个值可以设置的上限是65535。但在ubuntu12.04的时候这个值可以设置很高。</p>
+<p><strong>net.netfilter.nf_conntrack_max</strong>  </p>
+<p><code>net.netfilter.nf_conntrack_max</code>默认65536，同时这个值和你的内存大小有关，如果内存128M，这个值最大8192，1G以上内存这个值都是默认65536。这个值决定了你作为网关的工作能力上限，所有局域网内通过这台网关对外的连接都将占用一个连接。</p>
+<p><strong>net.netfilter.nf_conntrack_tcp_timeout_established</strong>  </p>
+<p><code>net.netfilter.nf_conntrack_tcp_timeout_established</code>表示已建立的tcp连接的超时时间。这个值过大将导致一些可能已经不用的连接常驻于内存中，占用大量链接资源，从而可能导致NAT
+ip_conntrack: table full的问题。</p>
+<p>修改了几个参数之后重新跑了一下<code>sysctl -p /etc/sysctl.conf</code>，之后死人杨先生又调整了dns等等其他参数，问题基本解决。</p>
+<p>这个故事告诉我们，假前不要随便上线奇怪的东西，任何不畏惧墨菲定律的行为都将会得到报应ಥ_ಥ</p>
+<p><strong>参考：</strong><br><a href="http://my.oschina.net/hongsheng/blog/151136">http://my.oschina.net/hongsheng/blog/151136</a><br><a href="http://www.cnblogs.com/fczjuever/archive/2013/04/17/3026694.html">http://www.cnblogs.com/fczjuever/archive/2013/04/17/3026694.html</a>
+<a href="http://www.itwhy.org/linux/%E4%BC%98%E5%8C%96%E4%BD%A0%E7%9A%84-netfilteriptables-%E7%BD%91%E5%85%B3.html">http://www.itwhy.org/linux/%E4%BC%98%E5%8C%96%E4%BD%A0%E7%9A%84-netfilteriptables-%E7%BD%91%E5%85%B3.html</a></p>
+</div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+<div class="footer">
+    <div class="center">huangsir / Powered by <a target="_blank" href="https://github.com/acyortjs/acyort">AcyOrt</a> & <a target="_blank" href="https://github.com">GitHub</a></div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>
