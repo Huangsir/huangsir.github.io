@@ -1,0 +1,258 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="keywords" content="" />
+<link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+初尝hhvm - huangsir
+</title>
+</head>
+
+<body>
+
+<div class="main">
+<div class="inner">
+  
+<div class="header">
+    <a class="logo" href="/">huangsir</a><!--
+
+ --><div class="menu">
+        <a href="/archives">archives</a><a href="/category">category</a><a href="/tag">tag</a>
+    </div>
+
+    <div class="social">
+        <a target="_blank" href="https://github.com/Huangsir/huangsir.github.io/issues"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"></path>
+</svg></a><!--
+    --><a target="_blank" href="/rss.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+<path d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z"></path>
+</svg></a>
+    </div>
+</div>
+
+
+
+
+<div id="post" class="center">
+
+    <p class="time">October 26, 2017</p>
+
+    <h1 class="title">初尝hhvm</h1>
+
+    <div class="content"><hr>
+<h2 id="datetime20140403023409">datetime: 2014-04-03 02:34:09</h2><p>hhvm和phc在前两年已经略有耳闻，但是一直没有真正加入到我们的生产环境中。  </p>
+<p>最近因为hhvm过于好评如潮，终于又对她产生了墙裂的兴趣。故下手测试了一番。  </p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+</pre>
+            </td>
+            <td class="code"><pre>git <span class="hljs-keyword">clone</span> <span class="hljs-title">https</span>://github.com/facebook/hhvm</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>把hhvm载下来后，就可以直接编译了。（老夫的机器变异环境良好~）</p>
+<p>.....两个小时后-_-|||.....</p>
+<p>就可以直接使用啦~~</p>
+<p>如何测试呢，上网找了一个身份证校验的函数。这样的数学计算应该就足够测试了，不是HelloWorld测试哟。  </p>
+<p>代码如下：</p>
+
+    <div class="hljs php">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+<span>21</span>
+<span>22</span>
+<span>23</span>
+<span>24</span>
+<span>25</span>
+<span>26</span>
+<span>27</span>
+<span>28</span>
+<span>29</span>
+<span>30</span>
+<span>31</span>
+<span>32</span>
+<span>33</span>
+<span>34</span>
+<span>35</span>
+<span>36</span>
+<span>37</span>
+<span>38</span>
+<span>39</span>
+<span>40</span>
+<span>41</span>
+<span>42</span>
+<span>43</span>
+<span>44</span>
+<span>45</span>
+<span>46</span>
+<span>47</span>
+<span>48</span>
+<span>49</span>
+<span>50</span>
+<span>51</span>
+<span>52</span>
+<span>53</span>
+<span>54</span>
+<span>55</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="php"><span class="hljs-meta">&lt;?php</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">validation_filter_id_card</span><span class="hljs-params">($id_card)</span></span>{
+    <span class="hljs-keyword">if</span>(strlen($id_card)==<span class="hljs-number">18</span>){
+        <span class="hljs-keyword">return</span> idcard_checksum18($id_card);
+    }<span class="hljs-keyword">elseif</span>((strlen($id_card)==<span class="hljs-number">15</span>)){
+        $id_card=idcard_15to18($id_card);
+        <span class="hljs-keyword">return</span> idcard_checksum18($id_card);
+    }<span class="hljs-keyword">else</span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+    }
+}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">idcard_verify_number</span><span class="hljs-params">($idcard_base)</span></span>{
+    <span class="hljs-keyword">if</span>(strlen($idcard_base)!=<span class="hljs-number">17</span>){
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+    }
+    $factor=<span class="hljs-keyword">array</span>(<span class="hljs-number">7</span>,<span class="hljs-number">9</span>,<span class="hljs-number">10</span>,<span class="hljs-number">5</span>,<span class="hljs-number">8</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">6</span>,<span class="hljs-number">3</span>,<span class="hljs-number">7</span>,<span class="hljs-number">9</span>,<span class="hljs-number">10</span>,<span class="hljs-number">5</span>,<span class="hljs-number">8</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>);
+    $verify_number_list=<span class="hljs-keyword">array</span>(<span class="hljs-string">'1'</span>,<span class="hljs-string">'0'</span>,<span class="hljs-string">'X'</span>,<span class="hljs-string">'9'</span>,<span class="hljs-string">'8'</span>,<span class="hljs-string">'7'</span>,<span class="hljs-string">'6'</span>,<span class="hljs-string">'5'</span>,<span class="hljs-string">'4'</span>,<span class="hljs-string">'3'</span>,<span class="hljs-string">'2'</span>);
+    $checksum=<span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span>($i=<span class="hljs-number">0</span>;$i&lt;strlen($idcard_base);$i++){
+        $checksum += substr($idcard_base,$i,<span class="hljs-number">1</span>) * $factor[$i];
+    }
+    $mod=$checksum % <span class="hljs-number">11</span>;
+    $verify_number=$verify_number_list[$mod];
+    <span class="hljs-keyword">return</span> $verify_number;
+}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">idcard_15to18</span><span class="hljs-params">($idcard)</span></span>{
+    <span class="hljs-keyword">if</span>(strlen($idcard)!=<span class="hljs-number">15</span>){
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+    }<span class="hljs-keyword">else</span>{
+        <span class="hljs-keyword">if</span>(array_search(substr($idcard,<span class="hljs-number">12</span>,<span class="hljs-number">3</span>),<span class="hljs-keyword">array</span>(<span class="hljs-string">'996'</span>,<span class="hljs-string">'997'</span>,<span class="hljs-string">'998'</span>,<span class="hljs-string">'999'</span>)) !== <span class="hljs-keyword">false</span>){
+            $idcard=substr($idcard,<span class="hljs-number">0</span>,<span class="hljs-number">6</span>).<span class="hljs-string">'18'</span>.substr($idcard,<span class="hljs-number">6</span>,<span class="hljs-number">9</span>);
+        }<span class="hljs-keyword">else</span>{
+            $idcard=substr($idcard,<span class="hljs-number">0</span>,<span class="hljs-number">6</span>).<span class="hljs-string">'19'</span>.substr($idcard,<span class="hljs-number">6</span>,<span class="hljs-number">9</span>);
+        }
+    }
+    $idcard=$idcard.idcard_verify_number($idcard);
+    <span class="hljs-keyword">return</span> $idcard;
+}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">idcard_checksum18</span><span class="hljs-params">($idcard)</span></span>{
+    <span class="hljs-keyword">if</span>(strlen($idcard)!=<span class="hljs-number">18</span>){
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+    }
+    $idcard_base=substr($idcard,<span class="hljs-number">0</span>,<span class="hljs-number">17</span>);
+    <span class="hljs-keyword">if</span>(idcard_verify_number($idcard_base)!=strtoupper(substr($idcard,<span class="hljs-number">17</span>,<span class="hljs-number">1</span>))){
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+    }<span class="hljs-keyword">else</span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;
+    }
+}
+
+$st = microtime(<span class="hljs-keyword">true</span>);
+<span class="hljs-keyword">for</span>($x = <span class="hljs-number">0</span>; $x &lt; <span class="hljs-number">100000</span>; $x++) {
+    validation_filter_id_card(<span class="hljs-string">'自己上网找'</span>);
+}
+var_dump(microtime(<span class="hljs-keyword">true</span>) - $st);</span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>100w次执行下，原生的PHP执行时间:  </p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-function"><span class="hljs-title">double</span><span class="hljs-params">(<span class="hljs-number">4.6601610183716</span>)</span></span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>hhvm执行时间:  </p>
+
+    <div class="hljs bash">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+</pre>
+            </td>
+            <td class="code"><pre><span class="hljs-function"><span class="hljs-title">float</span><span class="hljs-params">(<span class="hljs-number">0.31694412231445</span>)</span></span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>差距到这个程度，似乎已经不需要在做更多组测试了...</p>
+<p>在另外一组测试中，（这里就不贴了），使用的是校验IMEI的函数，对比测试了原生php，zephir，hhvm三者的效果。结果是在100w次执行下hhvm约是原生php的10倍，zephir约是php的6-7倍。  </p>
+<p>没错当时老夫就吓尿了，比zephir还要快，当然可能zephir是受到了php的影响，调用100w次zephir的函数，可能对于php影响也不小，不过这个只是老夫的猜测。  </p>
+<p>如果有有缘人能看到这篇文章-_-|||。可以把上面的函数用zephir重写一遍然后在php里调用100w次看下效果...  </p>
+<p>P.S. zephir真难写，vim插件都找不到  </p>
+<p>P.S.S. 据说hhvm在百度推广的很好...  </p>
+<p>P.S.S.S. HHVM还不支持PHP扩展，真蛋疼...  </p>
+<p>P.S.S.S.S. 其实在用python的时候就有使用pypy，但是pypy对于json支持太水，老夫又是json大户，再加上有个python3在后面，实在用不下去。</p>
+<p><a href="http://zh.wikipedia.org/wiki/%E5%8D%B3%E6%99%82%E7%B7%A8%E8%AD%AF">关于JIT的技术</a>  </p>
+<p>以上是鄙人的简单测试结果。  </p>
+<p>以下是一些关于HHVM的说明和比较等的文章。  </p>
+<p><a href="http://wuduoyi.com/note/hhvm/">HHVM 是如何提升 PHP 性能的？</a>  </p>
+<p><a href="http://simonholywell.com/post/2014/02/hhvm-vs-zephir-vs-php-the-showdown.html">HHVM vs Zephir vs PHP: The showdown</a>  </p>
+<p><a href="http://simonholywell.com/static/files/2014-02-28/index.html">HHVM vs Zephir vs PHP</a></p>
+<p>至此，简单的测试完毕。因为目前HHVM不支持PHP扩展，但是我对PHP扩展依赖性太高，所以暂时可能还无法使用HHVM，不过以Facebook的决心和目前HHVM的质量来看，应该会有许多扩展很快兼容到HHVM上。</p>
+</div>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+<div class="footer">
+    <div class="center">huangsir / Powered by <a target="_blank" href="https://github.com/acyortjs/acyort">AcyOrt</a> & <a target="_blank" href="https://github.com">GitHub</a></div>
+</div>
+
+
+
+
+
+
+
+</body>
+</html>

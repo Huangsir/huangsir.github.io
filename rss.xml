@@ -1,4 +1,83 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 13:08:39 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 13:08:39 GMT</pubDate><item><title><![CDATA[第一次Hackday活动]]></title><description><![CDATA[<p>// datetime: 2014-03-20 23:44:53</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 13:21:34 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 13:21:33 GMT</pubDate><item><title><![CDATA[初尝hhvm]]></title><description><![CDATA[<hr>
+<h2>datetime: 2014-04-03 02:34:09</h2><p>hhvm和phc在前两年已经略有耳闻，但是一直没有真正加入到我们的生产环境中。  </p>
+<p>最近因为hhvm过于好评如潮，终于又对她产生了墙裂的兴趣。故下手测试了一番。  </p>
+<pre><code>git clone https:&#x2F;&#x2F;github.com&#x2F;facebook&#x2F;hhvm</code></pre><p>把hhvm载下来后，就可以直接编译了。（老夫的机器变异环境良好~）</p>
+<p>.....两个小时后-_-|||.....</p>
+<p>就可以直接使用啦~~</p>
+<p>如何测试呢，上网找了一个身份证校验的函数。这样的数学计算应该就足够测试了，不是HelloWorld测试哟。  </p>
+<p>代码如下：</p>
+<pre><code>&lt;?php
+function validation_filter_id_card($id_card){
+    if(strlen($id_card)&#x3D;&#x3D;18){
+        return idcard_checksum18($id_card);
+    }elseif((strlen($id_card)&#x3D;&#x3D;15)){
+        $id_card&#x3D;idcard_15to18($id_card);
+        return idcard_checksum18($id_card);
+    }else{
+        return false;
+    }
+}
+function idcard_verify_number($idcard_base){
+    if(strlen($idcard_base)!&#x3D;17){
+        return false;
+    }
+    $factor&#x3D;array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2);
+    $verify_number_list&#x3D;array(&#39;1&#39;,&#39;0&#39;,&#39;X&#39;,&#39;9&#39;,&#39;8&#39;,&#39;7&#39;,&#39;6&#39;,&#39;5&#39;,&#39;4&#39;,&#39;3&#39;,&#39;2&#39;);
+    $checksum&#x3D;0;
+    for($i&#x3D;0;$i&lt;strlen($idcard_base);$i++){
+        $checksum +&#x3D; substr($idcard_base,$i,1) * $factor[$i];
+    }
+    $mod&#x3D;$checksum % 11;
+    $verify_number&#x3D;$verify_number_list[$mod];
+    return $verify_number;
+}
+function idcard_15to18($idcard){
+    if(strlen($idcard)!&#x3D;15){
+        return false;
+    }else{
+        if(array_search(substr($idcard,12,3),array(&#39;996&#39;,&#39;997&#39;,&#39;998&#39;,&#39;999&#39;)) !&#x3D;&#x3D; false){
+            $idcard&#x3D;substr($idcard,0,6).&#39;18&#39;.substr($idcard,6,9);
+        }else{
+            $idcard&#x3D;substr($idcard,0,6).&#39;19&#39;.substr($idcard,6,9);
+        }
+    }
+    $idcard&#x3D;$idcard.idcard_verify_number($idcard);
+    return $idcard;
+}
+function idcard_checksum18($idcard){
+    if(strlen($idcard)!&#x3D;18){
+        return false;
+    }
+    $idcard_base&#x3D;substr($idcard,0,17);
+    if(idcard_verify_number($idcard_base)!&#x3D;strtoupper(substr($idcard,17,1))){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+$st &#x3D; microtime(true);
+for($x &#x3D; 0; $x &lt; 100000; $x++) {
+    validation_filter_id_card(&#39;自己上网找&#39;);
+}
+var_dump(microtime(true) - $st);</code></pre><p>100w次执行下，原生的PHP执行时间:  </p>
+<pre><code>double(4.6601610183716)</code></pre><p>hhvm执行时间:  </p>
+<pre><code>float(0.31694412231445)</code></pre><p>差距到这个程度，似乎已经不需要在做更多组测试了...</p>
+<p>在另外一组测试中，（这里就不贴了），使用的是校验IMEI的函数，对比测试了原生php，zephir，hhvm三者的效果。结果是在100w次执行下hhvm约是原生php的10倍，zephir约是php的6-7倍。  </p>
+<p>没错当时老夫就吓尿了，比zephir还要快，当然可能zephir是受到了php的影响，调用100w次zephir的函数，可能对于php影响也不小，不过这个只是老夫的猜测。  </p>
+<p>如果有有缘人能看到这篇文章-_-|||。可以把上面的函数用zephir重写一遍然后在php里调用100w次看下效果...  </p>
+<p>P.S. zephir真难写，vim插件都找不到  </p>
+<p>P.S.S. 据说hhvm在百度推广的很好...  </p>
+<p>P.S.S.S. HHVM还不支持PHP扩展，真蛋疼...  </p>
+<p>P.S.S.S.S. 其实在用python的时候就有使用pypy，但是pypy对于json支持太水，老夫又是json大户，再加上有个python3在后面，实在用不下去。</p>
+<p><a href="http://zh.wikipedia.org/wiki/%E5%8D%B3%E6%99%82%E7%B7%A8%E8%AD%AF">关于JIT的技术</a>  </p>
+<p>以上是鄙人的简单测试结果。  </p>
+<p>以下是一些关于HHVM的说明和比较等的文章。  </p>
+<p><a href="http://wuduoyi.com/note/hhvm/">HHVM 是如何提升 PHP 性能的？</a>  </p>
+<p><a href="http://simonholywell.com/post/2014/02/hhvm-vs-zephir-vs-php-the-showdown.html">HHVM vs Zephir vs PHP: The showdown</a>  </p>
+<p><a href="http://simonholywell.com/static/files/2014-02-28/index.html">HHVM vs Zephir vs PHP</a></p>
+<p>至此，简单的测试完毕。因为目前HHVM不支持PHP扩展，但是我对PHP扩展依赖性太高，所以暂时可能还无法使用HHVM，不过以Facebook的决心和目前HHVM的质量来看，应该会有许多扩展很快兼容到HHVM上。</p>
+]]></description><link>http:/ruibo.me/posts/268757288.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268757288.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 13:21:20 GMT</pubDate></item><item><title><![CDATA[第一次Hackday活动]]></title><description><![CDATA[<p>// datetime: 2014-03-20 23:44:53</p>
 <p>持续两天的公司内部Hackday终于结束了。一共8只队伍，两天时间，只有3个最后有成品演示。</p>
 <p>看着这些新同学的作业，忽然想起自己在学校时的样子，泪流满面。即使我再怎么伪装，也已经不再年轻了。</p>
 <p>说说对这次hackday的看法。 题材是：促进提升团队效率的工具。</p>
