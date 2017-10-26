@@ -1,4 +1,238 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 14:03:47 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 14:03:46 GMT</pubDate><item><title><![CDATA[新疆]]></title><description><![CDATA[<hr>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 14:33:53 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 14:33:52 GMT</pubDate><item><title><![CDATA[Celery]]></title><description><![CDATA[<hr>
+<p>datetime: 2014-09-12 11:34:12</p>
+<hr>
+<p><img src="https://user-images.githubusercontent.com/3870517/32059034-851cc114-ba30-11e7-81ca-658f58638ec0.jpg" alt="benefits-of-celery"></p>
+<h1>初尝</h1><p>久仰Celery大名，可惜业务上一直是以php为主，即使有需要比较靠谱的常驻内存Server也因并发要求过高使用Golang完成。所以一直无缘上手Celery，只能作为茶余饭后的demo。</p>
+<p>但是现在，老夫终于有了一个正当的理由，在项目中使用Celery了贼哈哈哈哈-。-#</p>
+<p>Celery的Api文档和Demo程序是相当齐全的，所以初学这，最好直接阅读他的<a href="http://www.celeryproject.org/docs-and-support/">官方文档</a>。
+老夫这里记录的一些老夫在阅读文档时可能没有注意到，最后考反复试验加研读源码找到的入门方案。</p>
+<p>首先我们要安装Celery，这个还用说么?<br>这里我们使用豆瓣的源，以提高墙内的下载速度。</p>
+<pre><code>pip install celery -i http:&#x2F;&#x2F;pypi.douban.com&#x2F;simple&#x2F;
+pip install redis -i http:&#x2F;&#x2F;pypi.douban.com&#x2F;simple&#x2F;</code></pre><p>同时，我们还需要用来保存队列数据的broker，这里我们选用<a href="http://redis.io">redis</a>来保存数据</p>
+<p>Ok，所有的工作都准备妥当了，现在我们来到文档Demo的Step1.</p>
+<p>首先我们创建一个文件夹叫proj，目录结构大概是：</p>
+<pre><code>proj&#x2F;__init__.py
+    &#x2F;tasks.py</code></pre><p>我们在tasks.py里键入代码</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+
+from celery import Celery
+
+app &#x3D; Celery(&#39;tasks&#39;, broker&#x3D;&#39;redis:&#x2F;&#x2F;127.0.0.1:6379&#x2F;0&#39;)
+
+@app.task
+def add(x, y):
+    return x + y</code></pre><p>然后在proj目录里运行</p>
+<pre><code>celery -A tasks worker -l info</code></pre><p>就可以跑起来了。<br>从<code>celery --help</code>里我们可以看到，<code>-A</code>是运行一个module的意思，也就是py的文件名。
+好了，我们现在已经启动了实例，现在时检验效果的时候。我们在proj目录里再创建一个文件<code>test.py</code></p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+
+from tasks import add
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    print add(2, 3)
+    print add.delay(3, 4)</code></pre><p>执行后得到结果：</p>
+<pre><code>$ python test.py
+$ 5
+$ b2382641-0a63-42ca-ac55-1a8c22d5cdec</code></pre><p>我们看到，直接调用函数也是没有问题的，但是如果用<code>add.delay</code>，隔壁shell的celery实例就会输出收到一个task。并且我们的add.delay函数也无法再获得返回值，而是一个uuid的随机字符串。</p>
+<p>那假如我们希望能够获得返回值，怎么处理呢？只要这么写就可以了</p>
+<pre><code>add.delay(3, 4).get()</code></pre><p>运行一下， 发现报错了<code>AttributeError: &#39;DisabledBackend&#39; object has no attribute &#39;_get_task_meta_for&#39;</code></p>
+<p>Celery默认就是一个Task Distribute的模式，是不记录返回值的。如果需要Celery将返回值回传给Caller，需要手动指定。详情可以查看文档，老夫没有实验-。-#</p>
+<p>完了Step1后，我们进入Step2。Step2里给了一个更高级的用法，不过这里也有老夫一直不理解的地方，如果有哪位大神知道还请不吝赐教。</p>
+<p>还是proj这个项目</p>
+<pre><code>proj&#x2F;__init__.py
+    &#x2F;celery.py
+    &#x2F;tasks.py</code></pre><p>proj/celery.py</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+from __future__ import absolute_import
+from celery import Celery
+
+app &#x3D; Celery(&#39;proj&#39;,
+             broker&#x3D;&#39;redis:&#x2F;&#x2F;127.0.0.1:6379&#x2F;0&#39;,
+             include&#x3D;[&#39;proj.tasks&#39;])
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    app.start()</code></pre><p>proj/tasks.py</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+from __future__ import absolute_import
+from proj.celery import app
+
+@app.task
+def add(x, y):
+    return x + y
+
+@app.task
+def mul(x, y):
+    return x * y
+
+@app.task
+def xsum(numbers):
+    return sum(numbers)</code></pre><p>好了，运行一下</p>
+<pre><code>celery -A proj worker -l info</code></pre><p>报错了<code>ImportError: No module named proj</code>，好吧，demo报错了，真是奇怪...<br>老夫一开始也被绕进去了，但是后来发现，在<code>celery.py</code>里有一句话</p>
+<pre><code>include&#x3D;[&#39;proj.tasks&#39;]</code></pre><p>什么概念，就是说引用的module从project开始，但是我们运行的时候已经是在proj目录下了，所以就会报找不到proj的错误。好吧，到proj的上层目录去执行<code>celery -A proj worker -l info</code>，果然成功了。</p>
+<p>有同学看到，在项目的目录下，有一个<code>celery.py</code>，这会和原生的celery module产生冲突，是不建议使用的。so同学们会将这个<code>celery.py</code>改成其他名字，比如说像我一样改为<code>backend.py</code></p>
+<p>我们再来运行一下。<code>ImportError: No module named celery</code> 又报错了我擦的，说找不到celery。也就是说用这种方式执行的话，目录中一定要有个文件叫<code>celery.py</code>
+但是这样子又不太符合python里命名文件的规范，总感觉怪怪的。Not good。<br>（从老夫的实验来看，Celery的也许就是希望由我们定义一个celery去取代原生的celery实例，但是这东西放在顶层目录，由子module去调用顶层module，在我看来是比较奇怪的一种做法，这也是我所无法理解的地方）</p>
+<p>这时我们还有一种方法。</p>
+<p>首先我们改一下celery.py这个文件，改为backend.py。同时修改tasks.py里的引用。
+这时我们运行一下这个文件</p>
+<pre><code>python backend.py</code></pre><p>我们发现他输出了和celery一样的结果，也就是说这个文件已经变成了一个celery的文件，所以我们可以直接执行这个文件来达到目的。</p>
+<p>我们修改一下目录结构</p>
+<pre><code>proj&#x2F;__init__.py
+    &#x2F;backend.py
+    apps&#x2F;__init__.py
+        &#x2F;tasks.py
+    lib&#x2F;__init__.py
+        &#x2F;distribute.py</code></pre><p>proj/backend.py</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+from lib import distribute
+
+app &#x3D; distribute.app
+app.conf.update(
+    CELERY_INCLUDE&#x3D;(&quot;apps.tasks&quot;,)
+)
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    app.start()</code></pre><p>proj/lib/distribute.py</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+from celery import Celery
+
+app &#x3D; Celery(&#39;proj&#39;,
+             broker&#x3D;&#39;redis:&#x2F;&#x2F;127.0.0.1:6379&#x2F;0&#39;)</code></pre><p>proj/apps/tasks.py</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+from lib.distribute import app
+
+@app.task
+def add(x, y):
+    return x + y
+
+@app.task
+def mul(x, y):
+    return x * y
+
+@app.task
+def xsum(numbers):
+    return sum(numbers)</code></pre><p>好了，这时我们可以运行</p>
+<pre><code>python backend.py worker -l info</code></pre><p>也是一样的效果。这样就可以避免使用和原装celery相同名字的py文件。</p>
+<p>在测试的时候，我被整个文档误导了，我相信应该也会有其他人有和我一样的情况。</p>
+<p>假如说我们分有client端和server端，两端的差别很大，是由不同的人员来负责实现的，难道说我们还要在client端布置一遍server端的内容？但是调用的时候又是通过task来调用？无法只提供一个接口的interface就可以随便调用么？</p>
+<p>经过老夫反复的实验和仔细阅读celery的源码后，发现不是的，文档上只是一个简写。</p>
+<p>还是上面的那段代码，我们增加一个测试目录</p>
+<pre><code>proj&#x2F;test&#x2F;__init__.py
+         &#x2F;apps&#x2F;__init__.py
+             &#x2F;tasks.py
+        &#x2F;test_by_module.py
+        &#x2F;test_by_name.py</code></pre><p>proj/test/apps/tasks.py</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+from celery import Celery
+
+app &#x3D; Celery(&quot;proj&quot;,
+             broker&#x3D;&quot;redis:&#x2F;&#x2F;127.0.0.1:6379&#x2F;0&quot;)
+
+@app.task
+def add():
+    pass
+
+@app.task
+def mul():
+    pass
+
+@app.task
+def xsum():
+    pass</code></pre><p>proj/test/test_by_module.py</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+
+from apps import tasks
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    tasks.add.delay(4, 7)</code></pre><p>proj/test/test_by_name.py</p>
+<pre><code>#!&#x2F;usr&#x2F;bin&#x2F;env python
+# encoding: utf-8
+from celery import Celery
+
+app &#x3D; Celery(&quot;proj&quot;, broker&#x3D;&quot;redis:&#x2F;&#x2F;localhost:6379&#x2F;0&quot;)
+
+@app.task(name&#x3D;&quot;apps.tasks.add&quot;)
+def add():
+    pass
+
+@app.task(name&#x3D;&quot;apps.tasks.mul&quot;)
+def mul():
+    pass
+
+@app.task(name&#x3D;&quot;apps.tasks.xsum&quot;)
+def xsum():
+    pass
+
+if __name__ &#x3D;&#x3D; &#39;__main__&#39;:
+    mul.delay(4, 7)</code></pre><p>分别执行test_by_name.py和test_by_module.py</p>
+<pre><code>$ python test_by_module.py
+$ 11
+$ python test_by_name.py
+$ 28</code></pre><p>我们发现，其实两种方法都是可以的。而文档里的引用估计是为了节省文章，都引用了同一处地方。但是如果在实际运用中，client和server是分开实现的，用这样的方法也是一个不错的选择。</p>
+<p>在使用golang，或php时，如果需要调用celery做事，也是以传入string的方式来达到调用目的的。</p>
+<p>写到这里，celery的基本server和client的写法都列出来了。剩下的就是在项目中自己组织目录结构，队列结构等。对于老夫来说，除了觉得module之间的引用比较奇怪之外，整个celery还是十分好用的。<br>文档的坑基本上就在于此处，再更深度的使用中会有什么更神奇的坑就得老夫慢慢踩完了。</p>
+<p>至于一些Router或Chan等高级用法，只能是在不同的项目中case by case的使用了，自己慢慢啃文档去吧。</p>
+<h1>如何在PHP里调用Celery</h1><p>在php里调用celery可以使用github里提供的一个<a href="https://github.com/gjedeer/celery-php">开源库</a>，不过老夫是没有使用过，因为老夫使用Redis作为broker，但是github上的这个client似乎并不支持。</p>
+<p>这里给出一个最简单的php调用task的demo</p>
+<pre><code>&lt;?php
+$router &#x3D; &#39;celery&#39;;#默认的router
+$exchange &#x3D; &#39;celery&#39;;#默认的exchange
+$queue &#x3D; &#39;celery&#39;;#默认的queue
+$task &#x3D; array(
+    &#39;task&#39; &#x3D;&gt; &#39;proj.add&#39;,#在celery运行的时候，可以看到所有的task的名称
+    &#39;kwargs&#39; &#x3D;&gt; array(&#39;x&#39; &#x3D;&gt; 3, &#39;y&#39; &#x3D;&gt; 4),#参数列表
+    &#39;retries&#39; &#x3D;&gt; 0,
+    &#39;expire&#39; &#x3D;&gt; null,
+);
+$task[&#39;id&#39;] &#x3D; sha1(json_encode($task[&#39;kwargs&#39;]) . time());
+$body &#x3D; array(
+    &#39;body&#39; &#x3D;&gt; base64_encode(json_encode($task)),
+    &#39;headers&#39; &#x3D;&gt; new stdClass,
+    &#39;content-type&#39; &#x3D;&gt; &#39;application&#x2F;json&#39;,
+    &#39;properties&#39; &#x3D;&gt; array(
+        &#39;body_encoding&#39; &#x3D;&gt; &#39;base64&#39;,
+        &#39;delivery_info&#39; &#x3D;&gt; array(
+            &#39;priority&#39; &#x3D;&gt; 0,
+            &#39;routing_key&#39; &#x3D;&gt; $router,
+            &#39;exchange&#39; &#x3D;&gt; $exchange
+        ),
+        &#39;delivery_tag&#39; &#x3D;&gt; sha1(base64_encode(json_encode($task)) . time()),
+        &#39;delivery_mode&#39; &#x3D;&gt; 2
+    ),
+    &#39;content-encoding&#39; &#x3D;&gt; &#39;utf-8&#39;
+);
+$redis &#x3D; new Redis();
+$redis-&gt;pconnect(&#39;127.0.0.1&#39;, 6379);
+$redis-&gt;lPush($queue, json_encode($body));</code></pre><p>不要在意json，相比IO操作，即使用msgpack或者再加上lz4也无法有太多改善，不过对Redis的内存占用是有挺大帮助的，如果你的队列经常大规模拥堵的话-。-#<br>当然，如果有人实现了msgpack+lz4或者zip的多语言的broker的话，也请提供到github上，能改善一点是一点哟-。-#</p>
+<h1>集中式日志(logging)</h1><p>现在，我们需要集中管理Celery的某些日志。比如我们需要将<code>unregistered task of type</code>这样的Error集中汇总到syslog或者<a href="https://github.com/getsentry/sentry">sentry</a>上。<br>以sentry为例，首先我们要装好sentry(或者使用在线版)和raven扩展。<br>Celery的日志封装得比较严实，而且会劫持代码中的其他logging和print之类的函数，所以用起来比较麻烦。<br>但是自动2.2.7之后（之前的我也没用过），提供了两个函数可以用于添加handler。</p>
+<p>下面这段函数将注册一个handler到Celery的logger里，这样我们就可以同时handle到<code>Worker</code>和<code>Main Process</code>的日志</p>
+<pre><code>import logging
+from raven.handlers.logging import SentryHandler
+from celery.signals import after_setup_logger, after_setup_task_logger
+
+@after_setup_logger.connect
+@after_setup_task_logger.connect
+def after_setup_logger_handler(sender&#x3D;None, logger&#x3D;None, loglevel&#x3D;None, logfile&#x3D;None, format&#x3D;None, colorize&#x3D;None, **kwargs):
+    handler &#x3D; SentryHandler(&quot;&lt;your_sentry_client_address&gt;&quot;)
+    handler.setFormatter(logging.Formatter(logging.BASIC_FORMAT))
+    handler.setLevel(logging.ERROR)
+    logger.addHandler(handler)</code></pre><p>以上，这样我们就对<code>Worker</code>和<code>Main Process</code>都添加全局logging的handler。<br>不过值得<strong>注意</strong>的是，不要反复对signal添加handler，否则会受到重复的日志。</p>
+<p>现在我们再来运行一下，去看看Sentry里有没有正确的受到log吧。</p>
+<p>Links:</p>
+<ul>
+<li><a href="http://www.toforge.com/2011/06/celery-centralized-logging/">http://www.toforge.com/2011/06/celery-centralized-logging/</a></li>
+</ul>
+<p>TODO...</p>
+]]></description><link>http:/ruibo.me/posts/268784994.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268784994.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 14:33:32 GMT</pubDate></item><item><title><![CDATA[新疆]]></title><description><![CDATA[<hr>
 <p>datetime: 204-07-22 23:33:10</p>
 <hr>
 <p>今年用攒了一年的年假，配合两个周末去了趟新疆。二话不说先贴行程。</p>
