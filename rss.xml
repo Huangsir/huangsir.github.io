@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 15:38:47 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 15:38:45 GMT</pubDate><item><title><![CDATA[万能的timestamp]]></title><description><![CDATA[<hr>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 15:39:35 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 15:39:34 GMT</pubDate><item><title><![CDATA[清除命令行或文本里的着色代码]]></title><description><![CDATA[<hr>
+<p>datetime: 2015-12-07 23:33:15</p>
+<hr>
+<p>有的logging模块，比如说Celery的，或者Golang的seelog，在输出日志的时候会带有高亮的着色代码。我们在cut日志或做其他操作的时候就会变得十分蛋疼。  </p>
+<p>可以用下面的正则去掉</p>
+<pre><code>sed -r &quot;s&#x2F;\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]&#x2F;&#x2F;g&quot;</code></pre>]]></description><link>http:/ruibo.me/posts/268810603.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268810603.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 15:39:12 GMT</pubDate></item><item><title><![CDATA[万能的timestamp]]></title><description><![CDATA[<hr>
 <p>datetime: 2014-12-06 11:10:03</p>
 <hr>
 <p>日常工作中经常需要做一些counter的工作，但是老老实实的用户点一下赞就加一个赞，或用户下载一个App就给这个App的下载数+1这种做法实在是太不符合老！板！的！风！格！了！  </p>
