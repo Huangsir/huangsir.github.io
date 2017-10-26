@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 13:04:53 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 13:04:53 GMT</pubDate><item><title><![CDATA[第一次Hackday活动]]></title><description><![CDATA[<p>持续两天的公司内部Hackday终于结束了。一共8只队伍，两天时间，只有3个最后有成品演示。</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 13:08:39 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 13:08:39 GMT</pubDate><item><title><![CDATA[第一次Hackday活动]]></title><description><![CDATA[<p>// datetime: 2014-03-20 23:44:53</p>
+<p>持续两天的公司内部Hackday终于结束了。一共8只队伍，两天时间，只有3个最后有成品演示。</p>
 <p>看着这些新同学的作业，忽然想起自己在学校时的样子，泪流满面。即使我再怎么伪装，也已经不再年轻了。</p>
 <p>说说对这次hackday的看法。 题材是：促进提升团队效率的工具。</p>
 <p>8组队伍，有4组是坐gitlab的扩展货插件，1个组做网页聊天工具，1组做留言板，1组做订餐，1组做考勤分析（我们组）。 为啥有这么多组做gitlab的插件，可能是因为大家的工作都是以gitlab为主。在使用的过程中积累了不少改进的idea。加之小涛公开了gitlab的api权限和数据库权限。所以大家一拥而上做gitlab。</p>
@@ -26,4 +27,4 @@
 <p>最后的结果，我们获得了第三名，最然不及前两组，但是我认为，我们组的产品才是最棒的。用一个忘了是在哪看到的话：一个产品的是不是做得好，唯一的标准就是潜在的使用人群里，有多少人在使用你的产品。</p>
 <p>其他7组的产品在过了今夜后还会不会有人用我不知道，但是我知道，我们组的产品会一直服务综合部直到不可再用的状态，并会在未来一段时间内解放综合部的生产力，让她们能够有更多的时间在提升公司福利上。</p>
 <p>最后，令我略为不满的是，在Hackday开始前，我和小涛一再强调产品需求要精简，时间只有两天，我们要看的是成品不是样品，但是许多参加过上次Hackday的老同学依然是设计了“异常宏伟”的产品。而在公司实习了很久的一些新同学也还是依旧沉浸在理想的学术环境中，最后做出来的不是课程设计就是ppt。好吧，也许也只是我因为没拿到键盘而抱怨牢骚。</p>
-]]></description><link>http:/ruibo.me/posts/268329899.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268329899.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Wed, 25 Oct 2017 19:10:41 GMT</pubDate></item></channel></rss>
+]]></description><link>http:/ruibo.me/posts/268329899.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268329899.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 13:08:23 GMT</pubDate></item></channel></rss>
