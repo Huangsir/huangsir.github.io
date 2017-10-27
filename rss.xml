@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:33:07 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:33:05 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:33:30 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:33:28 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
@@ -1460,9 +1460,10 @@ def after_setup_logger_handler(sender&#x3D;None, logger&#x3D;None, loglevel&#x3D
 <p>好吧，没螺丝也没关系，本身电池连接片就是有卡口的~  </p>
 <p>就这样简单的把电池换上了，涛妈妈不知道是不是很不爽贼哈哈哈哈~  </p>
 <p>什么，没图？markdown上图很麻烦哟，再说自己能拍到自己的屁股么？</p>
-]]></description><link>http:/ruibo.me/posts/268758756.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268758756.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:32:52 GMT</pubDate></item><item><title><![CDATA[初尝hhvm]]></title><description><![CDATA[<hr>
-<p>datetime: 2014-04-03 02:34:09</p>
-<hr>
+]]></description><link>http:/ruibo.me/posts/268758756.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268758756.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:32:52 GMT</pubDate></item><item><title><![CDATA[初尝hhvm]]></title><description><![CDATA[<p>&lt;!-- datetime: 2014-04-03 02:34:09--&gt;
+</p>
+<p>&lt;!-- more --&gt;
+</p>
 <p>hhvm和phc在前两年已经略有耳闻，但是一直没有真正加入到我们的生产环境中。  </p>
 <p>最近因为hhvm过于好评如潮，终于又对她产生了墙裂的兴趣。故下手测试了一番。  </p>
 <pre><code>git clone https:&#x2F;&#x2F;github.com&#x2F;facebook&#x2F;hhvm</code></pre><p>把hhvm载下来后，就可以直接编译了。（老夫的机器变异环境良好~）</p>
@@ -1541,7 +1542,7 @@ var_dump(microtime(true) - $st);</code></pre><p>100w次执行下，原生的PHP�
 <p><a href="http://simonholywell.com/post/2014/02/hhvm-vs-zephir-vs-php-the-showdown.html">HHVM vs Zephir vs PHP: The showdown</a>  </p>
 <p><a href="http://simonholywell.com/static/files/2014-02-28/index.html">HHVM vs Zephir vs PHP</a></p>
 <p>至此，简单的测试完毕。因为目前HHVM不支持PHP扩展，但是我对PHP扩展依赖性太高，所以暂时可能还无法使用HHVM，不过以Facebook的决心和目前HHVM的质量来看，应该会有许多扩展很快兼容到HHVM上。</p>
-]]></description><link>http:/ruibo.me/posts/268757288.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268757288.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 13:21:39 GMT</pubDate></item><item><title><![CDATA[第一次Hackday活动]]></title><description><![CDATA[<hr>
+]]></description><link>http:/ruibo.me/posts/268757288.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268757288.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:33:14 GMT</pubDate></item><item><title><![CDATA[第一次Hackday活动]]></title><description><![CDATA[<hr>
 <p>datetime: 2014-03-20 23:44:53</p>
 <hr>
 <p>持续两天的公司内部Hackday终于结束了。一共8只队伍，两天时间，只有3个最后有成品演示。</p>
