@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:24:50 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:24:48 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:25:55 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:25:53 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
@@ -174,8 +174,9 @@ exit 0</code></pre><p>上面的逻辑表示他会读取这次release的tag，如
 </p>
 <p>基于Issue的blog有两种，一种是在前端页面直接调用github api加载数据然后现场渲染页面的。另一种是线下build完之后在用git push上传的。</p>
 <p>原本第一种挺好的，但是他的核心劣势在于没有seo，没办法，只能在自己的小服务器上部署一个github hook来定期build了-，-#</p>
-]]></description><link>http:/ruibo.me/posts/268819030.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268819030.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:24:29 GMT</pubDate></item><item><title><![CDATA[iphone用ikev2搭梯子]]></title><description><![CDATA[<hr>
-<h2>datetime: 2015-10-24 21:38:19</h2><p>一种个人感觉比较小众的科学Shangwang的方式</p>
+]]></description><link>http:/ruibo.me/posts/268819030.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268819030.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:24:29 GMT</pubDate></item><item><title><![CDATA[iphone用ikev2搭梯子]]></title><description><![CDATA[<p>&lt;!-- datetime: 2015-10-24 21:38:19 --&gt;
+</p>
+<p>一种个人感觉比较小众的科学Shangwang的方式</p>
 <p>&lt;!-- more --&gt;
 </p>
 <p>想到要为我的iphone翻墙原因有两个。一是前几天出门旅游，在玩instagram；二是我一直在玩ingress，但是手头iphone翻墙实在不方便，虽然在家大部分时间还是用Android机开画图工具-，-#</p>
@@ -497,7 +498,7 @@ EOF</code></pre><p>最后整个配置也只有我自己试用过是可以的。�
 <hr>
 <p>后记：iphone上我只使用过openvpn和ikev2个人感觉ikev2十分稳定，到目前为止没有出现过被block的情况。出门打po面基都十分方便，用instagram装逼也是妥妥的。</p>
 <p>PS：我是蓝...</p>
-]]></description><link>http:/ruibo.me/posts/268818423.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268818423.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 16:00:47 GMT</pubDate></item><item><title><![CDATA[用户数统计运算]]></title><description><![CDATA[<hr>
+]]></description><link>http:/ruibo.me/posts/268818423.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268818423.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:25:32 GMT</pubDate></item><item><title><![CDATA[用户数统计运算]]></title><description><![CDATA[<hr>
 <h2>datetime: 2015-12-11 22:11:34</h2><p>用户数统计基本上有三种做法。</p>
 <ol>
 <li>使用一个Set来直接记录用户数</li>
