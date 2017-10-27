@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:32:08 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:32:06 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:32:49 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:32:46 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
@@ -1438,15 +1438,16 @@ def after_setup_logger_handler(sender&#x3D;None, logger&#x3D;None, loglevel&#x3D
 <p>从玉器店出来，我们带着沉重的心情来到了一家非常之豪华的饭店（名字忘记了-。-#）。因为据说这里有骆驼奶喝。<br>到了饭店后，我们点了4杯骆驼奶，4串羊肉串，4碗羊肉手抓饭，还有一户当地的茶水。然后服务员很配合的帮我们点了10串羊肉串。。。<br>然后我们就在喝了巨骚无比的骆驼奶后，4个人怒吃了10大串羊肉串和一碗手抓饭。。。<br>看来来新疆和服务员点餐，一定要用手语-。-#  </p>
 <p>午饭过后，我们就打车去了机场，准备在西安玩最后一天然后回广州。
 因为西安的行程已经超出的新疆的范围，而且一点不好玩，也不好吃-。-# 所以整片新疆的行程就到此结束了。</p>
-]]></description><link>http:/ruibo.me/posts/268772401.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268772401.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:31:51 GMT</pubDate></item><item><title><![CDATA[Chrome下B格调超高的插件]]></title><description><![CDATA[<hr>
-<p>datetime: 2014-05-23: 00:23:00</p>
-<hr>
+]]></description><link>http:/ruibo.me/posts/268772401.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268772401.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:31:51 GMT</pubDate></item><item><title><![CDATA[Chrome下B格调超高的插件]]></title><description><![CDATA[<p>&lt;!-- datetime: 2014-05-23: 00:23:00 --&gt;
+</p>
+<p>&lt;!-- more --&gt;
+</p>
 <p>第一次写推荐~~<br>推荐一个chrome下B格超高的插件，肥叔推荐的~~<br>先上连接 <a href="https://chrome.google.com/webstore/detail/momentum/laookkfknpbbblfpciffpaejjkokdgca">Momentum</a><br>插件的主要作用是修改chrome的默认页。先来个图<br><img src="https://user-images.githubusercontent.com/3870517/32055451-78abede6-ba27-11e7-8130-4dd4450ac6f3.jpg" alt="537e26123cca7">
 好吧，暴露了今天睡得比较晚，如果明天上班比较晚，请忽略~~<br>第一次使用的时候，填写以下自己的名字，然后她就会记录下来。  </p>
 <p>之后，每当你打开浏览器的时候，都能看到一幅唯美的的景色。<br>背景图片每天都不同~~<br>可以看到右上角有显示当地的气温，正中间是显示时间~<br>时间的下面，是一句自己写给自己的话。<br>比如说，我今天写下了<code>Body building.</code> <code>今天要健身。</code><br>底部，是一句每日格言。比如我今天的这句</p>
 <p><code>Do a little more of what you want to do every day, until your idea becomes what&#39;s real.</code> <code>持之于恒，直至梦想成真。</code></p>
 <p>什么？翻译得不正确？我已经要说我4级是考了30次才过的么~~<br>咳咳，我们再看看右下角，是一个简易的TODO List，每次当你打开网页的时候，都能看到自己今天需要做什么。<br>不需要将今天内无法完成的那些Things放到TODO List里，因为每多一条，就又多了一寸碍眼的东西。。。</p>
-]]></description><link>http:/ruibo.me/posts/268759729.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268759729.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 13:28:06 GMT</pubDate></item><item><title><![CDATA[给手机换个电池]]></title><description><![CDATA[<hr>
+]]></description><link>http:/ruibo.me/posts/268759729.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268759729.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:32:28 GMT</pubDate></item><item><title><![CDATA[给手机换个电池]]></title><description><![CDATA[<hr>
 <p>datetime: 2014-05-15 21:09:32</p>
 <hr>
 <p>事情的起因是这样的，老夫的极阳铝壳宏碁笔记本的电源坏了，是的全公司这么多人居然只有我一个人的坏了=。=#  </p>
