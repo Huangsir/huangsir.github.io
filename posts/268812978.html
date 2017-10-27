@@ -39,14 +39,13 @@
 
 <div id="post" class="center">
 
-    <p class="time">October 26, 2017</p>
+    <p class="time">October 27, 2017</p>
 
     <h1 class="title">使用Logrotated清理日志文件</h1>
 
-    <div class="content"><p>在Linux环境下，使用Logrotated工具定期自动清理历史的运行日志。</p>
-<hr>
-<p>datetime: 2015-02-22 22:23:44</p>
-<hr>
+    <div class="content"><p>&lt;!--datetime: 2015-02-22 22:23:44 --&gt;
+</p>
+<p>在Linux环境下，使用Logrotated工具定期自动清理历史的运行日志。</p>
 <p>题外话：Logrotated是依靠cron来执行的，他的脚本放在/etc/cron.daily下。其实许多定时执行的功能如apc cache清理过期数据等等，也是依赖cron执行的。</p>
 <p>首先，要比较全面的了解Logrotated的使用，推荐阅读<a href="http://linux.vbird.org/linux_basic/0570syslog.php#rotate_config">鸟哥的私房菜Logrotated部分</a>。</p>
 <p>我这里讲一些我自己使用的情况。</p>
