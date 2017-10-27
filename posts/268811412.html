@@ -39,13 +39,12 @@ netfilter参数 - huangsir
 
 <div id="post" class="center">
 
-    <p class="time">October 26, 2017</p>
+    <p class="time">October 27, 2017</p>
 
     <h1 class="title">netfilter参数</h1>
 
-    <div class="content"><hr>
-<p>datetime: 2015-02-20 22:01:33</p>
-<hr>
+    <div class="content"><p>&lt;!-- datetime: 2015-02-20 22:01:33 --&gt;
+</p>
 <p>死人杨先生在春节放假前几天，跑去机房升级了两台服务器的内存，<strong>顺便</strong>把这两台服务器从ubuntu12.04升级到14.04。<br>这两台服务器负责的一个重要的业务，是使用rest对外发送各种消息或postback数据。<br>升级之后，当天晚上发现大量rest请求出现<code>tcp i/o timeout</code>这样的错误，死人杨先生重启服务后继续再跑。</p>
 <p>第二天又发生了许多的<code>tcp i/o
 timeout</code>，因为死人杨先生又去了机房，只能老夫来抢救服务。检查了cpu和内存，都没有发现异常，load也很低，网卡中断也正常，syslog和dmesg没有错误信息。事情紧急，不能挂tcpdump这种耗时的工作(大多数发生问题的时候都已经不容许挂tcpdump或者strace这种高耗时的工作了)。细细思考了一下，插内存对于机器的影响是很小的，相比于插内存，更有可能出现问题的是升级系统。</p>

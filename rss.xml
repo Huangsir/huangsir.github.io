@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:28:36 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:28:34 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:29:10 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:29:08 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
@@ -819,9 +819,10 @@ CORS_ORIGIN_ALLOW_ALL &#x3D; True</code></pre><p><strong>参考+推荐</strong><
 <p><a href="http://note.axiaoxin.com/contents/install-and-use-graphite-on-ubuntu14.04.html">http://note.axiaoxin.com/contents/install-and-use-graphite-on-ubuntu14.04.html</a>
 <a href="http://segmentfault.com/blog/duoduo3_69/1190000000744706">http://segmentfault.com/blog/duoduo3_69/1190000000744706</a>
 <a href="https://kevinmccarthy.org/blog/2013/07/18/10-things-i-learned-deploying-graphite/">https://kevinmccarthy.org/blog/2013/07/18/10-things-i-learned-deploying-graphite/</a></p>
-]]></description><link>http:/ruibo.me/posts/268812421.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268812421.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:28:17 GMT</pubDate></item><item><title><![CDATA[netfilter参数]]></title><description><![CDATA[<hr>
-<p>datetime: 2015-02-20 22:01:33</p>
-<hr>
+]]></description><link>http:/ruibo.me/posts/268812421.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268812421.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:28:17 GMT</pubDate></item><item><title><![CDATA[netfilter参数]]></title><description><![CDATA[<p>&lt;!-- datetime: 2015-02-20 22:01:33 --&gt;
+</p>
+<p>&lt;!-- more --&gt;
+</p>
 <p>死人杨先生在春节放假前几天，跑去机房升级了两台服务器的内存，<strong>顺便</strong>把这两台服务器从ubuntu12.04升级到14.04。<br>这两台服务器负责的一个重要的业务，是使用rest对外发送各种消息或postback数据。<br>升级之后，当天晚上发现大量rest请求出现<code>tcp i/o timeout</code>这样的错误，死人杨先生重启服务后继续再跑。</p>
 <p>第二天又发生了许多的<code>tcp i/o
 timeout</code>，因为死人杨先生又去了机房，只能老夫来抢救服务。检查了cpu和内存，都没有发现异常，load也很低，网卡中断也正常，syslog和dmesg没有错误信息。事情紧急，不能挂tcpdump这种耗时的工作(大多数发生问题的时候都已经不容许挂tcpdump或者strace这种高耗时的工作了)。细细思考了一下，插内存对于机器的影响是很小的，相比于插内存，更有可能出现问题的是升级系统。</p>
@@ -844,7 +845,7 @@ ip_conntrack: table full的问题。</p>
 <p>这个故事告诉我们，假前不要随便上线奇怪的东西，任何不畏惧墨菲定律的行为都将会得到报应ಥ_ಥ</p>
 <p><strong>参考：</strong><br><a href="http://my.oschina.net/hongsheng/blog/151136">http://my.oschina.net/hongsheng/blog/151136</a><br><a href="http://www.cnblogs.com/fczjuever/archive/2013/04/17/3026694.html">http://www.cnblogs.com/fczjuever/archive/2013/04/17/3026694.html</a>
 <a href="http://www.itwhy.org/linux/%E4%BC%98%E5%8C%96%E4%BD%A0%E7%9A%84-netfilteriptables-%E7%BD%91%E5%85%B3.html">http://www.itwhy.org/linux/%E4%BC%98%E5%8C%96%E4%BD%A0%E7%9A%84-netfilteriptables-%E7%BD%91%E5%85%B3.html</a></p>
-]]></description><link>http:/ruibo.me/posts/268811412.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268811412.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 15:41:24 GMT</pubDate></item><item><title><![CDATA[Lock your procedure]]></title><description><![CDATA[<hr>
+]]></description><link>http:/ruibo.me/posts/268811412.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268811412.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:28:48 GMT</pubDate></item><item><title><![CDATA[Lock your procedure]]></title><description><![CDATA[<hr>
 <p>datetime: 2015-02-18 20:33:12</p>
 <hr>
 <p>在MySQL里，我们使用存储过程，以保证在执行出错的时候，数据可以即时的回滚到上一个状态。</p>
