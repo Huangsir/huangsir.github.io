@@ -39,12 +39,13 @@ git flow release finish的时候自动生成Changelog - huangsir
 
 <div id="post" class="center">
 
-    <p class="time">October 26, 2017</p>
+    <p class="time">October 27, 2017</p>
 
     <h1 class="title">git flow release finish的时候自动生成Changelog</h1>
 
-    <div class="content"><hr>
-<h2 id="datetime20160223192219">datetime: 2016-02-23 19:22:19</h2><p>大部分人应该都没有写Changelog的习惯吧？我也没有...</p>
+    <div class="content"><p>&lt;!-- datetime: 2016-02-23 19:22:19 --&gt;
+</p>
+<p>大部分人应该都没有写Changelog的习惯吧？我也没有...</p>
 <p>git有提供hook的方法，可以实现帮助我们实现许多自定义的功能。在git flow大热之后，许多的企业项目，都采用git flow的流程来作为项目开发的标准流程。</p>
 <p>有一天老夫在网上逛荡的时候，注意到一些服务每次在发布版本的时候，都有提供详细的Changelog，然而老夫自己的项目里基本上是不会有这种东西的，而且我感觉也没有人有兴趣每天在上面更新项目的Changelog。作为一个极（ma）客（nong），我们应该是用技术的手法来减少工作。</p>
 <p>于是乎，我就想到了在git flow发布release的时候，自动生成一份Changelog。</p>
