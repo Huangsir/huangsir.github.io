@@ -39,13 +39,12 @@ Lock your procedure - huangsir
 
 <div id="post" class="center">
 
-    <p class="time">October 26, 2017</p>
+    <p class="time">October 27, 2017</p>
 
     <h1 class="title">Lock your procedure</h1>
 
-    <div class="content"><hr>
-<p>datetime: 2015-02-18 20:33:12</p>
-<hr>
+    <div class="content"><p>&lt;!-- datetime: 2015-02-18 20:33:12 --&gt;
+</p>
 <p>在MySQL里，我们使用存储过程，以保证在执行出错的时候，数据可以即时的回滚到上一个状态。</p>
 <p>存储过程并不是线程安全的。假如存储过程调用频率比较频繁时，如果同一个存储过程在同一刻被意外的打码多次，就有可能出现问题。</p>
 <p>比如说下面的过程</p>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:29:10 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:29:08 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:29:38 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:29:35 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
@@ -845,9 +845,10 @@ ip_conntrack: table full的问题。</p>
 <p>这个故事告诉我们，假前不要随便上线奇怪的东西，任何不畏惧墨菲定律的行为都将会得到报应ಥ_ಥ</p>
 <p><strong>参考：</strong><br><a href="http://my.oschina.net/hongsheng/blog/151136">http://my.oschina.net/hongsheng/blog/151136</a><br><a href="http://www.cnblogs.com/fczjuever/archive/2013/04/17/3026694.html">http://www.cnblogs.com/fczjuever/archive/2013/04/17/3026694.html</a>
 <a href="http://www.itwhy.org/linux/%E4%BC%98%E5%8C%96%E4%BD%A0%E7%9A%84-netfilteriptables-%E7%BD%91%E5%85%B3.html">http://www.itwhy.org/linux/%E4%BC%98%E5%8C%96%E4%BD%A0%E7%9A%84-netfilteriptables-%E7%BD%91%E5%85%B3.html</a></p>
-]]></description><link>http:/ruibo.me/posts/268811412.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268811412.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:28:48 GMT</pubDate></item><item><title><![CDATA[Lock your procedure]]></title><description><![CDATA[<hr>
-<p>datetime: 2015-02-18 20:33:12</p>
-<hr>
+]]></description><link>http:/ruibo.me/posts/268811412.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268811412.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:28:48 GMT</pubDate></item><item><title><![CDATA[Lock your procedure]]></title><description><![CDATA[<p>&lt;!-- datetime: 2015-02-18 20:33:12 --&gt;
+</p>
+<p>&lt;!-- more --&gt;
+</p>
 <p>在MySQL里，我们使用存储过程，以保证在执行出错的时候，数据可以即时的回滚到上一个状态。</p>
 <p>存储过程并不是线程安全的。假如存储过程调用频率比较频繁时，如果同一个存储过程在同一刻被意外的打码多次，就有可能出现问题。</p>
 <p>比如说下面的过程</p>
@@ -875,7 +876,7 @@ COMMIT;
 end body;
 
 DO RELEASE_LOCK(&#x60;lock_name&#x60;);
-end top;</code></pre>]]></description><link>http:/ruibo.me/posts/268810987.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268810987.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 15:40:13 GMT</pubDate></item><item><title><![CDATA[清除命令行或文本里的着色代码]]></title><description><![CDATA[<hr>
+end top;</code></pre>]]></description><link>http:/ruibo.me/posts/268810987.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268810987.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:29:13 GMT</pubDate></item><item><title><![CDATA[清除命令行或文本里的着色代码]]></title><description><![CDATA[<hr>
 <p>datetime: 2015-02-07 23:33:15</p>
 <hr>
 <p>有的logging模块，比如说Celery的，或者Golang的seelog，在输出日志的时候会带有高亮的着色代码。我们在cut日志或做其他操作的时候就会变得十分蛋疼。  </p>
