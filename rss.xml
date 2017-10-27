@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Thu, 26 Oct 2017 17:58:07 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 26 Oct 2017 17:58:05 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 01:33:24 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 01:33:21 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
@@ -47,8 +47,9 @@
 <p>...</p>
 <p>...</p>
 <p>蒸龙虾，还挺成功的~</p>
-]]></description><link>http:/ruibo.me/posts/268821650.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268821650.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 17:57:45 GMT</pubDate></item><item><title><![CDATA[我的2016]]></title><description><![CDATA[<hr>
-<h2>datetime: 2017-02-05 03:12:33</h2><p>2016年过去了，一年一年的，总该记录点什么</p>
+]]></description><link>http:/ruibo.me/posts/268821650.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268821650.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 17:57:45 GMT</pubDate></item><item><title><![CDATA[我的2016]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-02-05 03:12:33 --&gt;
+</p>
+<p>2016年过去了，一年一年的，总该记录点什么</p>
 <p>&lt;!-- more --&gt;
 </p>
 <p>首先必须吐槽一下春节实在是太早了，很多事情都要在节前赶完，第一次这么不想放假...</p>
@@ -84,7 +85,7 @@
 <p>大危机年年都有，不想说了。</p>
 <p>对于我自己</p>
 <p>其实要吐槽的东西还是挺多的，每年都可以吐槽自己几百遍，也会在心里吐槽不给力的同事几百遍。但是吐槽归吐槽，再怎么不爽，短板还是需要补齐，时间规划还是需要优化，各端该插手还是需要插手，脾气还是需要再改改，如果能再对市场更敏锐一些，不那么后知后觉一些，就更好了。</p>
-]]></description><link>http:/ruibo.me/posts/268819961.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268819961.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 16:04:42 GMT</pubDate></item><item><title><![CDATA[git flow release finish的时候自动生成Changelog]]></title><description><![CDATA[<hr>
+]]></description><link>http:/ruibo.me/posts/268819961.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268819961.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 01:33:04 GMT</pubDate></item><item><title><![CDATA[git flow release finish的时候自动生成Changelog]]></title><description><![CDATA[<hr>
 <h2>datetime: 2016-02-23 19:22:19</h2><p>大部分人应该都没有写Changelog的习惯吧？我也没有...</p>
 <p>&lt;!-- more --&gt;
 </p>
