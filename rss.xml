@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:28:06 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:28:03 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:28:36 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:28:34 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
@@ -627,11 +627,10 @@ su root audio</code></pre><p>是否需要compress要看log文件的大小和具�
 <p>比如说，我现在有一个log文件叫做celery.log，并不断有日志往这个文件里写入。<br>在归档后，文件名变成了celery.log.1.gz。<br>这时程序理应生成一个新的celery.log并往里面写数据，
 但是却不见celery.log出现。<br>这是因为程序一直持有老的celery.log的fd，在老的celery.log变成celery.log.1.gz后，程序并没有释放fd，所以就不会生成新的celery.log。</p>
 <p>解决这个问题的方法要看具体案例，比如说php5-fpm就使用上文的postrotate语法段来解决。<br>如果是我们自己写的python程序，使用logging的FileHandler时也会出现这个问题，可以改用WatchedFileHandler解决问题。<br>当然使用RotatingFileHandler/TimedRotatingFileHandler来自己做rotate也是可以的。</p>
-]]></description><link>http:/ruibo.me/posts/268812978.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268812978.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:27:46 GMT</pubDate></item><item><title><![CDATA[ubuntu上安装和配置graphite+statsd]]></title><description><![CDATA[<p>在Ubuntu上配置Graphite加Statsd来采集程序运行状态。
+]]></description><link>http:/ruibo.me/posts/268812978.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268812978.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:27:46 GMT</pubDate></item><item><title><![CDATA[ubuntu上安装和配置graphite+statsd]]></title><description><![CDATA[<p>&lt;!-- datetime: 2015-02-21 22:09:11 --&gt;
+</p>
+<p>在Ubuntu上配置Graphite加Statsd来采集程序运行状态。
 &lt;!-- more --&gt;</p>
-<hr>
-<p>datetime: 2015-02-21 22:09:11</p>
-<hr>
 <p>常见的开源监控工具有nagios, ganglia, graphite等等，各有各的特点。
 第一次听说graphite是在nsq的文档上，他声称官方支持使用graphite+statsd来统计metric。
 于是乎便捣鼓了一下。</p>
@@ -820,7 +819,7 @@ CORS_ORIGIN_ALLOW_ALL &#x3D; True</code></pre><p><strong>参考+推荐</strong><
 <p><a href="http://note.axiaoxin.com/contents/install-and-use-graphite-on-ubuntu14.04.html">http://note.axiaoxin.com/contents/install-and-use-graphite-on-ubuntu14.04.html</a>
 <a href="http://segmentfault.com/blog/duoduo3_69/1190000000744706">http://segmentfault.com/blog/duoduo3_69/1190000000744706</a>
 <a href="https://kevinmccarthy.org/blog/2013/07/18/10-things-i-learned-deploying-graphite/">https://kevinmccarthy.org/blog/2013/07/18/10-things-i-learned-deploying-graphite/</a></p>
-]]></description><link>http:/ruibo.me/posts/268812421.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268812421.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 15:43:45 GMT</pubDate></item><item><title><![CDATA[netfilter参数]]></title><description><![CDATA[<hr>
+]]></description><link>http:/ruibo.me/posts/268812421.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268812421.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:28:17 GMT</pubDate></item><item><title><![CDATA[netfilter参数]]></title><description><![CDATA[<hr>
 <p>datetime: 2015-02-20 22:01:33</p>
 <hr>
 <p>死人杨先生在春节放假前几天，跑去机房升级了两台服务器的内存，<strong>顺便</strong>把这两台服务器从ubuntu12.04升级到14.04。<br>这两台服务器负责的一个重要的业务，是使用rest对外发送各种消息或postback数据。<br>升级之后，当天晚上发现大量rest请求出现<code>tcp i/o timeout</code>这样的错误，死人杨先生重启服务后继续再跑。</p>
