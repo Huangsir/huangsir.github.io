@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:26:20 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:26:17 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Fri, 27 Oct 2017 03:27:24 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 27 Oct 2017 03:27:21 GMT</pubDate><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
@@ -498,8 +498,11 @@ EOF</code></pre><p>最后整个配置也只有我自己试用过是可以的。�
 <hr>
 <p>后记：iphone上我只使用过openvpn和ikev2个人感觉ikev2十分稳定，到目前为止没有出现过被block的情况。出门打po面基都十分方便，用instagram装逼也是妥妥的。</p>
 <p>PS：我是蓝...</p>
-]]></description><link>http:/ruibo.me/posts/268818423.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268818423.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:25:32 GMT</pubDate></item><item><title><![CDATA[用户数统计运算]]></title><description><![CDATA[<hr>
-<h2>datetime: 2015-12-11 22:11:34</h2><p>用户数统计基本上有三种做法。</p>
+]]></description><link>http:/ruibo.me/posts/268818423.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268818423.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:25:32 GMT</pubDate></item><item><title><![CDATA[用户数统计运算]]></title><description><![CDATA[<p>&lt;!-- datetime: 2015-12-11 22:11:34 --&gt;
+</p>
+<p>&lt;!-- more --&gt;
+</p>
+<p>用户数统计基本上有三种做法。</p>
 <ol>
 <li>使用一个Set来直接记录用户数</li>
 <li>自己实现类似BloomFilter的方法</li>
@@ -539,7 +542,7 @@ EOF</code></pre><p>最后整个配置也只有我自己试用过是可以的。�
 <h4>最后</h4><p>值得注意的是，因为HyperLogLog本身并不是100%无差统计，每个HLL的数据集里都可能会多多少少有一些误差，在做容斥运算的时候会导致这些误差增大。最坏的情况下，误差可能会达到30%多，且在做减法运算时，可能会出现负数的情况。</p>
 <h4>参考：</h4><p><a href="http://tech.adroll.com/blog/data/2013/07/10/hll-minhash.html">http://tech.adroll.com/blog/data/2013/07/10/hll-minhash.html</a></p>
 <p><a href="http://research.neustar.biz/2012/12/17/hll-intersections-2/">http://research.neustar.biz/2012/12/17/hll-intersections-2/</a></p>
-]]></description><link>http:/ruibo.me/posts/268816800.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268816800.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Thu, 26 Oct 2017 15:55:46 GMT</pubDate></item><item><title><![CDATA[小水管支撑大流量-Graphite的IO优化实践]]></title><description><![CDATA[<p>&lt;!-- datetime: 2015-05-06 02:01:23 --&gt;
+]]></description><link>http:/ruibo.me/posts/268816800.html</link><guid isPermaLink="true">http:/ruibo.me/posts/268816800.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Fri, 27 Oct 2017 03:27:03 GMT</pubDate></item><item><title><![CDATA[小水管支撑大流量-Graphite的IO优化实践]]></title><description><![CDATA[<p>&lt;!-- datetime: 2015-05-06 02:01:23 --&gt;
 </p>
 <p>在实际的项目开发中，用于做运行时监控的工具往往无法分配到高配置的服务器，但可能又要接受100K以上的Metrics发送，特别是在流量暴涨的时候还要能Hold得主。要怎么解决这个问题呢？</p>
 <p>&lt;!-- more --&gt;

@@ -39,12 +39,13 @@
 
 <div id="post" class="center">
 
-    <p class="time">October 26, 2017</p>
+    <p class="time">October 27, 2017</p>
 
     <h1 class="title">用户数统计运算</h1>
 
-    <div class="content"><hr>
-<h2 id="datetime20151211221134">datetime: 2015-12-11 22:11:34</h2><p>用户数统计基本上有三种做法。</p>
+    <div class="content"><p>&lt;!-- datetime: 2015-12-11 22:11:34 --&gt;
+</p>
+<p>用户数统计基本上有三种做法。</p>
 <ol>
 <li>使用一个Set来直接记录用户数</li><li>自己实现类似BloomFilter的方法</li><li>HyperLogLog</li></ol>
 <h4 id="hyperloglog">HyperLogLog</h4><p>HyperLogLog(HLL)作为比较新的一种方案，比起BloomFilter，错误可以比较稳定的维持在一个较低的水平。绝大多数情况下误差不回超过5%，平均错误在1%以内，对于超大量的用户量级维护十分友好。</p>
