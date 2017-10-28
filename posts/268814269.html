@@ -39,13 +39,11 @@
 
 <div id="post" class="center">
 
-    <p class="time">October 27, 2017</p>
+    <p class="time">May 06, 2015</p>
 
     <h1 class="title">小水管支撑大流量-Graphite的IO优化实践</h1>
 
-    <div class="content"><p>&lt;!-- datetime: 2015-05-06 02:01:23 --&gt;
-</p>
-<p>在实际的项目开发中，用于做运行时监控的工具往往无法分配到高配置的服务器，但可能又要接受100K以上的Metrics发送，特别是在流量暴涨的时候还要能Hold得主。要怎么解决这个问题呢？</p>
+    <div class="content"><p>在实际的项目开发中，用于做运行时监控的工具往往无法分配到高配置的服务器，但可能又要接受100K以上的Metrics发送，特别是在流量暴涨的时候还要能Hold得主。要怎么解决这个问题呢？</p>
 <p>首先推荐两片文章：<br><a href="http://calvin1978.blogcn.com/articles/graphite.html">http://calvin1978.blogcn.com/articles/graphite.html</a>网上各种转载，我也不知道那篇才是原文<br><a href="https://kevinmccarthy.org/blog/2013/07/18/10-things-i-learned-deploying-graphite/">https://kevinmccarthy.org/blog/2013/07/18/10-things-i-learned-deploying-graphite/</a>绝逼推荐，尤其是讲interval的那节    </p>
 <p>做我们这行的，什么不多，就是请求特别多，什么不大，就是流量特别大-，-#</p>
 <p>首先我们的Graphite只有一台小机器，用于投放的机器有12台。并且放Graphite的这台小机器还兼顾着放许多的三方监控，放sentry错误采集等等周边产品。你想想一个异性恋小正太站在12个彪悍凶残的兄贵中间，是一种什么样的体验-，-#</p>
