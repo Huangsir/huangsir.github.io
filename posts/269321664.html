@@ -65,18 +65,20 @@
 <p>很快我找到了这个（需要梯子）：<a href="https://circleci.com/">https://circleci.com/</a> </p>
 <p>----------   这里才是真正的解决方案的分割线   ----------</p>
 <h4 id="circleci设置">Circle CI 设置</h4><ol>
-<li>首先要注册，这一句是废话。</li><li>给CircleCI授权你的GitHub权限，这句也是废话。</li><li>在PROJECTS里找到你的博客项目，然后点击Setup Projcct。</li><li>System选Linux，Platform选最新，Language选NodeJS，把下面的Sample .yml 拷出来保存，然后点Start building。</li><li><em>我真的要写那么详细么？这都不会还是老老实实写CSDN好啦...</em></li><li><p>点击你的项目，然后点Settings，找到下面的Permission部分。</p>
+<li>首先要注册，这一句是废话。</li><li>给CircleCI授权你的GitHub权限，这句也是废话。</li><li>在PROJECTS里找到你的博客项目，然后点击Setup Projcct。</li><li>System选Linux，Platform选最新，Language选NodeJS，把下面的Sample .yml 拷出来保存，然后点Start building。</li><li><em>我真的要写那么详细么？这都不会还是老老实实写CSDN好啦...</em></li><li>点击你的项目，然后点Settings，找到下面的Permission部分。<blockquote>
+<p>因为我们需要在CI里编译然后Push，所以不能使用deploy key，因为deploy key没有Push权限。我们可以选择下面两种方法的其中一种来解决：</p>
+</blockquote>
+</li></ol>
 <blockquote>
-<p>因为我们需要在CI里编译然后Push，所以不能使用deploy key，因为deploy key没有Push权限。我们可以选择下面两种方法的其中一种来解决：
-方法一：
+<p>方法一：
 我们可以在Checkout SSH key里点击<code>Add user key</code>来增加一个用户级别的Key。</p>
 <p>方法二：
 回到GitHub -&gt; 找到项目 -&gt; Settings -&gt; Deploy keys -&gt; Add deploy key -&gt; &lt;自己生成一个Token然后填进去&gt; -&gt; <strong>勾选<code>Allow write access</code></strong> -&gt; 保存。
 回调CiecleCI -&gt; 点击SSH Permission -&gt; Add SSH key -&gt; 把刚才生成的Token填进去 -&gt; 保存。</p>
 <p>这时我们在CiecleCI里才能Push代码。需要注意的是方法二只能操作本项目，如果编译后的HTML需要Push到其他Project上，建议使用方法一。</p>
 </blockquote>
-</li><li><p>创建一个API Token给IFTTT使用，名字就叫做<code>IFTTT</code>好了。点击自己头像 -&gt; User Settings -&gt; Personal API Token -&gt; Create New Token -&gt; 填入IFTTT -&gt; 保存。</p>
-</li></ol>
+<ol>
+<li>创建一个API Token给IFTTT使用，名字就叫做<code>IFTTT</code>好了。点击自己头像 -&gt; User Settings -&gt; Personal API Token -&gt; Create New Token -&gt; 填入IFTTT -&gt; 保存。</li></ol>
 <ol>
 <li>首先我们要注册一个IFTTT，步骤我就不写了...</li><li>找到Webhooks（下面会说为什么用的是Webhooks而不是GitHub的连接器），然后在Settings里查到自己的Webhook地址，或者可以看<a href="https://ifttt.com/services/maker_webhooks/settings">这里</a></li><li>在GitHubPage的项目里点击Settings -&gt; Webhooks</li><li>在Payload URL里填上刚才IFTTT的Webhooks的地址，Content-Type选application/json。</li></ol>
 <p>这里需要注意</p>
