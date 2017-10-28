@@ -26,7 +26,7 @@ per_page:
 
 # menu
 menu:
-  # archives: /archives/
+  archives: /archives/
   # categories: /category/
   # tags: /tag/
 
