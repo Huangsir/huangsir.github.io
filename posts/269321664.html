@@ -46,7 +46,39 @@
     <div class="content"><p>基于Github issue的Github page要么就是直接用JS现场生成HTML，外加Token来提高访问上限。要么就是写完issue之后要找个地方把代码Markdown build一下生成HTML后再po回Github上。</p>
 <p>前者没法做SEO（好像我也不是很需要）；后者要自己部署东西，像我这种半年都不更新一次博客的，每次更新前还要检查部署的服务器是否还在.....</p>
 <p>两个都不完美，所以研究出了一种基于Github Issue的，没有SEO问题的，还不需要自己Build的解决方案[坏笑]。</p>
-<p>TODO...</p>
+<p>Github 用Issue写博客有集中方法，其中比较有代表性的好像是： </p>
+<ul>
+<li>JS动态编译系的 <a href="https://github.com/wuhaoworld/github-issues-blog">https://github.com/wuhaoworld/github-issues-blog</a></li><li>预编译系的 <a href="https://github.com/acyortjs/acyort">https://github.com/acyortjs/acyort</a> </li></ul>
+<p>我的博客用的是 <a href="https://github.com/acyortjs/acyort">https://github.com/acyortjs/acyort</a> 。因此需要在写好博客之后运行一下<code>acyort build</code>编译好静态HTML后再提交。</p>
+<p>这种做法很不友好，我并不能随时随地的写或记录一些东西，因为需要回到电脑上编译。</p>
+<p>因此我就找到了Github的Webhook，配置了一个Server，在我更新Issue后会Notify我的Server，然后编译并po到线上。</p>
+<p>但是我很长时间都不会写一片博客，经常到要写的时候就已经忘记了要干什么才能正确发布一片博客，或者经常写完之后还要去服务器调半个小时的代码，非常不优雅。</p>
+<p>因此我就想到了用CI帮忙编译。于是我就找到了<code>Travis CI</code>。经过研究发现Travis CI没有基于Issue的触发器。所以想要触发Travis CI要么产生一个Push，要么手动触发Travis CI的Trigger，还是不够优雅。</p>
+<p>或者用Github的Webhook触发一个中转的Server，然后Server再通过API调用Travis CI来编译博客，那就又回到了要部署代码的那个状态。</p>
+<p>----------   这里是解决方案的分割线   ----------</p>
+<p>中转的Server用于连接Github的Webhook和Travis CI的API，这样的需求直指IFTTT。</p>
+<p>不知道的同学可以访问这里（需要梯子）：<a href="https://ifttt.com/">https://ifttt.com/</a></p>
+<p><img src="https://user-images.githubusercontent.com/3870517/32136474-027ca5da-bbd4-11e7-8800-4672b50edc5e.png" alt="image"></p>
+<p>IFTTT 专门处理 <code>If this then that</code> 的需求，而我们需要的是 If <code>Github的Issue有更新</code> then <code>触发Travis CI</code>。</p>
+<p>但是IFTTT里并没有Travis CI的连接器，所以我们只能IFTTT里的自定义Webhooks来生成对Travis CI的调用。而再经过仔细的阅读Travis CI的文档后，我发现Travis CI的授权Token必须要加再HTTPHeader里。然而IFTTT的Webhooks没法随意增加Header。</p>
+<p>因此我被迫放弃里Travis CI去寻找API里不需要操作太多Header，可以全部在URL或Body里解决的CI框架。</p>
+<p>很快我找到了这个（需要梯子）：<a href="https://circleci.com/">https://circleci.com/</a> </p>
+<p>----------   这里才是真正的解决方案的分割线   ----------</p>
+<ol>
+<li>首先我们要注册一个IFTTT，步骤我就不写了...</li><li>找到Webhooks（下面会说为什么用的是Webhooks而不是GitHub的连接器），然后在Settings里查到自己的Webhook地址，或者可以看<a href="https://ifttt.com/services/maker_webhooks/settings">这里</a></li><li>在GitHubPage的项目里点击Settings -&gt; Webhooks</li><li>在Payload URL里填上刚才IFTTT的Webhooks的地址，Content-Type选application/json。</li></ol>
+<p>这里需要注意</p>
+<ol>
+<li>选择<code>Let me select individual events.</code>，然后在下面的选项中选择<code>Issues</code>，其他不用勾。</li><li>保存你的设置。</li><li>回到IFTTT。</li></ol>
+<hr>
+<ol>
+<li>首先我们要注册一个IFTTT，步骤我就不写了...</li><li>点击<code>New Applet</code> -&gt; this -&gt; Webhooks -&gt; Receive ad web request</li><li>注意这里需要你填写<code>Event Name</code>，填写的<code>Event Name</code>必须和填写在GitHub上的连接的Event一直，否则触发不到。这里我们可以填写<code>build_github_page</code>，然后点击<code>Create Trigger</code>
+<img src="https://user-images.githubusercontent.com/3870517/32136663-4e2457fa-bbd7-11e7-9be9-ed083f9bc63e.png" alt="image"></li><li>点击 that -&gt; Webhooks -&gt; Make a web request</li><li>根据CircleCI的API文档填写你的GitHubPage的地址。<blockquote>
+<p>例如我的项目在<code>Huangsir/huangsir.github.io</code>上，那么我填写的地址是
+<code>https://circleci.com/api/v1.1/project/github/Huangsir/huangsir.github.io/tree/develop?circle-token={{Token}}</code>
+将我们一开始在CircleCI上申请的Token替换到{{Token}}上。</p>
+</blockquote>
+</li><li>保存并启用设置。</li></ol>
+<p>TODO ...</p>
 </div>
 
     <div class="comments">
