@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Sat, 28 Oct 2017 17:04:07 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 28 Oct 2017 17:04:02 GMT</pubDate><item><title><![CDATA[基于issue且没有seo问题还不用自己build的github page]]></title><description><![CDATA[<p>基于Github issue的Github page要么就是直接用JS现场生成HTML，外加Token来提高访问上限。要么就是写完issue之后要找个地方把代码Markdown build一下生成HTML后再po回Github上。</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Sat, 28 Oct 2017 17:23:33 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 28 Oct 2017 17:23:29 GMT</pubDate><item><title><![CDATA[基于issue且没有seo问题还不用自己build的github page]]></title><description><![CDATA[<p>基于Github issue的Github page要么就是直接用JS现场生成HTML，外加Token来提高访问上限。要么就是写完issue之后要找个地方把代码Markdown build一下生成HTML后再po回Github上。</p>
 <p>前者没法做SEO（好像我也不是很需要）；后者要自己部署东西，像我这种半年都不更新一次博客的，每次更新前还要检查部署的服务器是否还在.....</p>
 <p>两个都不完美，所以研究出了一种基于Github Issue的，没有SEO问题的，还不需要自己Build的解决方案[坏笑]。</p>
 <p>&lt;!-- more --&gt;
@@ -23,6 +23,24 @@
 <p>因此我被迫放弃里Travis CI去寻找API里不需要操作太多Header，可以全部在URL或Body里解决的CI框架。</p>
 <p>很快我找到了这个（需要梯子）：<a href="https://circleci.com/">https://circleci.com/</a> </p>
 <p>----------   这里才是真正的解决方案的分割线   ----------</p>
+<h4>Circle CI 设置</h4><ol>
+<li>首先要注册，这一句是废话。</li>
+<li>给CircleCI授权你的GitHub权限，这句也是废话。</li>
+<li>在PROJECTS里找到你的博客项目，然后点击Setup Projcct。</li>
+<li>System选Linux，Platform选最新，Language选NodeJS，把下面的Sample .yml 拷出来保存，然后点Start building。</li>
+<li><em>我真的要写那么详细么？这都不会还是老老实实写CSDN好啦...</em></li>
+<li>点击你的项目，然后点Settings，找到下面的Permission部分。<blockquote>
+<p>因为我们需要在CI里编译然后Push，所以不能使用deploy key，因为deploy key没有Push权限。我们可以选择下面两种方法的其中一种来解决：
+方法一：
+我们可以在Checkout SSH key里点击<code>Add user key</code>来增加一个用户级别的Key。</p>
+<p>方法二：
+或者回到GitHub -&gt; Settings -&gt; Deploy keys -&gt; Add deploy key -&gt; &lt;自己生成一个Token然后填进去&gt; -&gt; <strong>勾选<code>Allow write access</code></strong> -&gt; 保存。
+回调CiecleCI -&gt; 点击SSH Permission -&gt; Add SSH key -&gt; 把刚才生成的Token填进去 -&gt; 保存。
+这时我们在CiecleCI里才能Push代码。需要注意的是方法二只能操作本项目，如果编译后的HTML需要Push到其他Project上，建议使用方法一。</p>
+</blockquote>
+</li>
+<li>创建一个API Token给IFTTT使用，名字就叫做<code>IFTTT</code>好了。点击自己头像 -&gt; User Settings -&gt; Personal API Token -&gt; Create New Token -&gt; 填入IFTTT -&gt; 保存。</li>
+</ol>
 <ol>
 <li>首先我们要注册一个IFTTT，步骤我就不写了...</li>
 <li>找到Webhooks（下面会说为什么用的是Webhooks而不是GitHub的连接器），然后在Settings里查到自己的Webhook地址，或者可以看<a href="https://ifttt.com/services/maker_webhooks/settings">这里</a></li>
@@ -51,7 +69,7 @@
 <li>保存并启用设置。</li>
 </ol>
 <p>TODO ...</p>
-]]></description><link>http:/ruibo.me/posts/269321664.html</link><guid isPermaLink="true">http:/ruibo.me/posts/269321664.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Sat, 28 Oct 2017 17:03:38 GMT</pubDate></item><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+]]></description><link>http:/ruibo.me/posts/269321664.html</link><guid isPermaLink="true">http:/ruibo.me/posts/269321664.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Sat, 28 Oct 2017 17:23:13 GMT</pubDate></item><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
