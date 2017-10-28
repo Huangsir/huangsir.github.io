@@ -70,7 +70,7 @@
 方法一：
 我们可以在Checkout SSH key里点击<code>Add user key</code>来增加一个用户级别的Key。</p>
 <p>方法二：
-回到GitHub -&gt; Settings -&gt; Deploy keys -&gt; Add deploy key -&gt; &lt;自己生成一个Token然后填进去&gt; -&gt; <strong>勾选<code>Allow write access</code></strong> -&gt; 保存。
+回到GitHub -&gt; 找到项目 -&gt; Settings -&gt; Deploy keys -&gt; Add deploy key -&gt; &lt;自己生成一个Token然后填进去&gt; -&gt; <strong>勾选<code>Allow write access</code></strong> -&gt; 保存。
 回调CiecleCI -&gt; 点击SSH Permission -&gt; Add SSH key -&gt; 把刚才生成的Token填进去 -&gt; 保存。
 这时我们在CiecleCI里才能Push代码。需要注意的是方法二只能操作本项目，如果编译后的HTML需要Push到其他Project上，建议使用方法一。</p>
 </blockquote>
