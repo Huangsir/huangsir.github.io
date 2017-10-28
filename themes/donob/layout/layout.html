@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+  {% include 'partials/head.html' %}
+  <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+
+<div class="main">
+<div class="inner">
+  
+{% include 'partials/header.html' %}
+
+{% block content %}{% endblock %}
+
+</div>
+</div>
+
+{% include 'partials/footer.html' %}
+
+{% block script %}{% endblock %}
+
+</body>
+</html>
