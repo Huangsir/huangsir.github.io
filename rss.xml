@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Sat, 28 Oct 2017 17:28:35 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 28 Oct 2017 17:28:32 GMT</pubDate><item><title><![CDATA[基于issue且没有seo问题还不用自己build的github page]]></title><description><![CDATA[<p>基于Github issue的Github page要么就是直接用JS现场生成HTML，外加Token来提高访问上限。要么就是写完issue之后要找个地方把代码Markdown build一下生成HTML后再po回Github上。</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Sun, 29 Oct 2017 15:36:23 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sun, 29 Oct 2017 15:36:19 GMT</pubDate><item><title><![CDATA[基于issue且没有seo问题还不用自己build的github page]]></title><description><![CDATA[<p>基于Github issue的Github page要么就是直接用JS现场生成HTML，外加Token来提高访问上限。要么就是写完issue之后要找个地方把代码Markdown build一下生成HTML后再po回Github上。</p>
 <p>前者没法做SEO（好像我也不是很需要）；后者要自己部署东西，像我这种半年都不更新一次博客的，每次更新前还要检查部署的服务器是否还在.....</p>
 <p>两个都不完美，所以研究出了一种基于Github Issue的，没有SEO问题的，还不需要自己Build的解决方案[坏笑]。</p>
 <p>&lt;!-- more --&gt;
@@ -43,37 +43,37 @@
 <p>这时我们在CiecleCI里才能Push代码。需要注意的是方法二只能操作本项目，如果编译后的HTML需要Push到其他Project上，建议使用方法一。</p>
 </blockquote>
 <ol>
-<li>创建一个API Token给IFTTT使用，名字就叫做<code>IFTTT</code>好了。点击自己头像 -&gt; User Settings -&gt; Personal API Token -&gt; Create New Token -&gt; 填入IFTTT -&gt; 保存。</li>
+<li>创建一个API Token给IFTTT使用，名字就叫做<code>IFTTT</code>好了。点击自己头像 -&gt; User Settings -&gt; Personal API Token -&gt; Create New Token -&gt; 填入Token的名字IFTTT -&gt; 保存。</li>
 </ol>
-<ol>
-<li>首先我们要注册一个IFTTT，步骤我就不写了...</li>
-<li>找到Webhooks（下面会说为什么用的是Webhooks而不是GitHub的连接器），然后在Settings里查到自己的Webhook地址，或者可以看<a href="https://ifttt.com/services/maker_webhooks/settings">这里</a></li>
-<li>在GitHubPage的项目里点击Settings -&gt; Webhooks</li>
-<li>在Payload URL里填上刚才IFTTT的Webhooks的地址，Content-Type选application/json。</li>
-</ol>
-<p>这里需要注意</p>
-<ol>
-<li>选择<code>Let me select individual events.</code>，然后在下面的选项中选择<code>Issues</code>，其他不用勾。</li>
-<li>保存你的设置。</li>
-<li>回到IFTTT。</li>
-</ol>
-<hr>
-<ol>
+<p>查看CircleCI的<a href="https://circleci.com/docs/api/">文档</a>可以看到，通过API触发Build的方法为<code>POST: /project/:vcs-type/:username/:project/tree/:branch</code>。</p>
+<p>我的项目地址是<code>github.com/Huangsir/huangsir.github.io</code>，所以调用CircleCI的方法应该是</p>
+<pre><code>POST https:&#x2F;&#x2F;circleci.com&#x2F;api&#x2F;v1.1&#x2F;project&#x2F;github&#x2F;Huangsir&#x2F;huangsir.github.io&#x2F;tree&#x2F;develop?circle-token&#x3D;{{Token}}</code></pre><p>这里的{{Token}}就填入刚刚申请给IFTTT使用的那个Token。</p>
+<h4>IFTTT</h4><ol>
 <li>首先我们要注册一个IFTTT，步骤我就不写了...</li>
 <li>点击<code>New Applet</code> -&gt; this -&gt; Webhooks -&gt; Receive ad web request</li>
 <li>注意这里需要你填写<code>Event Name</code>，填写的<code>Event Name</code>必须和填写在GitHub上的连接的Event一直，否则触发不到。这里我们可以填写<code>build_github_page</code>，然后点击<code>Create Trigger</code>
 <img src="https://user-images.githubusercontent.com/3870517/32136663-4e2457fa-bbd7-11e7-9be9-ed083f9bc63e.png" alt="image"></li>
 <li>点击 that -&gt; Webhooks -&gt; Make a web request</li>
-<li>根据CircleCI的API文档填写你的GitHubPage的地址。<blockquote>
-<p>例如我的项目在<code>Huangsir/huangsir.github.io</code>上，那么我填写的地址是
+<li>填写上文我们获取到的CircleCI的调用地址，连带Token一起写进去。<blockquote>
+<p>例上文中，我的项目在<code>Huangsir/huangsir.github.io</code>上，那么我填写的地址是
 <code>https://circleci.com/api/v1.1/project/github/Huangsir/huangsir.github.io/tree/develop?circle-token={{Token}}</code>
 将我们一开始在CircleCI上申请的Token替换到{{Token}}上。</p>
 </blockquote>
 </li>
 <li>保存并启用设置。</li>
 </ol>
-<p>TODO ...</p>
-]]></description><link>http:/ruibo.me/posts/269321664.html</link><guid isPermaLink="true">http:/ruibo.me/posts/269321664.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Sat, 28 Oct 2017 17:28:17 GMT</pubDate></item><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<p>在IFTTT的<a href="https://ifttt.com/maker_webhooks">Webhooks</a>里，点击Documentation查看使用文档，可以看到连接的组成格式为<code>https://maker.ifttt.com/trigger/{event}/with/key/XXXXXXXXX</code>。</p>
+<p>其中{event}为我们要触发的Applets，需要和上文设置的Event Name一致。本例子中要填写的是build_github_page，所以整条连接应该是<code>https://maker.ifttt.com/trigger/build_github_page/with/key/XXXXXXXXX</code></p>
+<p>记下这个地址，这个地址将会填写到GitHub上。</p>
+<h4>GitHub</h4><ol>
+<li>进入你存放Issue的项目 -&gt; 点击Settings -&gt; Webhooks -&gt; Add Webhooks。</li>
+<li>将上文中IFTTT的触发连接填入Payload URL里，Content-Type选application/json。</li>
+<li>勾选 Let me select individual events. 然后再展开的列表中选择Issues，其他都不选。</li>
+<li>勾选Active，然后保存。</li>
+</ol>
+<p>至此，全部配置完成，当我修改了一个Issue时，会触发的流程如下：</p>
+<p><img src="https://user-images.githubusercontent.com/3870517/32145342-e1ad4c1c-bc94-11e7-8894-7dad0723d01f.png" alt="image"></p>
+<h4>.circleci/config.yml 配置</h4>]]></description><link>http:/ruibo.me/posts/269321664.html</link><guid isPermaLink="true">http:/ruibo.me/posts/269321664.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Sun, 29 Oct 2017 15:36:05 GMT</pubDate></item><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
