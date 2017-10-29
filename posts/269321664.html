@@ -111,7 +111,91 @@
 <li>进入你存放Issue的项目 -&gt; 点击Settings -&gt; Webhooks -&gt; Add Webhooks。</li><li>将上文中IFTTT的触发连接填入Payload URL里，Content-Type选application/json。</li><li>勾选 Let me select individual events. 然后再展开的列表中选择Issues，其他都不选。</li><li>勾选Active，然后保存。</li></ol>
 <p>至此，全部配置完成，当我修改了一个Issue时，会触发的流程如下：</p>
 <p><img src="https://user-images.githubusercontent.com/3870517/32145342-e1ad4c1c-bc94-11e7-8894-7dad0723d01f.png" alt="image"></p>
-<h4 id="circleci/configyml配置">.circleci/config.yml 配置</h4></div>
+<h4 id="circleci/configyml配置">.circleci/config.yml 配置</h4><p>根据<a href="https://circleci.com/docs/2.0/sample-config/">官方文档</a>来编写问题不大。</p>
+
+    <div class="hljs yaml">
+      <table>
+        <tbody>
+          <tr>
+            <td class="line">
+              <pre><span>1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+<span>6</span>
+<span>7</span>
+<span>8</span>
+<span>9</span>
+<span>10</span>
+<span>11</span>
+<span>12</span>
+<span>13</span>
+<span>14</span>
+<span>15</span>
+<span>16</span>
+<span>17</span>
+<span>18</span>
+<span>19</span>
+<span>20</span>
+<span>21</span>
+<span>22</span>
+<span>23</span>
+<span>24</span>
+<span>25</span>
+<span>26</span>
+<span>27</span>
+<span>28</span>
+<span>29</span>
+<span>30</span>
+<span>31</span>
+<span>32</span>
+<span>33</span>
+<span>34</span>
+</pre>
+            </td>
+            <td class="code"><pre>version: <span class="hljs-number">2</span>
+jobs:
+  build:
+    docker:
+      <span class="hljs-comment"># 这里使用Docker官方的Node源</span>
+      - image: node:latest
+
+    <span class="hljs-comment"># 项目的目录，可以随便写一个</span>
+    working_directory: ~/repo
+
+    <span class="hljs-comment"># 只触发某个branch的更新，这里我使用develop来编译博客，然后再合并到master来Push。</span>
+    branches:
+      only:
+        - develop
+
+    <span class="hljs-comment"># 执行步骤，基本就是语义化的写法，大家根据自己的需求改改应该就可以的了。</span>
+    steps:
+      - checkout
+      - <span class="hljs-keyword">run</span><span class="bash">: npm install acyort -g
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git config --global user.email <span class="hljs-string">"rj.huangsir@gmail.com"</span>
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git config --global user.name <span class="hljs-string">"Huangsir"</span>
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git checkout master
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git reset --hard origin/master
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git checkout develop
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git <span class="hljs-built_in">clone</span> https://github.com/acyortjs/theme-donob.git themes/donob
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: acyort build
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git checkout master
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: cp -R public/* .
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: rm -R public
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: ls -alh
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git status
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git add .
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git commit -am <span class="hljs-string">"build by circleci - `date`"</span>
+</span>      - <span class="hljs-keyword">run</span><span class="bash">: git push origin master</span></pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <p>保存到 <code>.circleci/config.yml</code> 下，然后Push，搞定。</p>
+<p>最后，如果发现用不了，请自行排查问题。
+最后后，IFTTT需要定期检查确保Applet依然稳定运行，所以虽然我这么配置了，但是可能过半年后待我写下一篇博客时依然要重新调试一遍...</p>
+</div>
 
     <div class="comments">
         <div id="disqus_thread"></div>

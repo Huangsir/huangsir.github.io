@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Sun, 29 Oct 2017 15:36:23 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sun, 29 Oct 2017 15:36:19 GMT</pubDate><item><title><![CDATA[基于issue且没有seo问题还不用自己build的github page]]></title><description><![CDATA[<p>基于Github issue的Github page要么就是直接用JS现场生成HTML，外加Token来提高访问上限。要么就是写完issue之后要找个地方把代码Markdown build一下生成HTML后再po回Github上。</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[huangsir]]></title><description><![CDATA[huangsir's blog]]></description><link>http://ruibo.me</link><generator>RSS for Node</generator><lastBuildDate>Sun, 29 Oct 2017 15:47:14 GMT</lastBuildDate><atom:link href="http:/ruibo.me/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sun, 29 Oct 2017 15:47:10 GMT</pubDate><item><title><![CDATA[基于issue且没有seo问题还不用自己build的github page]]></title><description><![CDATA[<p>基于Github issue的Github page要么就是直接用JS现场生成HTML，外加Token来提高访问上限。要么就是写完issue之后要找个地方把代码Markdown build一下生成HTML后再po回Github上。</p>
 <p>前者没法做SEO（好像我也不是很需要）；后者要自己部署东西，像我这种半年都不更新一次博客的，每次更新前还要检查部署的服务器是否还在.....</p>
 <p>两个都不完美，所以研究出了一种基于Github Issue的，没有SEO问题的，还不需要自己Build的解决方案[坏笑]。</p>
 <p>&lt;!-- more --&gt;
@@ -73,7 +73,44 @@
 </ol>
 <p>至此，全部配置完成，当我修改了一个Issue时，会触发的流程如下：</p>
 <p><img src="https://user-images.githubusercontent.com/3870517/32145342-e1ad4c1c-bc94-11e7-8894-7dad0723d01f.png" alt="image"></p>
-<h4>.circleci/config.yml 配置</h4>]]></description><link>http:/ruibo.me/posts/269321664.html</link><guid isPermaLink="true">http:/ruibo.me/posts/269321664.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Sun, 29 Oct 2017 15:36:05 GMT</pubDate></item><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
+<h4>.circleci/config.yml 配置</h4><p>根据<a href="https://circleci.com/docs/2.0/sample-config/">官方文档</a>来编写问题不大。</p>
+<pre><code>version: 2
+jobs:
+  build:
+    docker:
+      # 这里使用Docker官方的Node源
+      - image: node:latest
+
+    # 项目的目录，可以随便写一个
+    working_directory: ~&#x2F;repo
+
+    # 只触发某个branch的更新，这里我使用develop来编译博客，然后再合并到master来Push。
+    branches:
+      only:
+        - develop
+
+    # 执行步骤，基本就是语义化的写法，大家根据自己的需求改改应该就可以的了。
+    steps:
+      - checkout
+      - run: npm install acyort -g
+      - run: git config --global user.email &quot;rj.huangsir@gmail.com&quot;
+      - run: git config --global user.name &quot;Huangsir&quot;
+      - run: git checkout master
+      - run: git reset --hard origin&#x2F;master
+      - run: git checkout develop
+      - run: git clone https:&#x2F;&#x2F;github.com&#x2F;acyortjs&#x2F;theme-donob.git themes&#x2F;donob
+      - run: acyort build
+      - run: git checkout master
+      - run: cp -R public&#x2F;* .
+      - run: rm -R public
+      - run: ls -alh
+      - run: git status
+      - run: git add .
+      - run: git commit -am &quot;build by circleci - &#x60;date&#x60;&quot;
+      - run: git push origin master</code></pre><p>保存到 <code>.circleci/config.yml</code> 下，然后Push，搞定。</p>
+<p>最后，如果发现用不了，请自行排查问题。
+最后后，IFTTT需要定期检查确保Applet依然稳定运行，所以虽然我这么配置了，但是可能过半年后待我写下一篇博客时依然要重新调试一遍...</p>
+]]></description><link>http:/ruibo.me/posts/269321664.html</link><guid isPermaLink="true">http:/ruibo.me/posts/269321664.html</guid><dc:creator><![CDATA[Huangsir]]></dc:creator><pubDate>Sun, 29 Oct 2017 15:46:52 GMT</pubDate></item><item><title><![CDATA[程序员哥哥第一次与龙虾妹妹]]></title><description><![CDATA[<p>&lt;!-- datetime: 2017-07-22 01:12:11 --&gt;
 </p>
 <p>JD忽然由打折大龙虾，买一只回来炖了，龙虾妹妹，哥哥就不客气了~</p>
 <p>&lt;!-- more --&gt;
