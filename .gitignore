@@ -1,3 +1,6 @@
 _site
 .DS_Store
 *.swp
+.jekyll-cache
+_site
+.idea
