@@ -2,7 +2,7 @@
 layout: post
 title: "Lock your procedure"
 date: 2015-02-18 20:33:12 +8000
-categories: []
+categories: [MySQL]
 ---
 <!-- datetime: 2015-02-18 20:33:12 -->
 <!-- more -->

@@ -2,7 +2,7 @@
 layout: post
 title: "基于issue的Github Page工具"
 date: 2016-02-18 22:09:12 +8000
-categories: []
+categories: [乱写]
 ---
 <!-- datetime: 2016-02-18 22:09:12 -->
 换了这个用commit issue的方法来发blog的工具，感觉还是挺不错的。把之前的page全部都迁移过来了，虽然时间有点对不上，不过这点小事也不用太care。

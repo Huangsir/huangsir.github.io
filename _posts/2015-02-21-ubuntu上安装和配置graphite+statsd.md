@@ -2,7 +2,7 @@
 layout: post
 title: "ubuntu上安装和配置graphite+statsd"
 date: 2015-02-21 22:09:11 +8000
-categories: []
+categories: [Linux, 监控]
 ---
 <!-- datetime: 2015-02-21 22:09:11 -->
 在Ubuntu上配置Graphite加Statsd来采集程序运行状态。

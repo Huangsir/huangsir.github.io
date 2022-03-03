@@ -2,7 +2,7 @@
 layout: post
 title: "万能的timestamp"
 date: 2014-12-06 11:10:03 +8000
-categories: []
+categories: [PHP, 技术]
 ---
 <!-- datetime: 2014-12-06 11:10:03 -->
 <!-- more -->

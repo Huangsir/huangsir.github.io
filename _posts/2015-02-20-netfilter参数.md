@@ -2,7 +2,7 @@
 layout: post
 title: "netfilter参数"
 date: 2015-02-20 22:01:33 +8000
-categories: []
+categories: [Linux]
 ---
 <!-- datetime: 2015-02-20 22:01:33 -->
 <!-- more -->

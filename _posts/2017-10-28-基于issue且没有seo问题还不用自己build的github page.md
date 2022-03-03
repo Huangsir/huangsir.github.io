@@ -2,7 +2,7 @@
 layout: post
 title: "基于issue且没有seo问题还不用自己build的github page"
 date: 2017-10-28 14:28:34 +8000
-categories: []
+categories: [乱写]
 ---
 基于Github issue的Github page要么就是直接用JS现场生成HTML，外加Token来提高访问上限。要么就是写完issue之后要找个地方把代码Markdown build一下生成HTML后再po回Github上。
 

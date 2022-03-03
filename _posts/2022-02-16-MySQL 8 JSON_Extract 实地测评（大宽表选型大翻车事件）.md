@@ -2,7 +2,7 @@
 layout: post
 title: "MySQL 8 JSON_Extract 实地测评（大宽表选型大翻车事件）"
 date: 2022-02-16 09:42:58 +8000
-categories: []
+categories: [MySQL]
 ---
 记录投管家做数据存储的选型时遇到的问题和各个业务场景下的调研结果。
 

@@ -2,7 +2,7 @@
 layout: post
 title: "git flow release finish的时候自动生成Changelog"
 date: 2016-02-23 19:22:19 +8000
-categories: []
+categories: [Git, 技术, Linux]
 ---
 <!-- datetime: 2016-02-23 19:22:19 -->
 

@@ -2,7 +2,7 @@
 layout: post
 title: "小水管支撑大流量-Graphite的IO优化实践"
 date: 2015-05-06 02:01:23 +8000
-categories: []
+categories: [监控]
 ---
 <!-- datetime: 2015-05-06 02:01:23 -->
 

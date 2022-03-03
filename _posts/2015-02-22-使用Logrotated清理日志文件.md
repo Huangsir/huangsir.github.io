@@ -2,7 +2,7 @@
 layout: post
 title: "使用Logrotated清理日志文件"
 date: 2015-02-22 22:23:44 +8000
-categories: []
+categories: [Linux, 日志]
 ---
 <!-- datetime: 2015-02-22 22:23:44 -->
 在Linux环境下，使用Logrotated工具定期自动清理历史的运行日志。
