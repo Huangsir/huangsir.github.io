@@ -4,6 +4,7 @@ title: "MySQL 8 JSON_Extract 实地测评（大宽表选型大翻车事件）"
 date: 2022-02-16 09:42:58 +8000
 categories: [MySQL]
 ---
+
 记录投管家做数据存储的选型时遇到的问题和各个业务场景下的调研结果。
 
 ##  表结构设计
@@ -144,14 +145,48 @@ PS：PostgreSQL作为一款号称HTAP的数据库，还可以实现OLAP和OLTP�
 
 #### ClickHouse 
 
-实测性能很强，完爆其他所有列存储数据库，具体数据太久找不到了
+实测性能很强，完爆其他所有列存储数据库，具体数据太久找不到了，等后面再弄一次再PO数据
 最终没有选型的原因是Report当日的数据会频繁更新，而CH的MergeTree排重时间是不可控的，会导致当天的数据产生大量重复，除非我们所有的指标都只提供T-1的数据，否则靠MergeTree自动合并不太可行
 CH始终是标准的OLAP数据库，用来做生产环境页面实时加载报表这样的需求不太Match（这里跟组员观点不同，欢迎讨论）
-另外是实际查询需要JOIN大量MySQL的表，很多表没有办法直接挪到CH上，如果从CH直接查MySQL的表对于SQL要求较高否则会出现全表扫描进CH来运算的问题，比如这样的JOIN表就很容易出现各种奇怪的问题
-![image](https://user-images.githubusercontent.com/3870517/154439168-7df56ec6-352c-4944-ba01-f25120fce77e.png)
+另外是实际查询需要JOIN大量MySQL的表，很多表没有办法直接挪到CH上，如果从CH直接查MySQL的表对于SQL要求较高否则会出现全表扫描进CH来运算的问题，比如这样的JOIN表就很容易出现各种奇怪的问题，CH做MySQL的Slave还处于实验室阶段暂时也不考虑
 不过CH依然是非常有利的候选方案，MergeTree一系列的引擎可以说完爆其他OLAP数据库，如果在OLAP和OLTP的联查上能够有更好的突破，或者像PostgreSQL那样提供OLTP和OLAP分区，我还是很乐意选择CH的
 
 #### MySQL 8 JSON存储
 
-主要要补充MySQL 8用JSON存储数据的查询问题
+主要要补充MySQL 8用JSON存储数据的查询问题。补充一下测试用的表结构大概这样
+<img width="729" alt="image" src="https://user-images.githubusercontent.com/3870517/157390480-46e8b355-6972-4386-931c-a9023459ba91.png">
+表中有4个JSON字段用于存储指标类的数据，对标测试的使用基本结构的表字段太多就不放出来了。
+
+测试的SQL包含没有索引的ORDER BY和GROUP BY一个外部表的ID，见下图：
+<img width="802" alt="image" src="https://user-images.githubusercontent.com/3870517/157402178-539ffe9d-279f-456d-830d-c16b96945dfd.png">
+
+EXPLAIN 执行一下(两个表的EXPALIN执行结果一样就不重复贴了）
+<img width="1276" alt="image" src="https://user-images.githubusercontent.com/3870517/157399925-780fe67e-f60a-433a-b1e9-e7fa536ca2d1.png">
+
+#### JSON
+
+实际查询，执行时间在1s左右`25 rows retrieved starting from 1 in 852 ms (execution: 834 ms, fetching: 18 ms)`
+
+#### 原装表
+
+执行时间也是在1s左右`25 rows retrieved starting from 1 in 1 s 173 ms (execution: 1 s 152 ms, fetching: 21 ms)`
+
+#### 结论
+
+用JSON存储，在查询的时候现场JSON_Extract并没有显著降低表的查询速度，如果表列数很多的情况下，用JSON打包反而效率更好一些（测试用的表原装大概有350+个字段），
+因此在JSONSchema管理得当的前提下，表用JSON来存储似乎是更优质的选择。
+
+### 最后
+
+附上测试用的表信息（rows的数据不太准确，实际select count(1)显示是一样的行数)
+<img width="935" alt="image" src="https://user-images.githubusercontent.com/3870517/157402493-b9808755-1d3d-40da-92db-58535d079528.png">
+
+### 思考
+
+有时候想当然的去认为某件事会有一定翻车的风险，比如说我想当然的认为JSON_Extract会导致性能明显下降，实际看来使用JSON_Extract带来的性能开销并没有我考虑的那么严重
+
+过于严谨的测试也会带来不少损耗，比如说要做这样的测试，从搭建测试环境开始就得花一周以上的时间，如果项目正赶着需要某个功能，而我们又在慢悠悠的做这样的测试，也是不恰当的
+
+用课余时间来进行学术研究，积累经验，等到真正需要使用的时候就可以快速提出具有一定可行性的方法论看起来是可行之道。对于技术工具的使用调研是如此，对于大型项目工程的经验也是如此，技术工具的调研可以课后进行，但是靠谱的项目经验却是更加金贵
+
 
