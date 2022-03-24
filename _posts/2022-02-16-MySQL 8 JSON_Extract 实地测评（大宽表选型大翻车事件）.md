@@ -161,6 +161,14 @@ PS：PostgreSQL作为一款号称HTAP的数据库，还可以实现OLAP和OLTP�
 <img width="734" alt="image" src="https://user-images.githubusercontent.com/3870517/158343275-142bb8a5-3232-4f2d-be68-e887898f1a3d.png">  
 `20 rows retrieved starting from 1 in 2 s 290 ms (execution: 2 s 221 ms, fetching: 69 ms)`
 
+用OLTP的查询思维来查询OLAP可能并不太合适，CH里操作大量JOIN对生产环境并不是太友好，从shell中执行可以看出，process的数据量非常大，从这么大的数据量里捡25条出来，性价比很低  
+<img width="814" alt="image" src="https://user-images.githubusercontent.com/3870517/159828909-76559ff2-7d01-4ce7-974c-4255473e3bb0.png">
+
+我们优化一下SQL，先用WHERE约束查询的结果，再进行JOIN  
+<img width="797" alt="image" src="https://user-images.githubusercontent.com/3870517/159829193-9b67cbfe-fb10-4254-9650-9ac50963984d.png">  
+补上final之后执行，结果提升非常显著，processed的数量明显降低，执行时间也缩短到了0.36s。实际测试如果把final都去掉，执行时间可以降到0.11s  
+<img width="808" alt="image" src="https://user-images.githubusercontent.com/3870517/159829357-338168c1-120b-4420-86e7-cd1addb17435.png">  
+
 来看第二个SQL，查另外一个大宽表，不加FINAL的情况下表现非常不错，总耗时只需要500ms，加上FINAL总耗时也只上升到了600ms，成绩优异  
 <img width="831" alt="image" src="https://user-images.githubusercontent.com/3870517/158343565-52d19c17-4de7-46f5-aa81-61433f38f38f.png">  
 `25 rows retrieved starting from 1 in 517 ms (execution: 472 ms, fetching: 45 ms)`
