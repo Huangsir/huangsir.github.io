@@ -165,7 +165,7 @@ PS：PostgreSQL作为一款号称HTAP的数据库，还可以实现OLAP和OLTP�
 <img width="814" alt="image" src="https://user-images.githubusercontent.com/3870517/159828909-76559ff2-7d01-4ce7-974c-4255473e3bb0.png">
 
 我们优化一下SQL，先用WHERE约束查询的结果，再进行JOIN  
-<img width="797" alt="image" src="https://user-images.githubusercontent.com/3870517/159829193-9b67cbfe-fb10-4254-9650-9ac50963984d.png">  
+<img width="805" alt="image" src="https://user-images.githubusercontent.com/3870517/159836937-f6216232-c445-4128-914c-6e584946f9d3.png">  
 补上final之后执行，结果提升非常显著，processed的数量明显降低，执行时间也缩短到了0.36s。实际测试如果把final都去掉，执行时间可以降到0.11s  
 <img width="808" alt="image" src="https://user-images.githubusercontent.com/3870517/159829357-338168c1-120b-4420-86e7-cd1addb17435.png">  
 
