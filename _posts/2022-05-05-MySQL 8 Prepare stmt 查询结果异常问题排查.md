@@ -73,11 +73,15 @@ SELECT * FROM `qianchuan_material_file` WHERE account_id = 19750 AND mtr_outer_i
 
 合理猜测是gorm里使用了Prepare statement语法，把单引号当做变量传入进去了导致匹配失败。我们在mysql-client里使用Prepare statement语法测试，复现了结果
 
-[图]
+<img width="803" alt="QQ20220505-172158@2x" src="https://user-images.githubusercontent.com/3870517/167053826-2535032c-d3a2-46fa-8463-0b926dbf50cd.png">
+
 
 但随后更迷的事情出现了，SHOW TABLE可以看到两个id都是bigint，我们对两个id分别进行实验
 
-[图图图]
+<img width="965" alt="QQ20220505-172709@2x" src="https://user-images.githubusercontent.com/3870517/167053909-f7364280-01fc-4b38-9b33-8e49ee546654.png">
+<img width="930" alt="QQ20220505-173205@2x" src="https://user-images.githubusercontent.com/3870517/167053911-86b5f75c-2c97-41d1-abd8-4e47761133ae.png">
+<img width="921" alt="QQ20220505-173053@2x" src="https://user-images.githubusercontent.com/3870517/167053890-7a920f72-6efe-46cf-bb08-bd068287b91a.png">
+
 
 可以看到，有且仅有mtr_outer_id加单引号时会出现异常。都不加单引号、都加单引号、account_id加单引号且mtr_outer_id不加单引号，这几种情况都能正常返回数据。
 
