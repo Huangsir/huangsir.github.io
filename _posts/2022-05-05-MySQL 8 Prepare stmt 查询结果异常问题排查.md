@@ -86,3 +86,41 @@ SELECT * FROM `qianchuan_material_file` WHERE account_id = 19750 AND mtr_outer_i
 可以看到，有且仅有mtr_outer_id加单引号时会出现异常。都不加单引号、都加单引号、account_id加单引号且mtr_outer_id不加单引号，这几种情况都能正常返回数据。
 
 到这里问题的起因已经基本清楚，但是为啥是这样的情况还不得而知，这个问题细微到，我甚至都不知道如何在Google里写出问题的关键描述来进行检索。只能让运维同学去MySQL的社区里提个Issue。
+
+后续：
+
+本机Docker起MySQL测试
+```shell
+mysql> select version();
++-----------+
+| version() |
++-----------+
+| 8.0.29    |
++-----------+
+```
+MySQL 8.0.29 版本测试没有这个问题 -，-#
+
+重新pull了和线上一致的版本8.0.27重新测试，问题复现
+```shell
+mysql> prepare stmt1 from 'SELECT * FROM `qianchuan_material_file` WHERE account_id = ? AND mtr_outer_id = ? ORDER BY `qianchuan_material_file`.`mtr_outer_id` LIMIT 1;';
+Query OK, 0 rows affected (0.00 sec)
+Statement prepared
+
+mysql> set @a=21115;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> set @b='7082291618573664267';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> execute stmt1 using @a, @b;
+Empty set (0.00 sec)
+
+mysql> select version();
++-----------+
+| version() |
++-----------+
+| 8.0.27    |
++-----------+
+1 row in set (0.00 sec)
+```
+所以这可能是一个小版本的Bug？并且在后续的小版本中被立即修复了
