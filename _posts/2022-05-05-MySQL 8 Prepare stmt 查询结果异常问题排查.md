@@ -124,3 +124,5 @@ mysql> select version();
 1 row in set (0.00 sec)
 ```
 所以这可能是一个小版本的Bug？并且在后续的小版本中被立即修复了
+
+![image](https://user-images.githubusercontent.com/3870517/167058297-a03d5807-8e5b-41a4-8f65-c3e90bf8ffa5.png)
