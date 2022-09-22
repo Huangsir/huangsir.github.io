@@ -21,7 +21,7 @@ Error: An error occurred while checking for chart dependencies. You may need to 
 本地把项目 pull 下来然后运行 `helm dependency update` 之后倒是可以使用，但是总不能在本地发 production，不知道国外的小哥哥是不是不用 Rancher 这样的 UI 工具管理 K8S
 
 翻来翻去，最终比较少的改动 Chart 的发布方案就是
-1. 魔改 Chart.yaml 把 dependencies 全部注释掉，整个 Chart 就可以在 Rancher 上直接使用了
+1. 魔改 Chart.yaml 把 dependencies 全部注释掉，apiVersion改成v1(注册的Helm2)，整个 Chart 就可以在 Rancher 上直接使用了
 2. 用 `helm template` 生成 manifest，push 到自己的仓库里再去 Rancher 上发，但这个命令已经生成了最终执行的 manifest，没法再在 Rancher 启动时替换 values，就需要在其他地方去配置程序用的 Config
 
 #### 平滑升级 
